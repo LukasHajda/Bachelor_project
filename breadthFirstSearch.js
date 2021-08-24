@@ -39,4 +39,3 @@ function runBFSAnimation() {
 
 let timer = setInterval(runBFSAnimation, 1000);
 
-cy.on('drag', "node", function(event) {console.log('dsd') });
