@@ -1,7 +1,7 @@
 # Bachelor project
 
-<p>Visualization different type of graphs and algorithms</p>
+<h3>Visualization different type of graphs and algorithms</h3>
 
-<p>run: npm install</p>
-<p>run: npm run</p>
-<p>run: npm install cytoscape</p>
+run: ```npm install```<br>
+run: ```npm run```<br>
+run: ```npm install cytoscape```
