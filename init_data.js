@@ -14,9 +14,6 @@ cy.ready(function (){
         let vector_length = calculate_vector_length(edge);
         edges_info.set(edge.data().source + edge.data().target, [edge.data().weight, vector_length]);
     })
-
-    console.log(nodes_positions);
-    console.log(edges_info);
 })
 
 function calculate_vector_length(edge) {

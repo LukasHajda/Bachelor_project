@@ -1,12 +1,10 @@
 let n = cy.nodes();
 
-console.log(n);
 let edgesCollection = [];
 let bfs = cy.elements().bfs({
     roots: '#A',
     visit: function(v, e, u, i, depth){
         edgesCollection.push(e);
-        console.log(e);
     },
     directed: false
 });
