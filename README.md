@@ -1,6 +1,6 @@
 # Bachelor project
 
-<h3>Visualization different type of graphs and algorithms</h3>
+<h3>Graph visualization</h3>
 
 run: ```npm install```<br>
 run: ```npm run```<br>
