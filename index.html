@@ -13,6 +13,7 @@
     #cy {
         width: 100%;
         height: 100%;
+        background-color: red;
         position: absolute;
         top: 0px;
         left: 0px;
@@ -21,7 +22,7 @@
 
 <body>
 <div id="cy" style="width: 1000px; height: 1000px;"></div>
-<button style="position: absolute; left: 800px" id="color">HELLO</button>
+<button style="position: absolute; left: 800px" id="new_node">Add node</button>
 <script>
     let cy = cytoscape({
         container: document.getElementById('cy'),
@@ -85,7 +86,9 @@
         layout: {
             name: 'grid',
             directed: true,
-            padding: 10
+            padding: 10,
+            motionBlur: true,
+            autolock: true
         }
     }); // cy init
 
@@ -94,5 +97,6 @@
 <script src="init_data.js"></script>
 <script src="breadthFirstSearch.js"></script>
 <script src="calculating_distance.js"></script>
+<script src="add_node.js"></script>
 </body>
 </html>
