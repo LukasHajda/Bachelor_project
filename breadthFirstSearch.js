@@ -1,12 +1,10 @@
 let n = cy.nodes();
 
-console.log(n);
 let edgesCollection = [];
 let bfs = cy.elements().bfs({
     roots: '#A',
     visit: function(v, e, u, i, depth){
         edgesCollection.push(e);
-        console.log(e);
     },
     directed: false
 });
@@ -39,4 +37,3 @@ function runBFSAnimation() {
 
 let timer = setInterval(runBFSAnimation, 1000);
 
-cy.on('drag', "node", function(event) {console.log('dsd') });
