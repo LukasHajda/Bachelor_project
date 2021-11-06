@@ -1,7 +1,7 @@
 let n = cy.nodes();
 
 let edgesCollection = [];
-let bfs = cy.elements().bfs({
+let dfs = cy.elements().dfs({
     roots: '#A',
     visit: function(v, e, u, i, depth){
         edgesCollection.push(e);
@@ -9,14 +9,14 @@ let bfs = cy.elements().bfs({
     directed: true
 });
 
-let path = bfs.path;
-let found = bfs.found;
+let path = dfs.path;
+let found = dfs.found;
 path.select();
 
 
 let index = 0;
 let length = edgesCollection.length;
-function runBFSAnimation() {
+function runDFSAnimation() {
 
     if ( index >= length ){
         clearInterval(timer);
@@ -35,5 +35,5 @@ function runBFSAnimation() {
 
 }
 
-let timer = setInterval(runBFSAnimation, 1000);
+let timer = setInterval(runDFSAnimation, 1000);
 
