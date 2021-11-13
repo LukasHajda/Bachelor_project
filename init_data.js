@@ -1,4 +1,4 @@
-
+let click_count = 0;
 let nodes_positions = new Map();
 let edges_info = new Map();
 
