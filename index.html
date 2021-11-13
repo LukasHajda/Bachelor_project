@@ -5,6 +5,7 @@
 <head>
     <title>Tutorial 1: Getting Started</title>
     <script src="node_modules/cytoscape/dist/cytoscape.min.js"></script>
+    <script src="node_modules/cytoscape-automove/cytoscape-automove.js"></script>
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -24,6 +25,7 @@
 <div id="cy" style="width: 1000px; height: 1000px;"></div>
 <button style="position: absolute; left: 800px" id="new_node">Add node</button>
 <script>
+
     let cy = cytoscape({
         container: document.getElementById('cy'),
         zoomingEnabled: false,
@@ -90,7 +92,8 @@
             motionBlur: true,
             autolock: true
         }
-    }); // cy init
+    }); // cy init;
+
 
 
 </script>
