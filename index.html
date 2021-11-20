@@ -67,16 +67,17 @@
                 { data: { id: 'H' , name: 'H'} }
             ],
             edges: [
-                { data: { source: 'A', target: 'B' , weight: 50} },
-                { data: { source: 'B', target: 'C' , weight: 20} },
-                { data: { source: 'C', target: 'D' , weight: 50} },
-                { data: { source: 'D', target: 'E' , weight: 50} },
-                { data: { source: 'E', target: 'F' , weight: 50} },
-                { data: { source: 'F', target: 'G' , weight: 20} },
+                { data: { source: 'A', target: 'B' , weight: 5} },
+                { data: { source: 'B', target: 'C' , weight: 2} },
+                { data: { source: 'C', target: 'D' , weight: 1} },
+                { data: { source: 'D', target: 'E' , weight: 1} },
+                { data: { source: 'E', target: 'F' , weight: -20} },
+                { data: { source: 'F', target: 'G' , weight: -20} },
                 { data: { source: 'G', target: 'H' , weight: 50} },
                 { data: { source: 'D', target: 'D' , weight: 50} },
                 { data: { source: 'A', target: 'D' , weight: 50} },
-                { data: { source: 'A', target: 'E' , weight: 20} }
+                { data: { source: 'A', target: 'E' , weight: -20} },
+                { data: { source: 'G', target: 'E' , weight: 20} }
             ]
         },
 
@@ -98,9 +99,10 @@
 
 </script>
 <script src="init_data.js"></script>
-<script src="breadthFirstSearch.js"></script>
+<!--<script src="breadthFirstSearch.js"></script>-->
 <!--<script src="depthFirstSearch.js"></script>-->
 <script src="calculating_distance.js"></script>
+<script src="bellman-ford.js"></script>
 <script src="add_node.js"></script>
 </body>
 </html>
