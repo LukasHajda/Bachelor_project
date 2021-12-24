@@ -22,3 +22,105 @@ html {
     border: 10px solid black;
     padding: 0;
 }
+
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700');
+@import url('https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css');
+
+*, *:before, *:after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font: 16px/1 'Open Sans', sans-serif;
+    color: #9198e5;
+    background: #eee;
+}
+
+#tsum-tabs h1 {
+    padding: 50px 0;
+    font-weight: bolder;
+    text-align: center;
+}
+
+#tsum-tabs p {
+    margin: 0 0 20px;
+    line-height: 1.5;
+}
+
+#tsum-tabs main {
+    min-width: 320px;
+    max-width: 800px;
+    padding: 50px;
+    margin: 0 auto;
+    background: #fff;
+}
+
+#tsum-tabs section {
+    display: none;
+    padding: 20px 0 0;
+    border-top: 4px solid black;
+}
+
+#tsum-tabs input {
+    display: none;
+}
+
+#tsum-tabs label {
+    display: inline-block;
+    margin: 0 0 -1px;
+    padding: 15px 25px;
+    font-weight: 600;
+    text-align: center;
+    color: #9198e5;
+    border: 1px solid transparent;
+}
+
+#tsum-tabs label:before {
+    font-family: fontawesome;
+    font-weight: normal;
+    margin-right: 10px;
+}
+
+#tsum-tabs label:hover {
+    cursor: pointer;
+}
+
+#tsum-tabs input:checked + label {
+    color: black;
+    background-color: #9198e5;
+    border-radius: 11px 11px 0 0;
+    border-top: 4px solid black;
+    border-left: 4px solid black;
+    border-right: 4px solid black;
+    border-bottom: 1.5px solid black;;
+}
+
+#tsum-tabs #tab1:checked ~ #content1,
+#tsum-tabs #tab2:checked ~ #content2,
+#tsum-tabs #tab3:checked ~ #content3,
+#tsum-tabs #tab4:checked ~ #content4 {
+    display: block;
+}
+
+@media screen and (max-width: 650px) {
+    #tsum-tabs label {
+        font-size: 0;
+    }
+    #tsum-tabs label:before {
+        margin: 0;
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    #tsum-tabs label {
+        padding: 15px;
+    }
+}
