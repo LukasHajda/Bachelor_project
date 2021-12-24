@@ -4,14 +4,16 @@ cy.on('tap', function(event){
     if( evtTarget === this ){
         let xPos = event.position.x;
         let yPos = event.position.y;
+        let newId = 'new' + Math.round( Math.random() * 100 );
         console.log(xPos, yPos);
         this.add([{
             group: "nodes",
-            data: { id: 'new' + Math.round( Math.random() * 100 ), label: 'new' + Math.round( Math.random() * 100 )},
+            data: { id: newId, label: 'new' + Math.round( Math.random() * 100 )},
             position: {
                 x: xPos,
                 y: yPos,
             },
         }]);
+        nodes_positions.set(newId, [xPos, yPos]);
     }
 });
