@@ -29,11 +29,11 @@
 <div class="container float-right" id="menu">
     <div class="row">
         <ul>
-            <li>Algorithms</li>
-            <li>Representation</li>
-            <li>Configuration</li>
-            <li>Tutorial</li>
-            <hr />
+            <li id="algorithm">Algorithms</li>
+            <li id="representation">Representation</li>
+            <li id="configuration">Configuration</li>
+            <li id="tutorial">Tutorial</li>
+            <hr/>
         </ul>
     </div>
 </div>
@@ -46,7 +46,8 @@
     let second_node = null;
     let cy = cytoscape({
         container: document.getElementById('cy'),
-        zoomingEnabled: false,
+        wheelSensitivity: 0.5,
+        // zoomingEnabled: false,
 
         style : [
             {
@@ -112,6 +113,10 @@
             autolock: true
         }
     }); // cy init;
+
+    cy.fit()
+
+
 
 
 

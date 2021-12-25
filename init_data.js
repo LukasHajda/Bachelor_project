@@ -24,6 +24,7 @@ function calculate_vector_length(edge) {
 }
 
 $(function () {
+    $('.row li:first-child').addClass('active');
     $(".row li").click(function () {
         $('.row li').removeClass('active');
         $(this).addClass('active');

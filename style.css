@@ -64,6 +64,10 @@ a {
     margin-left: 75%;
 }
 
+.active {
+    color: #9198e5;
+}
+
 hr {
     height: .25rem;
     width: 25%;
