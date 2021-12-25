@@ -23,4 +23,36 @@ function calculate_vector_length(edge) {
     return Math.sqrt(Math.pow(node_b[0] - node_a[0], 2) + Math.pow(node_b[1] - node_a[1], 2));
 }
 
+$(function () {
+    $(".row li").click(function () {
+        $('.row li').removeClass('active');
+        $(this).addClass('active');
+    })
+})
+
+
+
+$(function () {
+    let line = $('hr');
+    line.css({
+        'left': $('.row li:first-child').position().left,
+        'width': $('.row li:first-child').width()
+    });
+
+    $(".row li").hover(function () {
+        let el = $(this);
+        line.stop().animate({
+            'left': el.position().left,
+            'width': el.width()
+        }, 300)
+    }, function () {
+        let active_el = $('.active');
+        line.stop().animate({
+            'left': active_el.position().left,
+            'width': active_el.width()
+        }, 300);
+    });
+})
+
+
 

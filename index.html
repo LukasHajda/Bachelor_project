@@ -7,6 +7,9 @@
     <script src="node_modules/cytoscape/dist/cytoscape.min.js"></script>
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -24,71 +27,19 @@
 <body>
 <div id="cy" style="width: 900px; height: 800px;"></div>
 <div class="container float-right" id="menu">
-<!--    <nav class="navbar navbar-expand-lg navbar-light bg-light">-->
-<!--        <a class="navbar-brand" href="javascript:void(0)">Navbar</a>-->
-<!--        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">-->
-<!--            <span class="navbar-toggler-icon"></span>-->
-<!--        </button>-->
-<!--        <div class="collapse navbar-collapse" id="navbarNav">-->
-<!--            <ul class="navbar-nav">-->
-<!--                <li class="nav-item active">-->
-<!--                    <a class="nav-link" href="javascript:void(0)">Home <span class="sr-only">(current)</span></a>-->
-<!--                </li>-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" href="javascript:void(0)">Features</a>-->
-<!--                </li>-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" href="javascript:void(0)">Pricing</a>-->
-<!--                </li>-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link disabled" href="javascript:void(0)">Disabled</a>-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </nav>-->
-    <div id="tsum-tabs">
-        <main>
-
-            <input id="tab1" type="radio" name="tabs" checked>
-            <label for="tab1">Algorithms</label>
-
-            <input id="tab2" type="radio" name="tabs">
-            <label for="tab2">Graph representation</label>
-
-            <input id="tab3" type="radio" name="tabs">
-            <label for="tab3">Dropbox</label>
-
-            <input id="tab4" type="radio" name="tabs">
-            <label for="tab4">Drupal</label>
-
-            <section id="content1">
-                <p>
-                    CONTENT FIR TAB 1
-                </p>
-            </section>
-
-            <section id="content2">
-                <p>
-                    CONTENT FIR TAB 2
-                </p>
-            </section>
-
-            <section id="content3">
-                <p>
-                    CONTENT FIR TAB 3
-                </p>
-            </section>
-
-            <section id="content4">
-                <p>
-                    CONTENT FIR TAB 4
-                </p>
-            </section>
-
-        </main>
+    <div class="row">
+        <ul>
+            <li>Algorithms</li>
+            <li>Representation</li>
+            <li>Configuration</li>
+            <li>Tutorial</li>
+            <hr />
+        </ul>
     </div>
 </div>
 <script>
+
+    $("#tab1").click();
 
     let node_click = 1;
     let first_node = null;
