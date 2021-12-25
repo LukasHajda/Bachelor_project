@@ -1,3 +1,79 @@
 body {
-    background-color: grey;
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background: linear-gradient(#0b5ed7, #9198e5) !important;
 }
+html {
+    height: 100%;
+}
+
+#cy {
+    margin: 15px 0 0 15px;
+    border: 10px solid black;
+}
+
+#menu {
+    width: 800px;
+    margin: 15px 15px 0 15px;
+    height: 800px;
+    background-color: white;
+    border: 10px solid black;
+    padding: 0;
+}
+
+.row ul {
+    margin: 40px auto 0;
+    padding: 0;
+}
+
+.row ul li {
+    display: inline-block;
+    font-weight: bolder;
+    font-family: 'Dosis', sans-serif;
+    font-size: 22px;
+}
+
+.row ul li:hover {
+    cursor: pointer;
+}
+
+.row ul li:not(:last-child) {
+    padding-right: 30px;
+}
+
+a {
+    display: inline-block;
+    width: 25%;
+    padding: .75rem 0;
+    margin: 0;
+    text-decoration: none;
+    color: #333;
+}
+
+.two:hover ~ hr {
+    margin-left: 25%;
+}
+
+.three:hover ~ hr {
+    margin-left: 50%;
+}
+
+.four:hover ~ hr {
+    margin-left: 75%;
+}
+
+.active {
+    color: #9198e5;
+}
+
+hr {
+    height: .25rem;
+    width: 25%;
+    margin: 0;
+    background: #9198e5;
+    border: none;
+    position: absolute;
+}
+
