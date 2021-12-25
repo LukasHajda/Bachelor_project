@@ -24,6 +24,34 @@ function calculate_vector_length(edge) {
 }
 
 $(function () {
+
+    $('#tab1').addClass('open-section');
+    $('#tab2, #tab3, #tab4').addClass('hide-section');
+
+    $('#algorithm').click(function () {
+        $('#tab1').removeClass('hide-section').addClass('open-section');
+        $('#tab2, #tab3, #tab4').removeClass('open-section').addClass('hide-section');
+    })
+
+    $('#representation').click(function () {
+        $('#tab2').removeClass('hide-section').addClass('open-section');
+        $('#tab1, #tab3, #tab4').removeClass('open-section').addClass('hide-section');
+    })
+
+    $('#configuration').click(function () {
+        $('#tab3').removeClass('hide-section').addClass('open-section');
+        $('#tab2, #tab1, #tab4').removeClass('open-section').addClass('hide-section');
+    })
+
+    $('#tutorial').click(function () {
+        $('#tab4').removeClass('hide-section').addClass('open-section');
+        $('#tab2, #tab3, #tab1').removeClass('open-section').addClass('hide-section');
+    })
+
+
+    $(".colorPickSelector").colorPick();
+
+
     $('.row li:first-child').addClass('active');
     $(".row li").click(function () {
         $('.row li').removeClass('active');

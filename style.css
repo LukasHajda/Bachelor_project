@@ -77,3 +77,33 @@ hr {
     position: absolute;
 }
 
+.colorPickSelector {
+    bottom: 0;
+    border-radius: 5px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    -webkit-transition: all linear .2s;
+    -moz-transition: all linear .2s;
+    -ms-transition: all linear .2s;
+    -o-transition: all linear .2s;
+    transition: all linear .2s;
+}
+
+.hide-section {
+    display: none;
+}
+
+.open-section {
+    display: block;
+}
+
+.row section {
+    margin-top: 15px;
+    margin-left: 30px;
+}
+
+
+.colorPickSelector:hover { transform: scale(1.1); }
+
+
