@@ -1,10 +1,9 @@
 body {
     height: 100%;
     margin: 0;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background: linear-gradient(#0b5ed7, #9198e5) !important;
+    background: linear-gradient(red, #9198e5) no-repeat fixed;
 }
+
 html {
     height: 100%;
 }
