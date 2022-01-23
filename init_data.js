@@ -2,6 +2,9 @@ let click_count = 0;
 let nodes_positions = new Map();
 let edges_info = new Map();
 
+$('#color4').val('#83b55a');
+$('#color3').val('#a83030');
+
 cy.ready(function (){
     let ids = cy.nodes().map(node => node.data().name);
     let edges = cy.edges();

@@ -31,6 +31,8 @@ $(function () {
 
     clear_button.click(function () {
         cy.elements().remove();
+        edges_info.clear();
+        nodes_positions.clear()
     });
 
     clear_all_edges.click(function () {
