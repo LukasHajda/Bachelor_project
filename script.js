@@ -3,8 +3,8 @@ $(function () {
     let color1 = $('#color1');
     let color2 = $('#color2');
     let color4 = $('#color4');
-    let clear_button = $('#clear');
-    let clear_all_edges = $('#clear-edge')
+    let clear_button = $('#clear_graph');
+    let clear_all_edges = $('#clear_edges')
 
     $('.colorPick').change(function () {
         console.log('linear-gradient(' + color1.val() + ',' + color2.val() + ') no-repeat fixed');

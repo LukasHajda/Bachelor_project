@@ -13,10 +13,6 @@ cy.on('cxttap', "node", function(event) {
     }
 
     if (new_edge) {
-        // cy.edges(new_edge).style({
-        //     'line-color': $(this).val(),
-        //     'target-arrow-color' : $(this).val()
-        // });
         console.log(new_edge.style({
             lineColor : $('#color4').val(),
             targetArrowColor : $('#color4').val()

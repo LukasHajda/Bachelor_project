@@ -106,3 +106,23 @@ hr {
 .colorPickSelector:hover { transform: scale(1.1); }
 
 
+.button {
+    transition: all 1s ease;
+    background-color: #9198e5;
+    border-radius: 4px;
+    border: none;
+    color: white;
+    padding: 6px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #4149ba;
+}
+
+
