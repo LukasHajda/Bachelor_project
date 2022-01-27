@@ -28,7 +28,7 @@ class Graph {
             let xPos = event.position.x;
             let yPos = event.position.y;
             if (this.current_id === 21) {
-                if (this.current_letter === 'Z') {
+                if (this.current_letter === 'B') {
                     this.current_letter = 'A';
                     this.levels.push(this.levels[this.levels.length - 1] + 1);
                 }else {
