@@ -12,6 +12,9 @@
 
 class Graph {
     constructor() {
+        this.current_id = 1;
+        this.current_letter = 'A';
+        this.levels = [0];
         this.current_graph = this.init_graph();
         this.nodes = this.current_graph.nodes();
         this.edges = this.current_graph.edges();
@@ -24,17 +27,27 @@ class Graph {
         if( evtTarget === this.current_graph ){
             let xPos = event.position.x;
             let yPos = event.position.y;
-            let newId = 'new' + Math.round( Math.random() * 100 );
+            if (this.current_id === 21) {
+                if (this.current_letter === 'Z') {
+                    this.current_letter = 'A';
+                    this.levels.push(this.levels[this.levels.length - 1] + 1);
+                }else {
+                    this.current_letter = String.fromCharCode(this.current_letter.charCodeAt(0) + 1);
+                }
+                this.current_id = 1;
+            }
+            let newID = this.current_letter + '_' + ((this.levels[this.levels.length - 1] === 0) ? '' : (this.levels[this.levels.length - 1] + '_')) + this.current_id;
+            console.log(newID);
             console.log(xPos, yPos);
-            let newNum = Math.round( Math.random() * 100 );
             let node = this.current_graph.add([{
                 group: "nodes",
-                data: { id: newId, label: 'new' + newNum, name: 'new'+ newNum},
+                data: { id: newID, label: newID, name: newID},
                 position: {
                     x: xPos,
                     y: yPos,
                 },
             }]);
+            this.current_id++;
 
             node.style('background-color', $('#color3').val());
             // nodes_positions.set(newId, [xPos, yPos]);
