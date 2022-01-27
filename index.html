@@ -84,90 +84,91 @@
     let node_click = 1;
     let first_node = null;
     let second_node = null;
-    let cy = cytoscape({
-        container: document.getElementById('cy'),
-        wheelSensitivity: 0.5,
-        // zoomingEnabled: false,
-
-        style : [
-            {
-                selector : 'nodes',
-                style : {
-                    'content': 'data(name)',
-                    'background-color' : '#a83030',
-                    'width' : 40,
-                    'height' : 40
-                }
-            },
-            {
-                selector: 'edges',
-                style: {
-                    'curve-style' : 'bezier',
-                    'target-arrow-shape' : 'triangle',
-                    'line-color' : '#83b55a',
-                    'target-arrow-color': '#83b55a',
-                    'width': 8,
-                    'label': 'data(weight)',
-                    'text-margin-y': 15,
-                    'text-rotation': 'autorotate'
-                }
-            },
-        ],
-
-        elements: {
-            nodes: [
-                { data: { id: 'A' , name: 'A'} },
-                { data: { id: 'B' , name: 'B'} },
-                { data: { id: 'C' , name: 'C'} },
-                { data: { id: 'D' , name: 'D'} },
-                { data: { id: 'E' , name: 'E'} },
-                { data: { id: 'F' , name: 'F'} },
-                { data: { id: 'G' , name: 'G'} },
-                { data: { id: 'H' , name: 'H'} }
-            ],
-            edges: [
-                { data: { source: 'A', target: 'B' , weight: 5} },
-                { data: { source: 'B', target: 'C' , weight: 2} },
-                { data: { source: 'C', target: 'D' , weight: 1} },
-                { data: { source: 'D', target: 'E' , weight: 1} },
-                { data: { source: 'E', target: 'F' , weight: -20} },
-                { data: { source: 'F', target: 'G' , weight: -20} },
-                { data: { source: 'G', target: 'H' , weight: 50} },
-                { data: { source: 'D', target: 'D' , weight: 50} },
-                { data: { source: 'A', target: 'D' , weight: 50} },
-                { data: { source: 'A', target: 'E' , weight: -20} },
-                { data: { source: 'G', target: 'E' , weight: 20} }
-            ]
-        },
-
-        animate: true, // whether to animate changes to the layout
-        animationDuration: 500, // duration of animation in ms, if enabled
-        animationEasing: undefined, // easing of animation, if enabled
-        animateFilter: function ( node, i ){ return true; },
-
-        layout: {
-            name: 'grid',
-            directed: true,
-            padding: 10,
-            motionBlur: true,
-            autolock: true
-        }
-    }); // cy init;
-
-    cy.fit()
+    // let cy = cytoscape({
+    //     container: document.getElementById('cy'),
+    //     wheelSensitivity: 0.5,
+    //     // zoomingEnabled: false,
+    //
+    //     style : [
+    //         {
+    //             selector : 'nodes',
+    //             style : {
+    //                 'content': 'data(name)',
+    //                 'background-color' : '#a83030',
+    //                 'width' : 40,
+    //                 'height' : 40
+    //             }
+    //         },
+    //         {
+    //             selector: 'edges',
+    //             style: {
+    //                 'curve-style' : 'bezier',
+    //                 'target-arrow-shape' : 'triangle',
+    //                 'line-color' : '#83b55a',
+    //                 'target-arrow-color': '#83b55a',
+    //                 'width': 8,
+    //                 'label': 'data(weight)',
+    //                 'text-margin-y': 15,
+    //                 'text-rotation': 'autorotate'
+    //             }
+    //         },
+    //     ],
+    //
+    //     elements: {
+    //         nodes: [
+    //             { data: { id: 'A' , name: 'A'} },
+    //             { data: { id: 'B' , name: 'B'} },
+    //             { data: { id: 'C' , name: 'C'} },
+    //             { data: { id: 'D' , name: 'D'} },
+    //             { data: { id: 'E' , name: 'E'} },
+    //             { data: { id: 'F' , name: 'F'} },
+    //             { data: { id: 'G' , name: 'G'} },
+    //             { data: { id: 'H' , name: 'H'} }
+    //         ],
+    //         edges: [
+    //             { data: { source: 'A', target: 'B' , weight: 5} },
+    //             { data: { source: 'B', target: 'C' , weight: 2} },
+    //             { data: { source: 'C', target: 'D' , weight: 1} },
+    //             { data: { source: 'D', target: 'E' , weight: 1} },
+    //             { data: { source: 'E', target: 'F' , weight: -20} },
+    //             { data: { source: 'F', target: 'G' , weight: -20} },
+    //             { data: { source: 'G', target: 'H' , weight: 50} },
+    //             { data: { source: 'D', target: 'D' , weight: 50} },
+    //             { data: { source: 'A', target: 'D' , weight: 50} },
+    //             { data: { source: 'A', target: 'E' , weight: -20} },
+    //             { data: { source: 'G', target: 'E' , weight: 20} }
+    //         ]
+    //     },
+    //
+    //     animate: true, // whether to animate changes to the layout
+    //     animationDuration: 500, // duration of animation in ms, if enabled
+    //     animationEasing: undefined, // easing of animation, if enabled
+    //     animateFilter: function ( node, i ){ return true; },
+    //
+    //     layout: {
+    //         name: 'grid',
+    //         directed: true,
+    //         padding: 10,
+    //         motionBlur: true,
+    //         autolock: true
+    //     }
+    // }); // cy init;
+    //
+    // cy.fit()
 
 
 
 
 
 </script>
+<script src="Objects/Graph.js"></script>
 <script src="init_data.js"></script>
 <!--<script src="breadthFirstSearch.js"></script>-->
 <!--<script src="depthFirstSearch.js"></script>-->
-<script src="calculating_distance.js"></script>
-<script src="bellman-ford.js"></script>
-<script src="add_node.js"></script>
-<script src="add_edge.js"></script>
-<script src="script.js"></script>
+<!--<script src="calculating_distance.js"></script>-->
+<!--<script src="bellman-ford.js"></script>-->
+<!--<script src="add_node.js"></script>-->
+<!--<script src="add_edge.js"></script>-->
+<!--<script src="script.js"></script>-->
 </body>
 </html>
