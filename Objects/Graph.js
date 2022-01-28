@@ -18,7 +18,19 @@ class Graph {
         this.current_graph = this.init_graph();
         this.nodes = this.current_graph.nodes();
         this.edges = this.current_graph.edges();
+        this.sourceNode = null;
+        this.targetNode = null;
         this.setEvents();
+    }
+
+    add_edge() {
+        this.current_graph.add([
+            {
+                group: "edges", data: { source: this.sourceNode.data().id, target: this.targetNode.data().id, weight: 10}
+            }
+        ]);
+        this.sourceNode = null;
+        this.targetNode=  null;
     }
 
     add_node(event) {
@@ -60,8 +72,13 @@ class Graph {
            self.add_node(event);
         });
 
-        this.current_graph.on('click', 'node', function(evt){
-            console.log( 'clicked ' + this.id() );
+        this.current_graph.on('cxttap', 'node', function(evt){
+            if (!self.sourceNode) {
+                self.sourceNode = this;
+            } else {
+                self.targetNode = this;
+                self.add_edge();
+            }
         });
         
         
