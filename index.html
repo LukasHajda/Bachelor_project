@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -33,10 +34,49 @@
             <li id="representation">Representation</li>
             <li id="configuration">Configuration</li>
             <li id="tutorial">Tutorial</li>
+            <li id="about">About</li>
             <hr/>
         </ul>
     </div>
+    <div class="row">
+        <section id="tab1">
+            <p>totot su algoritmy</p>
+            <p>dsdsdsdsdsdsdsds ds d sd s ds ds d sd s ds d sd s ds ds d sd s</p>
+        </section>
+        <section id="tab2">
+            <p>toto je reprezentacia</p>
+        </section>
+        <section id="tab3">
+            <div class="center">
+                <label><strong>Farba pozadia: </strong></label>
+                <input type="color" class="colorPick" id="color1">
+                <input type="color" class="colorPick" id="color2">
+                <br>
+                <label><strong>Farba vrcholov: </strong></label>
+                <input type="color" id="color3">
+                <br>
+                <label><strong>Farba hrán: </strong></label>
+                <input type="color" id="color4">
+                <br>
+                <label><strong>Vymazať celý graf: </strong></label>
+                <div class="button" id="clear_graph">Vykonaj</div>
+                <br>
+                <label><strong>Vymazať všetky hrany: </strong></label>
+                <div class="button" id="clear_edges">Vykonaj</div>
+            </div>
+        </section>
+        <section id="tab4">
+            <p>toto je tutorial</p>
+        </section>
+        <section id="tab5">
+            <p>toto je tutorial</p>
+        </section>
+    </div>
 </div>
+
+
+
+
 <script>
 
     $("#tab1").click();
@@ -44,89 +84,91 @@
     let node_click = 1;
     let first_node = null;
     let second_node = null;
-    let cy = cytoscape({
-        container: document.getElementById('cy'),
-        wheelSensitivity: 0.5,
-        // zoomingEnabled: false,
-
-        style : [
-            {
-                selector : 'nodes',
-                style : {
-                    'content': 'data(name)',
-                    'background-color' : '#9198e5',
-                    'width' : 40,
-                    'height' : 40
-                }
-            },
-            {
-                selector: 'edges',
-                style: {
-                    'curve-style' : 'bezier',
-                    'target-arrow-shape' : 'triangle',
-                    'line-color' : 'black',
-                    'target-arrow-color': 'black',
-                    'width': 8,
-                    'label': 'data(weight)',
-                    'text-margin-y': 15,
-                    'text-rotation': 'autorotate'
-                }
-            }
-        ],
-
-        elements: {
-            nodes: [
-                { data: { id: 'A' , name: 'A'} },
-                { data: { id: 'B' , name: 'B'} },
-                { data: { id: 'C' , name: 'C'} },
-                { data: { id: 'D' , name: 'D'} },
-                { data: { id: 'E' , name: 'E'} },
-                { data: { id: 'F' , name: 'F'} },
-                { data: { id: 'G' , name: 'G'} },
-                { data: { id: 'H' , name: 'H'} }
-            ],
-            edges: [
-                { data: { source: 'A', target: 'B' , weight: 5} },
-                { data: { source: 'B', target: 'C' , weight: 2} },
-                { data: { source: 'C', target: 'D' , weight: 1} },
-                { data: { source: 'D', target: 'E' , weight: 1} },
-                { data: { source: 'E', target: 'F' , weight: -20} },
-                { data: { source: 'F', target: 'G' , weight: -20} },
-                { data: { source: 'G', target: 'H' , weight: 50} },
-                { data: { source: 'D', target: 'D' , weight: 50} },
-                { data: { source: 'A', target: 'D' , weight: 50} },
-                { data: { source: 'A', target: 'E' , weight: -20} },
-                { data: { source: 'G', target: 'E' , weight: 20} }
-            ]
-        },
-
-        animate: true, // whether to animate changes to the layout
-        animationDuration: 500, // duration of animation in ms, if enabled
-        animationEasing: undefined, // easing of animation, if enabled
-        animateFilter: function ( node, i ){ return true; },
-
-        layout: {
-            name: 'grid',
-            directed: true,
-            padding: 10,
-            motionBlur: true,
-            autolock: true
-        }
-    }); // cy init;
-
-    cy.fit()
+    // let cy = cytoscape({
+    //     container: document.getElementById('cy'),
+    //     wheelSensitivity: 0.5,
+    //     // zoomingEnabled: false,
+    //
+    //     style : [
+    //         {
+    //             selector : 'nodes',
+    //             style : {
+    //                 'content': 'data(name)',
+    //                 'background-color' : '#a83030',
+    //                 'width' : 40,
+    //                 'height' : 40
+    //             }
+    //         },
+    //         {
+    //             selector: 'edges',
+    //             style: {
+    //                 'curve-style' : 'bezier',
+    //                 'target-arrow-shape' : 'triangle',
+    //                 'line-color' : '#83b55a',
+    //                 'target-arrow-color': '#83b55a',
+    //                 'width': 8,
+    //                 'label': 'data(weight)',
+    //                 'text-margin-y': 15,
+    //                 'text-rotation': 'autorotate'
+    //             }
+    //         },
+    //     ],
+    //
+    //     elements: {
+    //         nodes: [
+    //             { data: { id: 'A' , name: 'A'} },
+    //             { data: { id: 'B' , name: 'B'} },
+    //             { data: { id: 'C' , name: 'C'} },
+    //             { data: { id: 'D' , name: 'D'} },
+    //             { data: { id: 'E' , name: 'E'} },
+    //             { data: { id: 'F' , name: 'F'} },
+    //             { data: { id: 'G' , name: 'G'} },
+    //             { data: { id: 'H' , name: 'H'} }
+    //         ],
+    //         edges: [
+    //             { data: { source: 'A', target: 'B' , weight: 5} },
+    //             { data: { source: 'B', target: 'C' , weight: 2} },
+    //             { data: { source: 'C', target: 'D' , weight: 1} },
+    //             { data: { source: 'D', target: 'E' , weight: 1} },
+    //             { data: { source: 'E', target: 'F' , weight: -20} },
+    //             { data: { source: 'F', target: 'G' , weight: -20} },
+    //             { data: { source: 'G', target: 'H' , weight: 50} },
+    //             { data: { source: 'D', target: 'D' , weight: 50} },
+    //             { data: { source: 'A', target: 'D' , weight: 50} },
+    //             { data: { source: 'A', target: 'E' , weight: -20} },
+    //             { data: { source: 'G', target: 'E' , weight: 20} }
+    //         ]
+    //     },
+    //
+    //     animate: true, // whether to animate changes to the layout
+    //     animationDuration: 500, // duration of animation in ms, if enabled
+    //     animationEasing: undefined, // easing of animation, if enabled
+    //     animateFilter: function ( node, i ){ return true; },
+    //
+    //     layout: {
+    //         name: 'grid',
+    //         directed: true,
+    //         padding: 10,
+    //         motionBlur: true,
+    //         autolock: true
+    //     }
+    // }); // cy init;
+    //
+    // cy.fit()
 
 
 
 
 
 </script>
+<script src="Objects/Graph.js"></script>
 <script src="init_data.js"></script>
 <!--<script src="breadthFirstSearch.js"></script>-->
 <!--<script src="depthFirstSearch.js"></script>-->
-<script src="calculating_distance.js"></script>
-<script src="bellman-ford.js"></script>
-<script src="add_node.js"></script>
-<script src="add_edge.js"></script>
+<!--<script src="calculating_distance.js"></script>-->
+<!--<script src="bellman-ford.js"></script>-->
+<!--<script src="add_node.js"></script>-->
+<!--<script src="add_edge.js"></script>-->
+<!--<script src="script.js"></script>-->
 </body>
 </html>

@@ -13,6 +13,10 @@ cy.on('cxttap', "node", function(event) {
     }
 
     if (new_edge) {
+        console.log(new_edge.style({
+            lineColor : $('#color4').val(),
+            targetArrowColor : $('#color4').val()
+        }));
         let vector_length = calculate_vector_length(new_edge);
         edges_info.set(first_node.data().id + second_node.data().id, [10, vector_length])
     }
