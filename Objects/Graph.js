@@ -23,6 +23,10 @@ class Graph {
         this.setEvents();
     }
 
+    get_specific_node(id) {
+        return this.current_graph.nodes('[id = "' + id + '"]');
+    }
+
     add_edge() {
         this.current_graph.add([
             {
@@ -31,6 +35,14 @@ class Graph {
         ]);
         this.sourceNode = null;
         this.targetNode=  null;
+    }
+
+    change_nodes_color(nodes = '*', color) {
+        if (nodes === '*') {
+            this.nodes.style('background-color', color);
+        } else {
+            nodes.style('background-color', color);
+        }
     }
 
     add_node(event) {
@@ -80,6 +92,10 @@ class Graph {
                 self.add_edge();
             }
         });
+
+        this.current_graph.on('dblclick', 'node', function () {
+            self.change_nodes_color(this, '#bada55');
+        })
         
         
     }
