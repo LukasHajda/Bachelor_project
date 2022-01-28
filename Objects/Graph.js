@@ -94,9 +94,15 @@ class Graph {
         });
 
         this.current_graph.on('dblclick', 'node', function () {
-            self.change_nodes_color(this, '#bada55');
-        })
-        
+            if (this.hasClass('custom_select')) {
+                this.removeClass('custom_select');
+            } else {
+                this.addClass('custom_select');
+            }
+            console.log(this);
+            console.log(self.current_graph.$('.custom_select'));
+            // self.change_nodes_color(this, 'blue');
+        });
         
     }
 
@@ -122,6 +128,12 @@ class Graph {
                         'background-color' : '#a83030',
                         'width' : 40,
                         'height' : 40
+                    }
+                },
+                {
+                    selector : '.custom_select',
+                    css : {
+                        'background-color' : 'grey'
                     }
                 },
                 {
