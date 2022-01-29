@@ -4,8 +4,6 @@ class Graph {
         this.current_letter = 'A';
         this.levels = [0];
         this.current_graph = this.init_graph();
-        this.nodes = this.current_graph.nodes();
-        this.edges = this.current_graph.edges();
         this.sourceNode = null;
         this.targetNode = null;
         this.setEvents();
@@ -15,8 +13,10 @@ class Graph {
      *  Removing all selected ( grey colored one )nodes
      */
 
-    remove_nodes() {
-        this.get_all_selected_nodes().remove();
+    remove_selected_elements() {
+        this.get_all_selected_elements().remove();
+        this.sourceNode = null;
+        this.targetNode = null;
     }
 
     /**
@@ -24,7 +24,7 @@ class Graph {
      * @returns {*|jQuery.fn.init}
      */
 
-    get_all_selected_nodes() {
+    get_all_selected_elements() {
         return this.current_graph.$('.custom-select');
     }
 
@@ -52,18 +52,14 @@ class Graph {
         this.targetNode=  null;
     }
 
-    /**
-     * Change one specific node or all nodes ( '*' => all nodes )
-     * @param nodes
-     * @param color
-     */
-
-    change_nodes_color(nodes = '*', color) {
-        if (nodes === '*') {
-            this.nodes.style('background-color', color);
-        } else {
-            nodes.style('background-color', color);
-        }
+    change_selected_elements_color() {
+        let color = $('#color5').val();
+        this.get_all_selected_elements().nodes().style('background-color', color);
+        this.get_all_selected_elements().edges().style({
+            'line-color' : color,
+            'target-arrow-color': color,
+        });
+        this.get_all_selected_elements().removeClass('custom-select');
     }
 
     /**
@@ -123,7 +119,7 @@ class Graph {
                 self.add_edge();
             }
 
-            console.log(self.get_all_selected_nodes());
+            console.log(self.get_all_selected_elements());
         });
 
         this.current_graph.on('dblclick', 'node', function () {
@@ -159,7 +155,7 @@ class Graph {
      */
 
     clear_edges() {
-        this.edges.remove();
+        this.current_graph.edges().remove();
     }
 
     /**
