@@ -8,6 +8,10 @@ $('#clear_graph').click(function () {
     graph.clear_graph();
 })
 
+$('#remove_selected').click(function () {
+    graph.remove_nodes()
+})
+
 console.log(graph);
 
 

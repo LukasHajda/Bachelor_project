@@ -23,6 +23,16 @@ class Graph {
         this.setEvents();
     }
 
+
+    remove_nodes() {
+        this.get_all_selected_nodes().remove();
+        console.log(this.current_graph.edges().length);
+    }
+
+    get_all_selected_nodes() {
+        return this.current_graph.$('.custom-select');
+    }
+
     get_specific_node(id) {
         return this.current_graph.nodes('[id = "' + id + '"]');
     }
@@ -74,6 +84,7 @@ class Graph {
             this.current_id++;
 
             node.style('background-color', $('#color3').val());
+            console.log(this.current_graph.nodes().length);
             // nodes_positions.set(newId, [xPos, yPos]);
         }
     }
@@ -91,17 +102,18 @@ class Graph {
                 self.targetNode = this;
                 self.add_edge();
             }
+
+            console.log(self.get_all_selected_nodes());
         });
 
         this.current_graph.on('dblclick', 'node', function () {
-            if (this.hasClass('custom_select')) {
-                this.removeClass('custom_select');
+            if (this.hasClass('custom-select')) {
+                this.removeClass('custom-select');
+                this.style('background-color', $('#color3').val());
             } else {
-                this.addClass('custom_select');
+                this.addClass('custom-select');
+                this.style('background-color', 'grey');
             }
-            console.log(this);
-            console.log(self.current_graph.$('.custom_select'));
-            // self.change_nodes_color(this, 'blue');
         });
         
     }
@@ -131,9 +143,9 @@ class Graph {
                     }
                 },
                 {
-                    selector : '.custom_select',
-                    css : {
-                        'background-color' : 'grey'
+                    selector: '.custom-select',
+                    style: {
+                        'background-color' : 'yellow',
                     }
                 },
                 {
