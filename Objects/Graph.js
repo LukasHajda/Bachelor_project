@@ -26,7 +26,6 @@ class Graph {
 
     remove_nodes() {
         this.get_all_selected_nodes().remove();
-        console.log(this.current_graph.edges().length);
     }
 
     get_all_selected_nodes() {
@@ -91,7 +90,7 @@ class Graph {
 
     setEvents() {
         let self = this;
-        this.current_graph.on('tap', function(event){
+        this.current_graph.on('click', function(event){
            self.add_node(event);
         });
 
@@ -113,6 +112,22 @@ class Graph {
             } else {
                 this.addClass('custom-select');
                 this.style('background-color', 'grey');
+            }
+        });
+
+        this.current_graph.on('dblclick', 'edge', function () {
+            if (this.hasClass('custom-select')) {
+                this.removeClass('custom-select');
+                this.style({
+                    'line-color' : '#83b55a',
+                    'target-arrow-color': '#83b55a',
+                });
+            } else {
+                this.addClass('custom-select');
+                this.style({
+                    'line-color' : 'grey',
+                    'target-arrow-color': 'grey',
+                });
             }
         });
         
