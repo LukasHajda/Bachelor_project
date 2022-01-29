@@ -1,15 +1,3 @@
-// export function Graph(cy) {
-//
-//     this.current_graph = cy;
-//     this.nodes = cy.nodes();
-//     this.edges = cy.edges();
-//
-// }
-
-// Graph.prototype.current_graph = cy;
-// Graph.prototype.nodes = cy.nodes();
-// Graph.prototype.edges = cy.edges();
-
 class Graph {
     constructor() {
         this.current_id = 1;
@@ -23,18 +11,36 @@ class Graph {
         this.setEvents();
     }
 
+    /**
+     *  Removing all selected ( grey colored one )nodes
+     */
 
     remove_nodes() {
         this.get_all_selected_nodes().remove();
     }
 
+    /**
+     * Get all elements which have 'custom-select' class
+     * @returns {*|jQuery.fn.init}
+     */
+
     get_all_selected_nodes() {
         return this.current_graph.$('.custom-select');
     }
 
+    /**
+     * Get node by give ID
+     * @param id
+     * @returns {*}
+     */
+
     get_specific_node(id) {
         return this.current_graph.nodes('[id = "' + id + '"]');
     }
+
+    /**
+     * Add new edge witch source and target nodes
+     */
 
     add_edge() {
         this.current_graph.add([
@@ -46,6 +52,12 @@ class Graph {
         this.targetNode=  null;
     }
 
+    /**
+     * Change one specific node or all nodes ( '*' => all nodes )
+     * @param nodes
+     * @param color
+     */
+
     change_nodes_color(nodes = '*', color) {
         if (nodes === '*') {
             this.nodes.style('background-color', color);
@@ -53,6 +65,11 @@ class Graph {
             nodes.style('background-color', color);
         }
     }
+
+    /**
+     * Add new node to the graph with never ending level generated name
+     * @param event
+     */
 
     add_node(event) {
         let evtTarget = event.target;
@@ -87,6 +104,10 @@ class Graph {
             // nodes_positions.set(newId, [xPos, yPos]);
         }
     }
+
+    /**
+     * Set up all events for graph
+     */
 
     setEvents() {
         let self = this;
@@ -133,13 +154,26 @@ class Graph {
         
     }
 
+    /**
+     * Remove all edges from graph
+     */
+
     clear_edges() {
         this.edges.remove();
     }
 
+    /**
+     * Remove whole graph
+     */
+
     clear_graph() {
         this.current_graph.elements().remove();
     }
+
+    /**
+     * Init graph with some options and with example graph
+     * @returns {*}
+     */
 
     init_graph() {
         let cy = cytoscape({
