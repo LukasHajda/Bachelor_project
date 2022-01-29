@@ -164,6 +164,9 @@ class Graph {
 
     clear_graph() {
         this.current_graph.elements().remove();
+        this.current_letter = 'A';
+        this.levels = [0];
+        this.current_id = 1;
     }
 
     /**
