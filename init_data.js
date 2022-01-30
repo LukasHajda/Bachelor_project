@@ -1,4 +1,6 @@
 let graph = new Graph(cy);
+$('#color4').val('#83b55a');
+$('#color3').val('#a83030');
 
 $('#clear_edges').click(function () {
     graph.clear_edges();
@@ -6,6 +8,14 @@ $('#clear_edges').click(function () {
 
 $('#clear_graph').click(function () {
     graph.clear_graph();
+})
+
+$('#remove_selected').click(function () {
+    graph.remove_selected_elements()
+})
+
+$('#color5').on('change', function () {
+    graph.change_selected_elements_color();
 })
 
 console.log(graph);
