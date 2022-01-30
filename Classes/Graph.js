@@ -6,7 +6,7 @@ class Graph {
         this.current_graph = this.init_graph();
         this.sourceNode = null;
         this.targetNode = null;
-        this.setEvents();
+        this.set_events();
     }
 
     /**
@@ -51,6 +51,10 @@ class Graph {
         this.sourceNode = null;
         this.targetNode=  null;
     }
+
+    /**
+     *  Change color of all selected (which contains class "custom-select") elements.
+     */
 
     change_selected_elements_color() {
         let color = $('#color5').val();
@@ -105,7 +109,7 @@ class Graph {
      * Set up all events for graph
      */
 
-    setEvents() {
+    set_events() {
         let self = this;
         this.current_graph.on('click', function(event){
            self.add_node(event);
