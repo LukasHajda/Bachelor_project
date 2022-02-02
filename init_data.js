@@ -1,5 +1,10 @@
 let graph = new Graph(cy);
 let system = new System();
+let a = graph.current_graph.nodes().filter(function (n) {
+    return n.data('component') !== true;
+}).map(node => node.data('id'));
+
+console.log(a);
 
 
 $('#backgroundColor-first').val('#e2d0d0');

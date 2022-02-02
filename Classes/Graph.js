@@ -240,7 +240,7 @@ class Graph {
                 nodes: [
                     { data: { id: 'A' , name: 'A', parent: 'x'} },
                     { data: { id: 'B' , name: 'B'} },
-                    { data: { id: 'x'} },
+                    { data: { id: 'x', component: true} },
                     { data: { id: 'C' , name: 'C', parent: 'x'} },
                     { data: { id: 'D' , name: 'D'} },
                     { data: { id: 'E' , name: 'E', parent: 'x'} },
