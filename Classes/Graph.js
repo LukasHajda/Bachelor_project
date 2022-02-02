@@ -43,11 +43,13 @@ class Graph {
      */
 
     add_edge() {
-        this.current_graph.add([
+        let edge = this.current_graph.add([
             {
                 group: "edges", data: { source: this.sourceNode.data().id, target: this.targetNode.data().id, weight: 10}
             }
         ]);
+        edge.style({'line-color' : $('#color4').val(),
+            'target-arrow-color': $('#color4').val()});
         this.sourceNode = null;
         this.targetNode=  null;
     }

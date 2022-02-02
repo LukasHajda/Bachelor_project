@@ -1,4 +1,9 @@
 let graph = new Graph(cy);
+let system = new System();
+
+
+$('#backgroundColor-first').val('#e2d0d0');
+$('#backgroundColor-second').val('#949995');
 $('#color4').val('#83b55a');
 $('#color3').val('#a83030');
 
