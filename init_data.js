@@ -13,6 +13,11 @@ $('#clear_edges').click(function () {
 
 $('#clear_graph').click(function () {
     graph.clear_graph();
+});
+
+$('#reset_configuration').click(function () {
+    graph.reset_configuration();
+    system.reset_configuration();
 })
 
 $('#remove_selected').click(function () {

@@ -14,4 +14,11 @@ class System {
             }, 200)
         });
     }
+
+    reset_configuration() {
+        $('#color4').val('#83b55a');
+        $('#color3').val('#a83030');
+        $('#backgroundColor-first').val('#e2d0d0');
+        $('#backgroundColor-second').val('#949995');
+    }
 }
