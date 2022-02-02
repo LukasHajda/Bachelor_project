@@ -49,8 +49,8 @@
         <section id="tab3">
             <div class="center">
                 <label><strong>Farba pozadia: </strong></label>
-                <input type="color" class="colorPick" id="color1">
-                <input type="color" class="colorPick" id="color2">
+                <input type="color" class="colorPick" id="backgroundColor-first">
+                <input type="color" class="colorPick" id="backgroundColor-second">
                 <br>
                 <label><strong>Farba vrcholov: </strong></label>
                 <input type="color" id="color3">
@@ -69,6 +69,12 @@
                 <br>
                 <label><strong>Vymazať zvolené elementy: </strong></label>
                 <div class="button" id="remove_selected">Vykonaj</div>
+                <br>
+                <label><strong>Resetuj nastavenia: </strong></label>
+                <div class="button" id="reset_configuration">Vykonaj</div>
+                <br>
+                <label><strong>Vytvor komponentu: </strong></label>
+                <div class="button" id="make_component">Vykonaj</div>
                 <br>
             </div>
         </section>
@@ -169,6 +175,7 @@
 
 </script>
 <script src="Classes/Graph.js"></script>
+<script src="Classes/System.js"></script>
 <script src="init_data.js"></script>
 <!--<script src="breadthFirstSearch.js"></script>-->
 <!--<script src="depthFirstSearch.js"></script>-->

@@ -6,7 +6,7 @@ class Graph {
         this.current_graph = this.init_graph();
         this.sourceNode = null;
         this.targetNode = null;
-        this.setEvents();
+        this.set_events();
     }
 
     /**
@@ -43,14 +43,20 @@ class Graph {
      */
 
     add_edge() {
-        this.current_graph.add([
+        let edge = this.current_graph.add([
             {
                 group: "edges", data: { source: this.sourceNode.data().id, target: this.targetNode.data().id, weight: 10}
             }
         ]);
+        edge.style({'line-color' : $('#color4').val(),
+            'target-arrow-color': $('#color4').val()});
         this.sourceNode = null;
         this.targetNode=  null;
     }
+
+    /**
+     *  Change color of all selected (which contains class "custom-select") elements.
+     */
 
     change_selected_elements_color() {
         let color = $('#color5').val();
@@ -105,7 +111,7 @@ class Graph {
      * Set up all events for graph
      */
 
-    setEvents() {
+    set_events() {
         let self = this;
         this.current_graph.on('click', function(event){
            self.add_node(event);
@@ -136,8 +142,8 @@ class Graph {
             if (this.hasClass('custom-select')) {
                 this.removeClass('custom-select');
                 this.style({
-                    'line-color' : '#83b55a',
-                    'target-arrow-color': '#83b55a',
+                    'line-color' : $('#color4').val(),
+                    'target-arrow-color': $('#color4').val(),
                 });
             } else {
                 this.addClass('custom-select');
@@ -169,6 +175,15 @@ class Graph {
         this.current_id = 1;
     }
 
+    reset_configuration() {
+        this.current_graph.elements().removeClass('custom-select');
+        this.current_graph.nodes().style('background-color', '#a83030');
+        this.current_graph.edges().style({
+            'line-color' : '#83b55a',
+            'target-arrow-color': '#83b55a',
+        });
+    }
+
     /**
      * Init graph with some options and with example graph
      * @returns {*}
@@ -178,6 +193,7 @@ class Graph {
         let cy = cytoscape({
             container: document.getElementById('cy'),
             wheelSensitivity: 0.2,
+            boxSelectionEnabled: false,
             // zoomingEnabled: false,
 
             style : [
@@ -197,6 +213,15 @@ class Graph {
                     }
                 },
                 {
+                    selector: ':parent',
+                    css: {
+                        'text-valign': 'top',
+                        'text-halign': 'center',
+                        'background-color' : '#D1F0E9'
+                        ,
+                    }
+                },
+                {
                     selector: 'edges',
                     style: {
                         'curve-style' : 'bezier',
@@ -213,11 +238,12 @@ class Graph {
 
             elements: {
                 nodes: [
-                    { data: { id: 'A' , name: 'A'} },
+                    { data: { id: 'A' , name: 'A', parent: 'x'} },
                     { data: { id: 'B' , name: 'B'} },
-                    { data: { id: 'C' , name: 'C'} },
+                    { data: { id: 'x'} },
+                    { data: { id: 'C' , name: 'C', parent: 'x'} },
                     { data: { id: 'D' , name: 'D'} },
-                    { data: { id: 'E' , name: 'E'} },
+                    { data: { id: 'E' , name: 'E', parent: 'x'} },
                     { data: { id: 'F' , name: 'F'} },
                     { data: { id: 'G' , name: 'G'} },
                     { data: { id: 'H' , name: 'H'} }
