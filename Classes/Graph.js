@@ -218,14 +218,14 @@ class Graph {
         let selected_nodes = this.current_graph.nodes('.custom-select').filter(function (node) {
             return node.data('component') !== true;
         });
+
         if (selected_nodes.length === 0) return;
+
         let newComponent = this.add_component();
         selected_nodes.move({parent: newComponent.data('id')});
+
         this.reset_selected_elements(selected_nodes);
         this.remove_empty_components();
-        console.log(this.current_graph.nodes().filter(function (n) {
-            return n.data('component') === true;
-        }).length);
     }
 
     /**
@@ -282,12 +282,11 @@ class Graph {
 
             elements: {
                 nodes: [
-                    { data: { id: 'A' , name: 'A', parent: 'x'} },
+                    { data: { id: 'A' , name: 'A'} },
                     { data: { id: 'B' , name: 'B'} },
-                    { data: { id: 'x', component: true, name: 'komponenta 1'} },
-                    { data: { id: 'C' , name: 'C', parent: 'x'} },
+                    { data: { id: 'C' , name: 'C'} },
                     { data: { id: 'D' , name: 'D'} },
-                    { data: { id: 'E' , name: 'E', parent: 'x'} },
+                    { data: { id: 'E' , name: 'E'} },
                     { data: { id: 'F' , name: 'F'} },
                     { data: { id: 'G' , name: 'G'} },
                     { data: { id: 'H' , name: 'H'} }
