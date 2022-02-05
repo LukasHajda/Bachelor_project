@@ -2,6 +2,7 @@ class Graph {
     constructor() {
         this.current_id = 1;
         this.current_letter = 'A';
+        this.current_component_id = 1;
         this.levels = [0];
         this.current_graph = this.init_graph();
         this.sourceNode = null;
@@ -107,6 +108,16 @@ class Graph {
         }
     }
 
+    add_component() {
+        let newID = 'Komponenta_' + this.current_component_id;
+        let component = this.current_graph.add([{
+            group: "nodes",
+            data: { id: newID, label: newID, name: newID, component: true},
+        }]);
+        this.current_component_id++;
+        return component;
+    }
+
     /**
      * Set up all events for graph
      */
@@ -175,6 +186,10 @@ class Graph {
         this.current_id = 1;
     }
 
+    /**
+     * Remove all custom classes, set default color to all edges and nodes as well.
+     */
+
     reset_configuration() {
         this.current_graph.elements().removeClass('custom-select');
         this.current_graph.nodes().style('background-color', '#a83030');
@@ -182,6 +197,35 @@ class Graph {
             'line-color' : '#83b55a',
             'target-arrow-color': '#83b55a',
         });
+    }
+
+    reset_selected_elements(elements) {
+        elements.removeClass('custom-select');
+        elements.style('background-color', '#a83030');
+    }
+
+    remove_empty_components() {
+        this.current_graph.nodes().filter(function (node) {
+            return node.data('component') === true && node.children().length === 0;
+        }).remove();
+    }
+
+    /**
+     * Make component with selected nodes
+     */
+
+    make_component() {
+        let selected_nodes = this.current_graph.nodes('.custom-select').filter(function (node) {
+            return node.data('component') !== true;
+        });
+        if (selected_nodes.length === 0) return;
+        let newComponent = this.add_component();
+        selected_nodes.move({parent: newComponent.data('id')});
+        this.reset_selected_elements(selected_nodes);
+        this.remove_empty_components();
+        console.log(this.current_graph.nodes().filter(function (n) {
+            return n.data('component') === true;
+        }).length);
     }
 
     /**
@@ -240,7 +284,7 @@ class Graph {
                 nodes: [
                     { data: { id: 'A' , name: 'A', parent: 'x'} },
                     { data: { id: 'B' , name: 'B'} },
-                    { data: { id: 'x', component: true} },
+                    { data: { id: 'x', component: true, name: 'komponenta 1'} },
                     { data: { id: 'C' , name: 'C', parent: 'x'} },
                     { data: { id: 'D' , name: 'D'} },
                     { data: { id: 'E' , name: 'E', parent: 'x'} },
