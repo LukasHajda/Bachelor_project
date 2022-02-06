@@ -108,6 +108,18 @@ class Graph {
         }
     }
 
+    change_text() {
+        let input = $('#label');
+        let label_input = input.val();
+        let regex = /\s+/g;
+        let new_label = label_input.replaceAll(regex, ' ').trim();
+
+        if (new_label.length === 0) return;
+
+        let node = this.current_graph.nodes('#' + input.attr('data-id'));
+        node.data('name', new_label);
+    }
+
     add_component() {
         let newID = 'Komponenta_' + this.current_component_id;
         let component = this.current_graph.add([{
@@ -164,6 +176,12 @@ class Graph {
                 });
             }
         });
+
+        this.current_graph.on('click', 'node', function () {
+            let label_input = $('#label');
+            label_input.val(this.data('name'));
+            label_input.attr('data-id', this.data('id'));
+        })
         
     }
 

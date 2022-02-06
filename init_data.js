@@ -37,6 +37,10 @@ $('#make_component').on('click', function () {
    graph.make_component();
 });
 
+$('#change_element').on('click', function () {
+    graph.change_text();
+})
+
 console.log(graph);
 
 
