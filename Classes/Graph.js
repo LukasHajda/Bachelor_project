@@ -37,6 +37,7 @@ class Graph {
             self.#add_node(event);
         });
 
+        // right mouse click
         this.#current_graph.on('cxttap', 'node', function(evt){
             if (!self.#sourceNode) {
                 self.#sourceNode = this;
@@ -46,6 +47,7 @@ class Graph {
             }
         });
 
+        // double left mouse click on node
         this.#current_graph.on('dblclick', 'node', function () {
             if (this.hasClass('custom-select')) {
                 this.removeClass('custom-select');
@@ -60,6 +62,7 @@ class Graph {
             }
         });
 
+        // double left mouse click on edge
         this.#current_graph.on('dblclick', 'edge', function () {
             if (this.hasClass('custom-select')) {
                 this.removeClass('custom-select');
