@@ -41,13 +41,6 @@ $('#change_element').on('click', function () {
     graph.change_text();
 })
 
-$('#all_nodes').on('click', function () {
-    graph.get_all_nodes();
-})
-
-console.log(graph);
-
-
 
 // let click_count = 0;
 // let nodes_positions = new Map();

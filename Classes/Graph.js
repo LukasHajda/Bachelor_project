@@ -158,8 +158,11 @@ class Graph {
         this.current_graph.on('dblclick', 'node', function () {
             if (this.hasClass('custom-select')) {
                 this.removeClass('custom-select');
-                // console.log();
-                this.style('background-color', this.data().old_color);
+                if (this.data().component) {
+                    this.style('background-color', '#D1F0E9');
+                } else {
+                    this.style('background-color', this.data().old_color);
+                }
             } else {
                 this.addClass('custom-select');
                 this.style('background-color', 'grey');
