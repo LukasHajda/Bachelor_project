@@ -41,6 +41,10 @@ $('#change_element').on('click', function () {
     graph.change_text();
 })
 
+$('#all_nodes').on('click', function () {
+    graph.get_all_nodes();
+})
+
 console.log(graph);
 
 
