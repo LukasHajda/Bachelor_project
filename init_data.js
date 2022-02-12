@@ -1,11 +1,5 @@
 let graph = new Graph(cy);
 let system = new System();
-let a = graph.current_graph.nodes().filter(function (n) {
-    return n.data('component') === true;
-});
-
-console.log(a.children().map(child => child.data('id')));
-
 
 $('#backgroundColor-first').val('#e2d0d0');
 $('#backgroundColor-second').val('#949995');
@@ -17,28 +11,28 @@ $('#clear_edges').click(function () {
 });
 
 $('#clear_graph').click(function () {
-    graph.clear_graph();
+    graph.clear_graph(); // done
 });
 
 $('#reset_configuration').click(function () {
-    graph.reset_configuration();
+    graph.reset_configuration(); // Done
     system.reset_configuration();
 })
 
 $('#remove_selected').click(function () {
-    graph.remove_selected_elements()
+    graph.remove_selected_elements() // done
 })
 
 $('#color5').on('change', function () {
-    graph.change_selected_elements_color();
+    graph.change_selected_elements_color(); // done
 })
 
 $('#make_component').on('click', function () {
-   graph.make_component();
+   graph.make_component(); // done
 });
 
 $('#change_element').on('click', function () {
-    graph.change_text();
+    graph.change_text(); // done
 })
 
 
