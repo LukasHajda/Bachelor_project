@@ -1,5 +1,10 @@
 let graph = new Graph(cy);
 let system = new System();
+let a = graph.current_graph.nodes().filter(function (n) {
+    return n.data('component') === true;
+});
+
+console.log(a.children().map(child => child.data('id')));
 
 
 $('#backgroundColor-first').val('#e2d0d0');
@@ -26,6 +31,18 @@ $('#remove_selected').click(function () {
 
 $('#color5').on('change', function () {
     graph.change_selected_elements_color();
+})
+
+$('#make_component').on('click', function () {
+   graph.make_component();
+});
+
+$('#change_element').on('click', function () {
+    graph.change_text();
+})
+
+$('#all_nodes').on('click', function () {
+    graph.get_all_nodes();
 })
 
 console.log(graph);
@@ -62,8 +79,8 @@ console.log(graph);
 //
 $(function () {
 
-    $('#tab1').addClass('open-section');
-    $('#tab2, #tab3, #tab4, #tab5').addClass('hide-section');
+    $('#tab3').addClass('open-section');
+    $('#tab2, #tab1, #tab4, #tab5').addClass('hide-section');
 
     $('#algorithm').click(function () {
         $('#tab1').removeClass('hide-section').addClass('open-section');
@@ -91,7 +108,7 @@ $(function () {
     })
 
 
-    $('.row li:first-child').addClass('active');
+    $('.row li:nth-child(3)').addClass('active');
     $(".row li").click(function () {
         $('.row li').removeClass('active');
         $(this).addClass('active');

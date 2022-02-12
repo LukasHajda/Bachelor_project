@@ -2,6 +2,7 @@ class Graph {
     constructor() {
         this.current_id = 1;
         this.current_letter = 'A';
+        this.current_component_id = 1;
         this.levels = [0];
         this.current_graph = this.init_graph();
         this.sourceNode = null;
@@ -43,13 +44,14 @@ class Graph {
      */
 
     add_edge() {
+        let edge_color = $('#color4').val();
         let edge = this.current_graph.add([
             {
-                group: "edges", data: { source: this.sourceNode.data().id, target: this.targetNode.data().id, weight: 10}
+                group: "edges", data: { source: this.sourceNode.data().id, target: this.targetNode.data().id, weight: 10, old_color: edge_color}
             }
         ]);
-        edge.style({'line-color' : $('#color4').val(),
-            'target-arrow-color': $('#color4').val()});
+        edge.style({'line-color' : edge_color,
+            'target-arrow-color': edge_color});
         this.sourceNode = null;
         this.targetNode=  null;
     }
@@ -65,6 +67,7 @@ class Graph {
             'line-color' : color,
             'target-arrow-color': color,
         });
+        this.get_all_selected_elements().map(ele => ele.data('old_color', color))
         this.get_all_selected_elements().removeClass('custom-select');
     }
 
@@ -75,6 +78,7 @@ class Graph {
 
     add_node(event) {
         let evtTarget = event.target;
+        let node_color = $('#color3').val();
 
         if( evtTarget === this.current_graph ){
             let xPos = event.position.x;
@@ -89,11 +93,11 @@ class Graph {
                 this.current_id = 1;
             }
             let newID = this.current_letter + '_' + ((this.levels[this.levels.length - 1] === 0) ? '' : (this.levels[this.levels.length - 1] + '_')) + this.current_id;
-            console.log(newID);
-            console.log(xPos, yPos);
+            // console.log(newID);
+            // console.log(xPos, yPos);
             let node = this.current_graph.add([{
                 group: "nodes",
-                data: { id: newID, label: newID, name: newID},
+                data: { id: newID, label: newID, name: newID, old_color: node_color},
                 position: {
                     x: xPos,
                     y: yPos,
@@ -101,10 +105,33 @@ class Graph {
             }]);
             this.current_id++;
 
-            node.style('background-color', $('#color3').val());
-            console.log(this.current_graph.nodes().length);
+            node.style('background-color', node_color);
+            // console.log(this.current_graph.nodes().length);
+            // console.log('Old color: ', node.data('old_color'));
             // nodes_positions.set(newId, [xPos, yPos]);
         }
+    }
+
+    change_text() {
+        let input = $('#label');
+        let label_input = input.val();
+        let regex = /\s+/g;
+        let new_label = label_input.replaceAll(regex, ' ').trim();
+
+        if (new_label.length === 0) return;
+
+        let node = this.current_graph.nodes('#' + input.attr('data-id'));
+        node.data('name', new_label);
+    }
+
+    add_component() {
+        let newID = 'Komponenta_' + this.current_component_id;
+        let component = this.current_graph.add([{
+            group: "nodes",
+            data: { id: newID, label: newID, name: newID, component: true},
+        }]);
+        this.current_component_id++;
+        return component;
     }
 
     /**
@@ -125,13 +152,14 @@ class Graph {
                 self.add_edge();
             }
 
-            console.log(self.get_all_selected_elements());
+            // console.log(self.get_all_selected_elements());
         });
 
         this.current_graph.on('dblclick', 'node', function () {
             if (this.hasClass('custom-select')) {
                 this.removeClass('custom-select');
-                this.style('background-color', $('#color3').val());
+                // console.log();
+                this.style('background-color', this.data().old_color);
             } else {
                 this.addClass('custom-select');
                 this.style('background-color', 'grey');
@@ -141,9 +169,10 @@ class Graph {
         this.current_graph.on('dblclick', 'edge', function () {
             if (this.hasClass('custom-select')) {
                 this.removeClass('custom-select');
+                console.log(this);
                 this.style({
-                    'line-color' : $('#color4').val(),
-                    'target-arrow-color': $('#color4').val(),
+                    'line-color' : this.data().old_color,
+                    'target-arrow-color': this.data().old_color,
                 });
             } else {
                 this.addClass('custom-select');
@@ -153,7 +182,17 @@ class Graph {
                 });
             }
         });
+
+        this.current_graph.on('click', 'node', function () {
+            let label_input = $('#label');
+            label_input.val(this.data('name'));
+            label_input.attr('data-id', this.data('id'));
+        })
         
+    }
+
+    get_all_nodes() {
+        console.log(this.current_graph.nodes().map(node => node.data()));
     }
 
     /**
@@ -175,6 +214,10 @@ class Graph {
         this.current_id = 1;
     }
 
+    /**
+     * Remove all custom classes, set default color to all edges and nodes as well.
+     */
+
     reset_configuration() {
         this.current_graph.elements().removeClass('custom-select');
         this.current_graph.nodes().style('background-color', '#a83030');
@@ -182,6 +225,35 @@ class Graph {
             'line-color' : '#83b55a',
             'target-arrow-color': '#83b55a',
         });
+    }
+
+    reset_selected_elements(elements) {
+        elements.removeClass('custom-select');
+        elements.style('background-color', '#a83030');
+    }
+
+    remove_empty_components() {
+        this.current_graph.nodes().filter(function (node) {
+            return node.data('component') === true && node.children().length === 0;
+        }).remove();
+    }
+
+    /**
+     * Make component with selected nodes
+     */
+
+    make_component() {
+        let selected_nodes = this.current_graph.nodes('.custom-select').filter(function (node) {
+            return node.data('component') !== true;
+        });
+
+        if (selected_nodes.length === 0) return;
+
+        let newComponent = this.add_component();
+        selected_nodes.move({parent: newComponent.data('id')});
+
+        this.reset_selected_elements(selected_nodes);
+        this.remove_empty_components();
     }
 
     /**
@@ -238,28 +310,27 @@ class Graph {
 
             elements: {
                 nodes: [
-                    { data: { id: 'A' , name: 'A', parent: 'x'} },
-                    { data: { id: 'B' , name: 'B'} },
-                    { data: { id: 'x'} },
-                    { data: { id: 'C' , name: 'C', parent: 'x'} },
-                    { data: { id: 'D' , name: 'D'} },
-                    { data: { id: 'E' , name: 'E', parent: 'x'} },
-                    { data: { id: 'F' , name: 'F'} },
-                    { data: { id: 'G' , name: 'G'} },
-                    { data: { id: 'H' , name: 'H'} }
+                    { data: { id: 'A' , name: 'A', old_color: '#a83030'} },
+                    { data: { id: 'B' , name: 'B', old_color: '#a83030'} },
+                    { data: { id: 'C' , name: 'C', old_color: '#a83030'} },
+                    { data: { id: 'D' , name: 'D', old_color: '#a83030'} },
+                    { data: { id: 'E' , name: 'E', old_color: '#a83030'} },
+                    { data: { id: 'F' , name: 'F', old_color: '#a83030'} },
+                    { data: { id: 'G' , name: 'G', old_color: '#a83030'} },
+                    { data: { id: 'H' , name: 'H', old_color: '#a83030'} }
                 ],
                 edges: [
-                    { data: { source: 'A', target: 'B' , weight: 5} },
-                    { data: { source: 'B', target: 'C' , weight: 2} },
-                    { data: { source: 'C', target: 'D' , weight: 1} },
-                    { data: { source: 'D', target: 'E' , weight: 1} },
-                    { data: { source: 'E', target: 'F' , weight: -20} },
-                    { data: { source: 'F', target: 'G' , weight: -20} },
-                    { data: { source: 'G', target: 'H' , weight: 50} },
-                    { data: { source: 'D', target: 'D' , weight: 50} },
-                    { data: { source: 'A', target: 'D' , weight: 50} },
-                    { data: { source: 'A', target: 'E' , weight: -20} },
-                    { data: { source: 'G', target: 'E' , weight: 20} }
+                    { data: { source: 'A', target: 'B' , weight: 5, old_color: '#83b55a'} },
+                    { data: { source: 'B', target: 'C' , weight: 2, old_color: '#83b55a'} },
+                    { data: { source: 'C', target: 'D' , weight: 1, old_color: '#83b55a'} },
+                    { data: { source: 'D', target: 'E' , weight: 1, old_color: '#83b55a'} },
+                    { data: { source: 'E', target: 'F' , weight: -20, old_color: '#83b55a'} },
+                    { data: { source: 'F', target: 'G' , weight: -20, old_color: '#83b55a'} },
+                    { data: { source: 'G', target: 'H' , weight: 50, old_color: '#83b55a'} },
+                    { data: { source: 'D', target: 'D' , weight: 50, old_color: '#83b55a'} },
+                    { data: { source: 'A', target: 'D' , weight: 50, old_color: '#83b55a'} },
+                    { data: { source: 'A', target: 'E' , weight: -20, old_color: '#83b55a'} },
+                    { data: { source: 'G', target: 'E' , weight: 20, old_color: '#83b55a'} }
                 ]
             },
 
