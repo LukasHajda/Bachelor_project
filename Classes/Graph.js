@@ -37,8 +37,15 @@ class Graph {
             self.#add_node(event);
         });
 
+        // delete selected elements with DEL key
+        window.addEventListener('keydown', function (event) {
+            if (event.key === 'Delete') {
+                self.remove_selected_elements();
+            }
+        })
+
         // right mouse click
-        this.#current_graph.on('cxttap', 'node', function(evt){
+        this.#current_graph.on('cxttap', 'node', function(){
             if (!self.#sourceNode) {
                 self.#sourceNode = this;
             } else {
@@ -90,6 +97,22 @@ class Graph {
 
     // ========================================================================
 
+    #select_elements(arr, group) {
+        $.each(arr, function (index, value) {
+
+            if (group === 'edges') {
+                value.style({
+                    'line-color' : 'grey',
+                    'target-arrow-color': 'grey',
+                });
+            } else {
+                value.style('background-color', 'grey');
+            }
+        })
+    }
+
+
+    // ========================================================================
     /**
      * Add new edge witch source and target nodes
      */
@@ -242,7 +265,7 @@ class Graph {
                     selector: 'edges',
                     style: {
                         'curve-style' : 'bezier',
-                        'target-arrow-shape' : 'triangle',
+                        'target-arrow-shape' : 'none',
                         'line-color' : '#83b55a',
                         'target-arrow-color': '#83b55a',
                         'width': 8,
@@ -265,17 +288,20 @@ class Graph {
                     { data: { id: 'H' , name: 'H', old_color: '#a83030'} }
                 ],
                 edges: [
-                    { data: { source: 'A', target: 'B' , weight: 5, old_color: '#83b55a'} },
+                    { data: { source: 'A', target: 'B' , weight: 5, old_color: '#83b55a',directed: false} },
                     { data: { source: 'B', target: 'C' , weight: 2, old_color: '#83b55a'} },
                     { data: { source: 'C', target: 'D' , weight: 1, old_color: '#83b55a'} },
                     { data: { source: 'D', target: 'E' , weight: 1, old_color: '#83b55a'} },
                     { data: { source: 'E', target: 'F' , weight: -20, old_color: '#83b55a'} },
+
+                    { data: { source: 'F', target: 'A' , weight: 4, old_color: '#83b55a'} },
+
                     { data: { source: 'F', target: 'G' , weight: -20, old_color: '#83b55a'} },
                     { data: { source: 'G', target: 'H' , weight: 50, old_color: '#83b55a'} },
                     { data: { source: 'D', target: 'D' , weight: 50, old_color: '#83b55a'} },
                     { data: { source: 'A', target: 'D' , weight: 50, old_color: '#83b55a'} },
                     { data: { source: 'A', target: 'E' , weight: -20, old_color: '#83b55a'} },
-                    { data: { source: 'G', target: 'E' , weight: 20, old_color: '#83b55a'} }
+                    { data: { source: 'G', target: 'E' , weight: 20, old_color: '#83b55a'}, }
                 ]
             },
 
@@ -286,8 +312,8 @@ class Graph {
 
             layout: {
                 name: 'grid',
-                directed: true,
                 padding: 10,
+                directed: false,
                 motionBlur: true,
                 autolock: true
             }
@@ -435,9 +461,31 @@ class Graph {
 
     // =======================================================================================
 
+    select_all_edges() {
+        let edges = this.#current_graph.edges()
+        edges.removeClass('custom-select');
+        edges.addClass('custom-select');
+        this.#select_elements(edges, 'edges');
+    }
 
+    // =======================================================================================
 
+    select_all_nodes() {
+        let nodes = this.#current_graph.nodes();
+        nodes.removeClass('custom-select');
+        nodes.addClass('custom-select');
+        this.#select_elements(nodes, 'nodes');
+    }
 
+    // =======================================================================================
+
+    get_elements() {
+        return this.#current_graph.elements();
+    }
+
+    get_nodes() {
+        return this.#current_graph.nodes();
+    }
 
 
 

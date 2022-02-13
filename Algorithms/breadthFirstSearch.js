@@ -1,7 +1,7 @@
-let n = cy.nodes();
+let n = graph.get_nodes();
 
 let edgesCollection = [];
-let bfs = cy.elements().bfs({
+let bfs = graph.get_elements().bfs({
     roots: '#A',
     visit: function(v, e, u, i, depth){
         edgesCollection.push(e);

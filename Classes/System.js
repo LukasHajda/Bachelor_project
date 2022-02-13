@@ -1,7 +1,11 @@
 class System {
+
+    #backgroundColor_first;
+    #backgroundColor_second;
+
     constructor() {
-        this.backgroundColor_first = $('#backgroundColor-first');
-        this.backgroundColor_second = $('#backgroundColor-second');
+        this.#backgroundColor_first = $('#backgroundColor-first');
+        this.#backgroundColor_second = $('#backgroundColor-second');
         this.set_events();
     }
 
@@ -10,7 +14,7 @@ class System {
         let self = this;
         $('.colorPick').change(function () {
             $("body").css({
-                background : 'linear-gradient(' + $(self.backgroundColor_first).val() + ',' + $(self.backgroundColor_second).val() + ') no-repeat fixed'
+                background : 'linear-gradient(' + $(self.#backgroundColor_first).val() + ',' + $(self.#backgroundColor_second).val() + ') no-repeat fixed'
             }, 200)
         });
     }

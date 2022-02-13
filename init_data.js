@@ -35,6 +35,14 @@ $('#change_element').on('click', function () {
     graph.change_text(); // done
 })
 
+$('#select_all_edges').on('click', function () {
+   graph.select_all_edges();
+});
+
+$('#select_all_nodes').change(function () {
+    graph.select_all_nodes();
+});
+
 
 // let click_count = 0;
 // let nodes_positions = new Map();
