@@ -20,7 +20,6 @@ class Graph {
         this.#set_events();
     }
 
-
     /*
     |--------------------------------------------------------------------------
     |                              Private Methods
@@ -265,7 +264,7 @@ class Graph {
                     selector: 'edges',
                     style: {
                         'curve-style' : 'bezier',
-                        'target-arrow-shape' : 'none',
+                        'target-arrow-shape' : 'triangle',
                         'line-color' : '#83b55a',
                         'target-arrow-color': '#83b55a',
                         'width': 8,
@@ -288,7 +287,7 @@ class Graph {
                     { data: { id: 'H' , name: 'H', old_color: '#a83030'} }
                 ],
                 edges: [
-                    { data: { source: 'A', target: 'B' , weight: 5, old_color: '#83b55a',directed: false} },
+                    { data: { source: 'A', target: 'B' , weight: 5, old_color: '#83b55a'} },
                     { data: { source: 'B', target: 'C' , weight: 2, old_color: '#83b55a'} },
                     { data: { source: 'C', target: 'D' , weight: 1, old_color: '#83b55a'} },
                     { data: { source: 'D', target: 'E' , weight: 1, old_color: '#83b55a'} },
@@ -313,7 +312,7 @@ class Graph {
             layout: {
                 name: 'grid',
                 padding: 10,
-                directed: false,
+                directed: true,
                 motionBlur: true,
                 autolock: true
             }
@@ -485,6 +484,14 @@ class Graph {
 
     get_nodes() {
         return this.#current_graph.nodes();
+    }
+
+    // =======================================================================================
+
+    run_algorithm(algo_name) {
+        let algorithm = new Algorithm(this.#current_graph);
+        algorithm.call_algorithm(algo_name);
+
     }
 
 

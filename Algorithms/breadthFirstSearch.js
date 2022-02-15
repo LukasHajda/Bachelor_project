@@ -6,7 +6,7 @@ let bfs = graph.get_elements().bfs({
     visit: function(v, e, u, i, depth){
         edgesCollection.push(e);
     },
-    directed: true
+    directed: false
 });
 
 let path = bfs.path;

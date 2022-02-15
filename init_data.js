@@ -43,6 +43,11 @@ $('#select_all_nodes').change(function () {
     graph.select_all_nodes();
 });
 
+$('#play').on('click', function () {
+    let selected_algo = $('#algorithm-select option:selected').val()
+    graph.run_algorithm(selected_algo);
+});
+
 
 // let click_count = 0;
 // let nodes_positions = new Map();
