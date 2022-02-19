@@ -90,6 +90,7 @@ class Graph {
             let label_input = $('#label');
             label_input.val(this.data('name'));
             label_input.attr('data-id', this.data('id'));
+            system.add_node_option({id : this.data().id, name: this.data().name});
         })
 
     }
@@ -166,7 +167,7 @@ class Graph {
             let newID = this.#current_letter + '_' + ((this.#levels[this.#levels.length - 1] === 0) ? '' : (this.#levels[this.#levels.length - 1] + '_')) + this.#current_id;
             let node = this.#current_graph.add([{
                 group: "nodes",
-                data: { id: newID, label: newID, name: newID, old_color: node_color},
+                data: { id: newID, label: newID, name: newID, old_color: node_color, original_name: newID},
                 position: {
                     x: xPos,
                     y: yPos,
@@ -175,6 +176,8 @@ class Graph {
             this.#current_id++;
 
             node.style('background-color', node_color);
+
+            system.add_node_option({id: node.data().id, name: node.data().name});
             // nodes_positions.set(newId, [xPos, yPos]);
         }
     }
@@ -240,15 +243,30 @@ class Graph {
                     selector : 'nodes',
                     style : {
                         'content': 'data(name)',
+                        'font-size' : 25,
                         'background-color' : '#a83030',
                         'width' : 40,
-                        'height' : 40
+                        'height' : 40,
                     }
                 },
                 {
                     selector: '.custom-select',
                     style: {
                         'background-color' : 'yellow',
+                    }
+                },
+                {
+                    selector : '.visited',
+                    style : {
+                        'border-color': 'grey',
+                        'border-width': 8,
+                    }
+                },
+                {
+                    selector : '.explored',
+                    style : {
+                        'border-color': 'black',
+                        'border-width': 8,
                     }
                 },
                 {
@@ -264,10 +282,11 @@ class Graph {
                     selector: 'edges',
                     style: {
                         'curve-style' : 'bezier',
+                        'font-size' : 20,
                         'target-arrow-shape' : 'triangle',
                         'line-color' : '#83b55a',
                         'target-arrow-color': '#83b55a',
-                        'width': 8,
+                        'width': 6,
                         'label': 'data(weight)',
                         'text-margin-y': 15,
                         'text-rotation': 'autorotate'
@@ -277,14 +296,14 @@ class Graph {
 
             elements: {
                 nodes: [
-                    { data: { id: 'A' , name: 'A', old_color: '#a83030'} },
-                    { data: { id: 'B' , name: 'B', old_color: '#a83030'} },
-                    { data: { id: 'C' , name: 'C', old_color: '#a83030'} },
-                    { data: { id: 'D' , name: 'D', old_color: '#a83030'} },
-                    { data: { id: 'E' , name: 'E', old_color: '#a83030'} },
-                    { data: { id: 'F' , name: 'F', old_color: '#a83030'} },
-                    { data: { id: 'G' , name: 'G', old_color: '#a83030'} },
-                    { data: { id: 'H' , name: 'H', old_color: '#a83030'} }
+                    { data: { id: 'A' , name: 'A', old_color: '#a83030', original_name: 'A', visited : false} },
+                    { data: { id: 'B' , name: 'B', old_color: '#a83030', original_name: 'B', visited : false} },
+                    { data: { id: 'C' , name: 'C', old_color: '#a83030', original_name: 'C', visited : false} },
+                    { data: { id: 'D' , name: 'D', old_color: '#a83030', original_name: 'D', visited : false} },
+                    { data: { id: 'E' , name: 'E', old_color: '#a83030', original_name: 'E', visited : false} },
+                    { data: { id: 'F' , name: 'F', old_color: '#a83030', original_name: 'F', visited : false} },
+                    { data: { id: 'G' , name: 'G', old_color: '#a83030', original_name: 'G', visited : false} },
+                    { data: { id: 'H' , name: 'H', old_color: '#a83030', original_name: 'H', visited : false} }
                 ],
                 edges: [
                     { data: { source: 'A', target: 'B' , weight: 5, old_color: '#83b55a'} },
@@ -368,6 +387,7 @@ class Graph {
         if (new_label.length === 0) return;
 
         let node = this.#current_graph.nodes('#' + input.attr('data-id'));
+        node.data('original_name', new_label);
         node.data('name', new_label);
     }
 
@@ -492,6 +512,20 @@ class Graph {
         let algorithm = new Algorithm(this.#current_graph);
         algorithm.call_algorithm(algo_name);
 
+    }
+
+    // test() {
+    //     let e = this.#current_graph.edges()[0];
+    //     console.log(e);
+    //     e.addClass('visited');
+    // }
+
+    flashAnimation() {
+        this.#current_graph.$('#A').animate({
+            style: { borderColor: 'blue'},
+            duration: 2000,
+            easing: 'ease-in-out'
+        })
     }
 
 

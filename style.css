@@ -129,3 +129,9 @@ hr {
     width: 220px;
     border: 3px solid black;
 }
+
+.starting_node {
+    font-weight: bold;
+    color: #9198e5;
+    font-size: 24px;
+}

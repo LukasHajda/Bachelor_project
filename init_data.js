@@ -49,6 +49,11 @@ $('#play').on('click', function () {
 });
 
 
+// $('#test2').on('click', function () {
+//     graph.test();
+// });
+
+
 // let click_count = 0;
 // let nodes_positions = new Map();
 // let edges_info = new Map();
