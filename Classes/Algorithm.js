@@ -1,8 +1,12 @@
 class Algorithm {
 
     #current_graph
+    #is_paused;
+    #queue;
     constructor(current_graph) {
         this.#current_graph = current_graph;
+        this.#is_paused = false;
+        this.#queue = $('.queue');
     }
 
     call_algorithm(algo_name) {
@@ -68,49 +72,150 @@ class Algorithm {
 
     #breadth_first_search() {
 
-        let nodesCollection = this.my_bfs();
-        console.log(nodesCollection.map(node => node.data().id));
-        let index = 0;
-        let length = nodesCollection.length;
+        let edgesCollection = [];
+        let nodesCollection = [];
+        let bfs = graph.get_elements().bfs({
+            roots: '#' + system.node_select_value,
+            visit: function(v, e, u, i, depth){
+                if (e !== undefined) {
+                    edgesCollection.push(e);
+                }
 
+                if (v !== undefined) {
+                    nodesCollection.push(v);
+                }
+            },
+            directed: true
+        });
 
         let self = this;
+        let real_queue = [];
+
+        if (nodesCollection[0] !== undefined) {
+            real_queue.push(nodesCollection[0].data().original_name);
+        }
+
+        self.#queue.text(real_queue);
 
         function runBFSAnimation() {
+            console.log(edgesCollection);
+
+            self.#is_paused = true;
 
             let current_node = nodesCollection.shift();
-            if (current_node === undefined) return;
+            console.log(current_node);
+            if (current_node === undefined)  {
+                clearInterval(timer);
+                return;
+            }
 
             self.makeExplored(current_node);
+            real_queue.shift();
+            self.#queue.text(real_queue);
 
             let current_node_edges = current_node.outgoers().edges().filter(function (edge) {
                 return !edge.target().hasClass('visited') && !edge.target().hasClass('explored');
             });
 
-            let current_node_nodes = current_node.outgoers().nodes().filter(function (node) {
-                return !node.hasClass('visited') && !node.hasClass('explored');
-            });
-
-            $.each(current_node_nodes, function (index, node) {
-                self.makeVisited(node);
-            })
-
-            console.log(current_node_edges.map(edge => [edge.source().data().id, edge.target().data().id]));
-
-            $.each(current_node_edges, function (index, edge) {
-                edge.animation({
+            let length = current_node_edges.length;
+            if (length === 0) {
+                self.#is_paused = false;
+            }
+            current_node_edges.each(function (edge, index) {
+                edge.delay(1500).animate({
                     style: {
-                        'line-color' : 'black',
-                        'target-arrow-color': 'black'
+                        'line-color' : 'yellow',
+                        'target-arrow-color': 'yellow'
                     },
-                    duration: 700
-                }).play();
-            })
+                }, {
+                    duration : 800,
+                    complete : function() {
+                        if (!edge.target().hasClass('visited') && !edge.target().hasClass('explored')) {
+                            self.makeVisited(edge.target());
+                            real_queue.push(edge.target().data().original_name);
+                            self.#queue.text(real_queue);
+                        }
 
+                        if (length - 1 === index) {
+                            self.#queue.text(real_queue);
+                            self.#is_paused = false;
+                        }
+
+                    }
+                });
+            });
 
         }
 
-        let timer = setInterval(runBFSAnimation, 2000);
+        let timer = setInterval(function () {
+            if (!self.#is_paused) {
+                runBFSAnimation();
+
+            }
+        }, 1000);
+
+        // let nodesCollection = this.my_bfs();
+        // let self = this;
+        // let real_queue = nodesCollection.map(node => node.data().original_name);
+        // let iteration = 1;
+        // let visited = 0;
+        //
+        // function runBFSAnimation() {
+        //
+        //     self.#is_paused = true;
+        //
+        //     let current_node = nodesCollection.shift();
+        //     if (current_node === undefined)  {
+        //         clearInterval(timer);
+        //         return;
+        //     }
+        //
+        //     self.#queue.text(real_queue.slice(iteration));
+        //
+        //     self.makeExplored(current_node);
+        //
+        //     let current_node_edges = current_node.outgoers().edges().filter(function (edge) {
+        //         return !edge.target().hasClass('visited') && !edge.target().hasClass('explored');
+        //     });
+        //
+        //     let length = current_node_edges.length;
+        //     if (length === 0) {
+        //         real_queue.shift();
+        //         self.#queue.text(real_queue);
+        //         self.#is_paused = false;
+        //     }
+        //     current_node_edges.each(function (edge, index) {
+        //         edge.delay((index + 1) * 1200).animate({
+        //             style: {
+        //                 'line-color' : 'yellow',
+        //                 'target-arrow-color': 'yellow'
+        //             },
+        //         }, {
+        //             duration : 1000,
+        //             complete : function() {
+        //                 if (!edge.target().hasClass('visited') && !edge.target().hasClass('explored')) {
+        //                     self.makeVisited(edge.target());
+        //                     real_queue.push(edge.target().data().original_name);
+        //                     self.#queue.text(real_queue);
+        //                 }
+        //
+        //                 if (length - 1 === index) {
+        //                     real_queue.shift();
+        //                     self.#queue.text(real_queue);
+        //                     self.#is_paused = false;
+        //                 }
+        //
+        //             }
+        //         });
+        //     });
+        // }
+        //
+        // let timer = setInterval(function () {
+        //     if (!self.#is_paused) {
+        //         runBFSAnimation();
+        //
+        //     }
+        // }, 2500);
     }
     //     let n = this.#current_graph.nodes();
     //

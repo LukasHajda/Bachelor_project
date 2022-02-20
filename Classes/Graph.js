@@ -453,6 +453,9 @@ class Graph {
             'line-color' : '#83b55a',
             'target-arrow-color': '#83b55a',
         });
+        this.#current_graph.elements().removeClass('visited');
+        this.#current_graph.elements().removeClass('explored');
+        this.#current_graph.nodes().map(node => node.data('name', node.data().original_name));
     }
 
     // ======================================================================================

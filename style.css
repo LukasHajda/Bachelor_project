@@ -135,3 +135,11 @@ hr {
     color: #9198e5;
     font-size: 24px;
 }
+
+.queue {
+    border-top: 4px solid black;
+    border-bottom: 4px solid black;
+    height: 48px;
+    font-size: 17px;
+    padding-top: 8px;
+}
