@@ -18,6 +18,10 @@ class Algorithm {
             case "DFS":
                 this.#depth_first_search();
                 break;
+            case "Kruskal":
+                this.#kruskal();
+                break;
+
         }
 
     }
@@ -221,8 +225,68 @@ class Algorithm {
 
     }
 
+    sorting(sorted_edges) {
+        return sorted_edges.sort(function (edge1, edge2) {
+            return edge1[1] - edge2[1];
+        });
+    }
+
     #kruskal() {
-        
+        let nodes = graph.get_elements().nodes();
+        let test = graph.get_elements().edges().sort(function (edge1, edge2) {
+            return edge1.data().weight - edge2.data().weight;
+        })
+
+        $.each(test, function (index, edge) {
+            nodes.push(edge);
+        })
+
+        let sorted_edges = nodes.kruskal().edges().map(edge => [edge, edge.data().weight]);
+
+        let self = this;
+        function runKruskalAnimation() {
+            self.#is_paused = true;
+
+            let edge_arr = sorted_edges.shift();
+
+            if (edge_arr === undefined) {
+                clearInterval(timer);
+                return;
+            }
+
+            let current_edge = edge_arr[0];
+            
+            console.log(current_edge.source().data().name, current_edge.target().data().name);
+
+            current_edge.delay(1500).animate({
+                style: {
+                    'line-color' : 'yellow',
+                    'target-arrow-color': 'yellow'
+                }
+            }, {
+                duration : 800,
+                complete : function() {
+                    self.#is_paused = false;
+                }
+            });
+
+        }
+
+
+        let timer = setInterval(function () {
+            console.log('sdsdssd');
+            if (!self.#is_paused) {
+                runKruskalAnimation();
+            }
+        }, 1000);
+
+
+
+
+
+
+        // console.log(sorted_edges.map(edge => [edge.source().data().name, edge.target().data().name, edge.data().weight]));
+
     }
 
     #prim() {

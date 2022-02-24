@@ -308,16 +308,17 @@ class Graph {
                 edges: [
                     { data: { source: 'A', target: 'B' , weight: 5, old_color: '#83b55a'} },
                     { data: { source: 'B', target: 'C' , weight: 2, old_color: '#83b55a'} },
-                    { data: { source: 'C', target: 'D' , weight: 1, old_color: '#83b55a'} },
+                    { data: { source: 'C', target: 'D' , weight: 10, old_color: '#83b55a'} },
                     { data: { source: 'D', target: 'E' , weight: 1, old_color: '#83b55a'} },
                     { data: { source: 'E', target: 'F' , weight: -20, old_color: '#83b55a'} },
 
                     { data: { source: 'F', target: 'A' , weight: 4, old_color: '#83b55a'} },
+                    { data: { source: 'H', target: 'E' , weight: 1, old_color: '#83b55a'} },
 
                     { data: { source: 'F', target: 'G' , weight: -20, old_color: '#83b55a'} },
                     { data: { source: 'G', target: 'H' , weight: 50, old_color: '#83b55a'} },
                     { data: { source: 'D', target: 'D' , weight: 50, old_color: '#83b55a'} },
-                    { data: { source: 'A', target: 'D' , weight: 50, old_color: '#83b55a'} },
+                    { data: { source: 'A', target: 'D' , weight: -1, old_color: '#83b55a'} },
                     { data: { source: 'A', target: 'E' , weight: -20, old_color: '#83b55a'} },
                     { data: { source: 'G', target: 'E' , weight: 20, old_color: '#83b55a'}, }
                 ]
