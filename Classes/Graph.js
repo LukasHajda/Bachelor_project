@@ -8,6 +8,7 @@ class Graph {
     #current_graph;
     #sourceNode;
     #targetNode;
+    #directed;
 
     constructor() {
         this.#current_id = 1;
@@ -126,6 +127,7 @@ class Graph {
         ]);
         edge.style({'line-color' : edge_color,
             'target-arrow-color': edge_color});
+        edge.addClass(system.get_direction ? 'directed' : 'undirected');
         this.#sourceNode = null;
         this.#targetNode=  null;
     }
@@ -279,11 +281,22 @@ class Graph {
                     }
                 },
                 {
+                    selector: '.directed',
+                    css: {
+                        'target-arrow-shape' : 'triangle',
+                    }
+                },
+                {
+                    selector: '.undirected',
+                    css: {
+                        'target-arrow-shape' : 'none',
+                    }
+                },
+                {
                     selector: 'edges',
                     style: {
                         'curve-style' : 'bezier',
                         'font-size' : 20,
-                        'target-arrow-shape' : 'triangle',
                         'line-color' : '#83b55a',
                         'target-arrow-color': '#83b55a',
                         'width': 6,
@@ -518,19 +531,16 @@ class Graph {
 
     }
 
-    // test() {
-    //     let e = this.#current_graph.edges()[0];
-    //     console.log(e);
-    //     e.addClass('visited');
-    // }
+    // =======================================================================================
 
-    flashAnimation() {
-        this.#current_graph.$('#A').animate({
-            style: { borderColor: 'blue'},
-            duration: 2000,
-            easing: 'ease-in-out'
-        })
+    change_edges_directions(direction_option) {
+        if (direction_option) {
+            this.#current_graph.edges().map(edge => edge.removeClass('undirected').addClass('directed'));
+        } else {
+            this.#current_graph.edges().map(edge => edge.removeClass('directed').addClass('undirected'));
+        }
     }
+
 
 
 

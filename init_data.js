@@ -49,15 +49,6 @@ $('#play').on('click', function () {
 });
 
 
-$('#test2').on('click', function () {
-    let a = graph.get_elements().kruskal().edges();
-    a.style({
-        'line-color' : 'pink',
-        'target-arrow-color': 'pink',
-    });
-    console.log(a.edges().map(edge => edge.data().weight));
-});
-
 
 // let click_count = 0;
 // let nodes_positions = new Map();
