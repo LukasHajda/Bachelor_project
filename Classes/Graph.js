@@ -19,7 +19,7 @@ class Graph {
         this.#sourceNode = null;
         this.#targetNode = null;
         this.#set_events();
-        this.#set_direction();
+        // this.#set_direction();
     }
 
     /*
@@ -251,6 +251,7 @@ class Graph {
             container: document.getElementById('cy'),
             wheelSensitivity: 0.2,
             boxSelectionEnabled: false,
+            autounselectify: true,
             // zoomingEnabled: false,
 
             style : [
@@ -433,7 +434,7 @@ class Graph {
         if (pass) {
             edge.data('weight', label_input);
         } else {
-            alert('Musi byt validne cislo');
+            alert('Musi byt validne cele cislo');
         }
     }
 

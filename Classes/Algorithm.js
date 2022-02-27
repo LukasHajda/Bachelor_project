@@ -42,7 +42,6 @@ class Algorithm {
     }
 
     #breadth_first_search() {
-
         let edgesCollection = [];
         let nodesCollection = [];
         graph.get_elements().bfs({
@@ -68,14 +67,13 @@ class Algorithm {
 
         self.#queue.text(real_queue);
 
-        function runBFSAnimation() {
+        let runBFSAnimation = function() {
             console.log(edgesCollection);
 
             self.#is_paused = true;
 
             let current_node = nodesCollection.shift();
             if (current_node === undefined)  {
-                clearInterval(timer);
                 return;
             }
 
@@ -92,13 +90,13 @@ class Algorithm {
                 self.#is_paused = false;
             }
             current_node_edges.each(function (edge, index) {
-                edge.delay(1500).animate({
+                edge.animate({
                     style: {
                         'line-color' : 'yellow',
                         'target-arrow-color': 'yellow'
                     },
                 }, {
-                    duration : 800,
+                    duration : 500,
                     complete : function() {
                         if (!edge.target().hasClass('visited') && !edge.target().hasClass('explored')) {
                             self.makeVisited(edge.target());
@@ -110,24 +108,20 @@ class Algorithm {
                             self.#queue.text(real_queue);
                             self.#is_paused = false;
                         }
-
                     }
                 });
             });
 
+            setTimeout(runBFSAnimation, 2000);
+
         }
 
-        let timer = setInterval(function () {
-            if (!self.#is_paused) {
-                runBFSAnimation();
-            }
-        }, 1000);
+        runBFSAnimation();
 
     }
 
     #depth_first_search() {
         let edgesCollection = [];
-        let nodesCollection = [];
         let map = new Map();
         let root = system.node_select_value;
         graph.get_elements().dfs({
@@ -136,16 +130,11 @@ class Algorithm {
                 if (e !== undefined) {
                     edgesCollection.push(e);
                 }
-
-                if (v !== undefined) {
-                    nodesCollection.push(v);
-                }
             },
             directed: true
         });
 
         $.each(edgesCollection, function (index, edge) {
-            console.log(edge);
             let source = edge.source().data().id;
 
             if (!map.has(source)) {
@@ -156,28 +145,21 @@ class Algorithm {
                 map.set(source, arr);
             }
         });
-        
-        console.log(map);
+
         let current_node = root;
         let previous = [];
         let self = this;
-        self.#is_paused = false;
         self.makeVisited(graph.get_specific_node(current_node));
         
-        function runDFSAnimation() {
-            self.#is_paused = true;
-            
-            console.log(previous);
+        let runDFSAnimation = function() {
 
             if (!map.has(current_node)) {
                 if (current_node === undefined) {
-                    clearInterval(timer);
                     return;
                 }
                 self.makeExplored(graph.get_specific_node(current_node));
                 current_node = previous.pop();
             }
-
 
             let edge = map.get(current_node).shift();
             let node_object = graph.get_specific_node(current_node);
@@ -185,36 +167,26 @@ class Algorithm {
             if (edge === undefined) {
                 self.makeExplored(node_object);
                 current_node = previous.pop();
-                self.#is_paused = false;
-                return;
+                setTimeout(runDFSAnimation, 3000);
+            } else {
+                edge.animate({
+                    style: {
+                        'line-color' : 'yellow',
+                        'target-arrow-color': 'yellow'
+                    }
+                }, {
+                    duration : 500,
+                    complete : function() {
+                        self.makeVisited(edge.target());
+                    }
+                });
+
+                previous.push(current_node);
+                current_node = edge.target().data().id;
+                setTimeout(runDFSAnimation, 3000)
             }
-
-            edge.delay(1500).animate({
-                style: {
-                    'line-color' : 'yellow',
-                    'target-arrow-color': 'yellow'
-                }
-            }, {
-                duration : 800,
-                complete : function() {
-                    self.makeVisited(edge.target());
-                    self.#is_paused = false;
-                }
-            });
-
-            previous.push(current_node);
-            current_node = edge.target().data().id;
-
-
         }
-        
-        let timer = setInterval(function () {
-            console.log('sdsdssd');
-            if (!self.#is_paused) {
-                runDFSAnimation();
-            }
-        }, 1000);
-
+        runDFSAnimation();
     }
 
     #dijkstra() {
@@ -223,12 +195,6 @@ class Algorithm {
 
     #bellman_ford() {
 
-    }
-
-    sorting(sorted_edges) {
-        return sorted_edges.sort(function (edge1, edge2) {
-            return edge1[1] - edge2[1];
-        });
     }
 
     #kruskal() {
@@ -244,48 +210,31 @@ class Algorithm {
         let sorted_edges = nodes.kruskal().edges().map(edge => [edge, edge.data().weight]);
 
         let self = this;
-        function runKruskalAnimation() {
+        let runKruskalAnimation  = function() {
             self.#is_paused = true;
 
             let edge_arr = sorted_edges.shift();
 
             if (edge_arr === undefined) {
-                clearInterval(timer);
                 return;
             }
 
             let current_edge = edge_arr[0];
-            
-            console.log(current_edge.source().data().name, current_edge.target().data().name);
 
-            current_edge.delay(1500).animate({
-                style: {
-                    'line-color' : 'yellow',
-                    'target-arrow-color': 'yellow'
+            current_edge.animate({
+                css: {
+                    'line-color': '#61bffc',
+                    'target-arrow-color': '#61bffc',
+                    'transition-property':  'line-color, target-arrow-color',
+                    'transition-duration': '0.5s'
                 }
             }, {
-                duration : 800,
-                complete : function() {
-                    self.#is_paused = false;
-                }
+                duration : 500,
             });
-
+            setTimeout(runKruskalAnimation,2000);
         }
 
-
-        let timer = setInterval(function () {
-            console.log('sdsdssd');
-            if (!self.#is_paused) {
-                runKruskalAnimation();
-            }
-        }, 1000);
-
-
-
-
-
-
-        // console.log(sorted_edges.map(edge => [edge.source().data().name, edge.target().data().name, edge.data().weight]));
+        runKruskalAnimation();
 
     }
 
