@@ -19,6 +19,7 @@ class Graph {
         this.#sourceNode = null;
         this.#targetNode = null;
         this.#set_events();
+        this.#set_direction();
     }
 
     /*
@@ -26,6 +27,12 @@ class Graph {
     |                              Private Methods
     |--------------------------------------------------------------------------
     */
+
+
+    #set_direction() {
+        this.#current_graph.edges().map(edge => edge.addClass('directed'));
+    }
+
 
     /**
      * Set up all events for graph
@@ -92,6 +99,12 @@ class Graph {
             label_input.val(this.data('name'));
             label_input.attr('data-id', this.data('id'));
             system.add_node_option({id : this.data().id, name: this.data().name});
+        })
+
+        this.#current_graph.on('click', 'edge', function () {
+            let label_input = $('#label_edge');
+            label_input.val(this.data('weight'));
+            label_input.attr('data-id', this.data('id'));
         })
 
     }
@@ -403,6 +416,25 @@ class Graph {
         let node = this.#current_graph.nodes('#' + input.attr('data-id'));
         node.data('original_name', new_label);
         node.data('name', new_label);
+    }
+
+    // ========================================================================
+
+    /**
+     * Change weight of edge which was selected by a normal click (one click)
+     */
+
+    change_text_edge() {
+        let input = $('#label_edge');
+        let label_input = input.val();
+        let regex = /^-?([1-9][0-9]+|0)$/g;
+        let pass = regex.test(label_input);
+        let edge = this.#current_graph.edges('#' + input.attr('data-id'));
+        if (pass) {
+            edge.data('weight', label_input);
+        } else {
+            alert('Musi byt validne cislo');
+        }
     }
 
     // ========================================================================

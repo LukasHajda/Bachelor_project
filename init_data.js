@@ -35,6 +35,10 @@ $('#change_element').on('click', function () {
     graph.change_text(); // done
 })
 
+$('#change_edge').on('click', function () {
+    graph.change_text_edge();
+})
+
 $('#select_all_edges').on('click', function () {
    graph.select_all_edges();
 });
