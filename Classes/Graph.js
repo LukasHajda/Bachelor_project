@@ -182,7 +182,7 @@ class Graph {
             let newID = this.#current_letter + '_' + ((this.#levels[this.#levels.length - 1] === 0) ? '' : (this.#levels[this.#levels.length - 1] + '_')) + this.#current_id;
             let node = this.#current_graph.add([{
                 group: "nodes",
-                data: { id: newID, label: newID, name: newID, old_color: node_color, original_name: newID},
+                data: { id: newID, label: newID, name: newID, old_color: node_color, original_name: newID, discovered: -1, finished: -1},
                 position: {
                     x: xPos,
                     y: yPos,
@@ -586,6 +586,28 @@ class Graph {
         } else {
             this.#current_graph.edges().map(edge => edge.removeClass('directed').addClass('undirected'));
         }
+    }
+
+
+    make_transposed() {
+        let old_edges = this.#current_graph.edges().map(edge => [edge.source().data().id, edge.target().data().id, edge.data().weight]);
+
+        this.clear_edges();
+
+
+        let self = this;
+        let color = $('#color4').val();
+        $.each(old_edges, function (index, edge) {
+            let new_edge = self.#current_graph.add([
+                {
+                    group: "edges", data: { source: edge[1], target: edge[0], weight: edge[2], old_color: color}
+                }
+            ]);
+            new_edge.style({'line-color' : color,
+                'target-arrow-color': color});
+        new_edge.addClass(system.get_direction ? 'directed' : 'undirected');
+        })
+
     }
 
 

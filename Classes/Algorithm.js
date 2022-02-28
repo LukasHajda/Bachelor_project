@@ -303,16 +303,6 @@ class Algorithm {
             }
         }
 
-        return;
-
-
-
-
-
-
-        
-        console.log(map);
-
         let current_node = root;
         let previous = [];
         let self = this;
@@ -358,6 +348,11 @@ class Algorithm {
         }
         runKosarajuAnimation();
 
+    }
+
+
+    #transposed_graph() {
+        graph.make_transposed();
     }
 
     #topological_sort() {
