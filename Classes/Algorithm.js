@@ -1,11 +1,9 @@
 class Algorithm {
 
     #current_graph
-    #is_paused;
     #queue;
     constructor(current_graph) {
         this.#current_graph = current_graph;
-        this.#is_paused = false;
         this.#queue = $('.queue');
     }
 
@@ -20,6 +18,9 @@ class Algorithm {
                 break;
             case "Kruskal":
                 this.#kruskal();
+                break;
+            case "Kosararu sharir":
+                this.#kos_sharir();
                 break;
 
         }
@@ -70,8 +71,6 @@ class Algorithm {
         let runBFSAnimation = function() {
             console.log(edgesCollection);
 
-            self.#is_paused = true;
-
             let current_node = nodesCollection.shift();
             if (current_node === undefined)  {
                 return;
@@ -86,9 +85,6 @@ class Algorithm {
             });
 
             let length = current_node_edges.length;
-            if (length === 0) {
-                self.#is_paused = false;
-            }
             current_node_edges.each(function (edge, index) {
                 edge.animate({
                     style: {
@@ -106,7 +102,6 @@ class Algorithm {
 
                         if (length - 1 === index) {
                             self.#queue.text(real_queue);
-                            self.#is_paused = false;
                         }
                     }
                 });
@@ -211,7 +206,6 @@ class Algorithm {
 
         let self = this;
         let runKruskalAnimation  = function() {
-            self.#is_paused = true;
 
             let edge_arr = sorted_edges.shift();
 
@@ -242,7 +236,127 @@ class Algorithm {
 
     }
 
-    kos_sharir() {
+    #kos_sharir() {
+        let edgesCollection = [];
+        let nodesCollection = [];
+        let map = new Map();
+        let root = system.node_select_value;
+        graph.get_elements().dfs({
+            roots: '#' + root,
+            visit: function(v, e, u, i, depth){
+                if (e !== undefined) {
+                    edgesCollection.push(e);
+                }
+                if (v !== undefined) {
+                    nodesCollection.push([v.data().name, (u !== undefined) ? u.data().name : null, i + 1]);
+                }
+            },
+            directed: true
+        });
+        
+        $.each(edgesCollection, function (index, edge) {
+            let source = edge.source().data().id;
+
+            if (!map.has(source)) {
+                map.set(source, [edge]);
+            } else {
+                let arr = map.get(source);
+                arr.push(edge);
+                map.set(source, arr);
+            }
+        });
+
+        let time = 1;
+        let time_stamps = map;
+        let previous_time = [];
+        let current_node_time = root;
+        let node = null;
+        while(current_node_time !== undefined) {
+            node = graph.get_specific_node(current_node_time);
+
+            if (node.data().discovered === -1) {
+                node.data().discovered = time;
+                time++;
+            }
+
+            let data = time_stamps.get(current_node_time);
+
+            console.log(current_node_time, data);
+
+            if (data === undefined || data === []) {
+                node.data().finished = time;
+                time++;
+
+                current_node_time = previous_time.pop();
+            } else {
+                let edge = time_stamps.get(current_node_time).shift();
+
+                if (edge === undefined) {
+                    node = graph.get_specific_node(current_node_time);
+                    node.data().finished = time;
+                    time++;
+                    current_node_time = previous_time.pop();
+                } else {
+                    previous_time.push(current_node_time);
+                    current_node_time = edge.target().data().id;
+                }
+            }
+        }
+
+        return;
+
+
+
+
+
+
+        
+        console.log(map);
+
+        let current_node = root;
+        let previous = [];
+        let self = this;
+        graph.change_time(current_node, true, time);
+        time++;
+        let runKosarajuAnimation = function() {
+            // Vrcholy ktore nemaju cestu
+            if (!map.has(current_node)) {
+                if (current_node === undefined) {
+                    return;
+                }
+                self.makeExplored(graph.get_specific_node(current_node));
+                current_node = previous.pop();
+            }
+            
+            let edge = map.get(current_node).shift();
+            let node_object = graph.get_specific_node(current_node);
+            
+            
+            if (edge === undefined) {
+                self.makeExplored(node_object);
+                current_node = previous.pop();
+                setTimeout(runKosarajuAnimation, 1200);
+            } else {
+                edge.animate({
+                    style: {
+                        'line-color' : 'yellow',
+                        'target-arrow-color': 'yellow'
+                    }
+                }, {
+                    duration : 200,
+                    complete : function() {
+                        graph.change_time(edge.target().data().id, true, time);
+                        time++;
+                        self.makeVisited(edge.target());
+                    }
+                });
+
+                previous.push(current_node);
+                current_node = edge.target().data().id;
+                setTimeout(runKosarajuAnimation, 1200)
+            }
+        }
+        runKosarajuAnimation();
 
     }
 

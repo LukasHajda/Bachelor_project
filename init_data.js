@@ -52,6 +52,10 @@ $('#play').on('click', function () {
     graph.run_algorithm(selected_algo);
 });
 
+$('#discovered').on('click', function () {
+   graph.show_time();
+});
+
 
 
 // let click_count = 0;
