@@ -238,12 +238,19 @@ class Algorithm {
 
     #first_dfs(root) {
         let edgesCollection = [];
+        let visited = [];
         while(root !== undefined) {
+            if (!visited.includes(root)) {
+                visited.push(root)
+            }
             graph.get_elements().dfs({
                 roots: '#' + root,
                 visit: function(v, e, u, i, depth){
                     if (e !== undefined) {
-                        edgesCollection.push(e);
+                        if (!visited.includes(e.target().data().id)) {
+                            edgesCollection.push(e);
+                            visited.push(e.target().data().id)
+                        }
                     }
                     if (v !== undefined) {
                         v.data().discovered = 1;
@@ -255,6 +262,8 @@ class Algorithm {
             root = graph.get_undiscovered_nodes().pop();
             // console.log(root);
         }
+
+        console.log(edgesCollection.map(edge => [edge.source().data().id, edge.target().data().id]));
 
         return edgesCollection;
     }
@@ -386,7 +395,6 @@ class Algorithm {
             let source = edge.source().data().id;
 
             if (!map.has(source)) {
-                // map.set(source, [[edge.source().data().id,edge.target().data().id]]);
                 map.set(source, [edge]);
             } else {
                 let arr = map.get(source);
@@ -395,7 +403,6 @@ class Algorithm {
             }
 
             if (!time_stamps.has(source)) {
-                // map.set(source, [[edge.source().data().id,edge.target().data().id]]);
                 time_stamps.set(source, [edge]);
             } else {
                 let arr = time_stamps.get(source);
@@ -403,79 +410,27 @@ class Algorithm {
                 time_stamps.set(source, arr);
             }
         });
-        //
-        let map_original = map;
-        // // console.log(sorted.map(node => [node.data().name, node.data().discovered, node.data().finished]));
-        // // graph.make_transposed();
-        // let current = sorted.pop();
-        // let newEdgesCollections = [];
-        // let no = [];
-        // let runReversedDDFS = function () {
-        //
-        //     while (current !== undefined) {
-        //         let tmp = [];
-        //         graph.get_elements().dfs({
-        //             roots: '#' + current.data().id,
-        //             visit: function(v, e, u, i, depth){
-        //                 if (e !== undefined) {
-        //                     newEdgesCollections.push(e);
-        //                 }
-        //                 if (v !== undefined && v.data().reversed !== 1) {
-        //                     tmp.push(v);
-        //                     v.data().reversed = 1;
-        //                 }
-        //             },
-        //             directed: true
-        //         });
-        //         if (tmp.length !== 0) {
-        //             no.push(tmp);
-        //         }
-        //         current = sorted.pop();
-        //     }
-        //
-        // }
-        // let runReversedAnimation = function () {
-        //     $.each(no, function (index, arr) {
-        //         let component = graph.add_component();
-        //
-        //         $.each(arr, function (index, node) {
-        //             console.log(node);
-        //             node.move({parent: component.data('id')})
-        //         })
-        //     })
-        // }
 
         let time = 1;
         let current_node = original;
-        // console.log('Zaciatok: ', current_node);
-        // console.log(map);
         let previous = [];
         let self = this;
         let unconnected = false;
-        // graph.change_time(current_node, true, time);
 
-        // time++;
         let runKosarajuAnimation = function() {
             let node_object = graph.get_specific_node(current_node);
 
-            // console.log(node_object);
             if (current_node !== undefined && !node_object.hasClass('visited')) {
                 self.makeVisited(node_object);
-                // graph.change_time(current_node, true, time);
-                // time++;
             }
 
             unconnected = false;
-            // console.log(current_node);
             if (!map.has(current_node)) {
                 if (current_node === undefined) {
-                    // graph.make_transposed();
-                    // return;
                     for (const [key, value] of map.entries()) {
                         if (value.length !== 0) {
                             current_node = key;
                             self.makeExplored(graph.get_specific_node(current_node));
-                            // graph.change_time(current_node, false, time);
                             unconnected = true;
                             break;
                         }
@@ -489,32 +444,16 @@ class Algorithm {
                         graph.make_transposed();
                         self.#make_timestamps(time_stamps, original)
                         let sorted = graph.sorted_by_finished();
-                        // console.log('Vysledok: ', sorted);
                         self.#runReversedDDFS_main(sorted);
-                        // console.log(sorted);
                         return;
                     }
-                    // console.log('NIEC', current_node);
                     self.makeExplored(graph.get_specific_node(current_node));
-                    // graph.change_time(current_node, false, time);
-                    // time++;
                     current_node = previous.pop();
                 }
             }
 
-            // let data = map.get(current_node);
-            //
-            // if (data === undefined || data.length === 0) {
-            //     self.makeExplored(node_object);
-            //     current_node = previous.pop();
-            //     setTimeout(runKosarajuAnimation, 1200);
-            // } else {
-            //
-            // }
             let edge = current_node === undefined ? undefined : map.get(current_node).shift();
             node_object = graph.get_specific_node(current_node);
-            // console.log(current_node);
-
 
             if (edge === undefined) {
                 if (current_node !== undefined) {
