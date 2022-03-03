@@ -53,8 +53,8 @@ $('#play').on('click', function () {
 });
 
 $('#discovered').on('click', function () {
-   // graph.show_time();
-    graph.make_transposed();
+   graph.show_time();
+   //  graph.make_transposed();
 });
 
 

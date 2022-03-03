@@ -204,7 +204,7 @@ class Graph {
      * @returns {*}
      */
 
-    #add_component() {
+    add_component() {
         let newID = 'Komponenta_' + this.#current_component_id;
         let component = this.#current_graph.add([{
             group: "nodes",
@@ -323,14 +323,13 @@ class Graph {
 
             elements: {
                 nodes: [
-                    { data: { id: 'A' , name: 'A', old_color: '#a83030', original_name: 'A', visited : false, discovered : -1, finished : -1} },
-                    { data: { id: 'B' , name: 'B', old_color: '#a83030', original_name: 'B', visited : false, discovered : -1, finished : -1} },
-                    { data: { id: 'C' , name: 'C', old_color: '#a83030', original_name: 'C', visited : false, discovered : -1, finished : -1} },
-                    { data: { id: 'D' , name: 'D', old_color: '#a83030', original_name: 'D', visited : false, discovered : -1, finished : -1} },
-                    { data: { id: 'E' , name: 'E', old_color: '#a83030', original_name: 'E', visited : false, discovered : -1, finished : -1} },
-                    { data: { id: 'F' , name: 'F', old_color: '#a83030', original_name: 'F', visited : false, discovered : -1, finished : -1} },
-                    { data: { id: 'G' , name: 'G', old_color: '#a83030', original_name: 'G', visited : false, discovered : -1, finished : -1} },
-                    { data: { id: 'H' , name: 'H', old_color: '#a83030', original_name: 'H', visited : false, discovered : -1, finished : -1} }
+                    { data: { id: 'A' , name: 'A', old_color: '#a83030', original_name: 'A', visited : false, discovered : -1, finished : -1, reversed: 0} },
+                    { data: { id: 'B' , name: 'B', old_color: '#a83030', original_name: 'B', visited : false, discovered : -1, finished : -1, reversed: 0} },
+                    { data: { id: 'C' , name: 'C', old_color: '#a83030', original_name: 'C', visited : false, discovered : -1, finished : -1, reversed: 0} },
+                    { data: { id: 'D' , name: 'D', old_color: '#a83030', original_name: 'D', visited : false, discovered : -1, finished : -1, reversed: 0} },
+                    { data: { id: 'E' , name: 'E', old_color: '#a83030', original_name: 'E', visited : false, discovered : -1, finished : -1, reversed: 0} },
+                    { data: { id: 'F' , name: 'F', old_color: '#a83030', original_name: 'F', visited : false, discovered : -1, finished : -1, reversed: 0} },
+                    { data: { id: 'G' , name: 'G', old_color: '#a83030', original_name: 'G', visited : false, discovered : -1, finished : -1, reversed: 0} },
                 ],
                 edges: [
                     { data: { source: 'A', target: 'B' , weight: 1, old_color: '#83b55a'} },
@@ -338,17 +337,15 @@ class Graph {
                     { data: { source: 'D', target: 'A' , weight: 1, old_color: '#83b55a'} },
 
 
-                    { data: { source: 'B', target: 'E' , weight: 1, old_color: '#83b55a'} },
+                    { data: { source: 'A', target: 'G' , weight: 1, old_color: '#83b55a'} },
 
 
                     { data: { source: 'C', target: 'F' , weight: 1, old_color: '#83b55a'} },
                     { data: { source: 'F', target: 'E' , weight: 1, old_color: '#83b55a'} },
                     { data: { source: 'E', target: 'C' , weight: 1, old_color: '#83b55a'} },
 
-                    { data: { source: 'E', target: 'H' , weight: 1, old_color: '#83b55a'} },
+                    { data: { source: 'C', target: 'G' , weight: 1, old_color: '#83b55a'} },
 
-                    { data: { source: 'H', target: 'G' , weight: 1, old_color: '#83b55a'} },
-                    { data: { source: 'G', target: 'H' , weight: 1, old_color: '#83b55a'} },
                 ]
             },
 
@@ -452,7 +449,7 @@ class Graph {
 
         if (selected_nodes.length === 0) return;
 
-        let newComponent = this.#add_component();
+        let newComponent = this.add_component();
         selected_nodes.move({parent: newComponent.data('id')});
 
         this.#reset_selected_elements(selected_nodes);
@@ -504,6 +501,9 @@ class Graph {
         this.#current_graph.elements().removeClass('visited');
         this.#current_graph.elements().removeClass('explored');
         this.#current_graph.nodes().map(node => node.data('name', node.data().original_name));
+        this.#current_graph.nodes().map(node => node.data().discovered = -1);
+        this.#current_graph.nodes().map(node => node.data().finished = -1);
+        this.#current_graph.nodes().map(node => node.data().reversed = 0);
     }
 
     // ======================================================================================
@@ -608,6 +608,19 @@ class Graph {
         new_edge.addClass(system.get_direction ? 'directed' : 'undirected');
         })
 
+    }
+
+
+    sorted_by_finished() {
+        return this.#current_graph.nodes().sort(function (node1, node2) {
+            return node1.data().finished - node2.data().finished;
+        }).toArray();
+    }
+
+    get_undiscovered_nodes() {
+        return this.#current_graph.nodes().filter(function (node) {
+            return node.data().discovered === -1;
+        }).map(node => node.data().id);
     }
 
 
