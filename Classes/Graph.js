@@ -330,21 +330,30 @@ class Graph {
                     { data: { id: 'E' , name: 'E', old_color: '#a83030', original_name: 'E', visited : false, discovered : -1, finished : -1, reversed: 0} },
                     { data: { id: 'F' , name: 'F', old_color: '#a83030', original_name: 'F', visited : false, discovered : -1, finished : -1, reversed: 0} },
                     { data: { id: 'G' , name: 'G', old_color: '#a83030', original_name: 'G', visited : false, discovered : -1, finished : -1, reversed: 0} },
+                    { data: { id: 'H' , name: 'H', old_color: '#a83030', original_name: 'G', visited : false, discovered : -1, finished : -1, reversed: 0} },
+                    { data: { id: 'I' , name: 'I', old_color: '#a83030', original_name: 'G', visited : false, discovered : -1, finished : -1, reversed: 0} },
+                    { data: { id: 'J' , name: 'J', old_color: '#a83030', original_name: 'G', visited : false, discovered : -1, finished : -1, reversed: 0} },
                 ],
                 edges: [
-                    { data: { source: 'A', target: 'B' , weight: 1, old_color: '#83b55a'} },
-                    { data: { source: 'B', target: 'D' , weight: 1, old_color: '#83b55a'} },
-                    { data: { source: 'D', target: 'A' , weight: 1, old_color: '#83b55a'} },
+                    { data: { source: 'A', target: 'B' , weight: -20, old_color: '#83b55a'} },
+                    { data: { source: 'B', target: 'D' , weight: 100, old_color: '#83b55a'} },
+                    { data: { source: 'D', target: 'A' , weight: 10, old_color: '#83b55a'} },
 
 
-                    { data: { source: 'A', target: 'G' , weight: 1, old_color: '#83b55a'} },
+                    { data: { source: 'A', target: 'G' , weight: 5, old_color: '#83b55a'} },
 
 
-                    { data: { source: 'C', target: 'F' , weight: 1, old_color: '#83b55a'} },
-                    { data: { source: 'F', target: 'E' , weight: 1, old_color: '#83b55a'} },
-                    { data: { source: 'E', target: 'C' , weight: 1, old_color: '#83b55a'} },
+                    { data: { source: 'C', target: 'F' , weight: -30, old_color: '#83b55a'} },
+                    { data: { source: 'F', target: 'E' , weight: 4, old_color: '#83b55a'} },
+                    { data: { source: 'E', target: 'C' , weight: 10, old_color: '#83b55a'} },
 
-                    { data: { source: 'C', target: 'G' , weight: 1, old_color: '#83b55a'} },
+                    { data: { source: 'C', target: 'G' , weight: 21, old_color: '#83b55a'} },
+
+                    { data: { source: 'I', target: 'J' , weight: 78, old_color: '#83b55a'} },
+                    { data: { source: 'J', target: 'H' , weight: 1, old_color: '#83b55a'} },
+                    { data: { source: 'H', target: 'F' , weight: 5, old_color: '#83b55a'} },
+                    { data: { source: 'J', target: 'G' , weight: -1, old_color: '#83b55a'} },
+
 
                 ]
             },
@@ -376,7 +385,7 @@ class Graph {
      */
 
     get_specific_node(id) {
-        return this.#current_graph.nodes('[id = "' + id + '"]');
+        return this.#current_graph.$('#' + id);
     }
 
     // ========================================================================
@@ -430,7 +439,7 @@ class Graph {
         let pass = regex.test(label_input);
         let edge = this.#current_graph.edges('#' + input.attr('data-id'));
         if (pass) {
-            edge.data('weight', label_input);
+            edge.data('weight', parseInt(label_input));
         } else {
             alert('Musi byt validne cele cislo');
         }
@@ -621,6 +630,10 @@ class Graph {
         return this.#current_graph.nodes().filter(function (node) {
             return node.data().discovered === -1;
         }).map(node => node.data().id);
+    }
+
+    make_collection() {
+        return this.#current_graph.collection();
     }
 
 

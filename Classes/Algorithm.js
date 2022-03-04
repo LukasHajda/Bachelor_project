@@ -22,6 +22,9 @@ class Algorithm {
             case "Kosararu sharir":
                 this.#kos_sharir();
                 break;
+            case "Prim":
+                this.#prim();
+                break;
 
         }
 
@@ -232,7 +235,76 @@ class Algorithm {
 
     }
 
+    #expand_collection(nodes) {
+        let new_collection = graph.make_collection();
+
+        $.each(nodes, function (index, node) {
+            let node_object = graph.get_specific_node(node);
+            new_collection.merge(node_object.outgoers().edges()).merge(node_object.incomers().edges());
+        })
+
+        return new_collection;
+    }
+
+
     #prim() {
+        graph.change_edges_directions(false);
+        let root = system.node_select_value;
+        let root_object = graph.get_specific_node(root);
+
+
+        let nodes_collection = [];
+        let node_graphs = graph.get_elements().nodes().length;
+        let result = [];
+
+        nodes_collection.push(root);
+
+        root_object.data().finished = 1;
+
+        while(nodes_collection.length !== node_graphs) {
+            let coll = this.#expand_collection(nodes_collection);
+
+            let minEdge = coll.min(function(edge){
+                return edge.data().weight;
+            }).ele;
+
+            while(minEdge.source().data().finished === 1 && minEdge.target().data().finished === 1) {
+                coll.unmerge(minEdge);
+                minEdge = coll.min(function(edge){
+                    return edge.data().weight;
+                }).ele;
+            }
+            result.push(minEdge);
+            if (minEdge.source().data().finished === -1) {
+                minEdge.source().data().finished = 1;
+                nodes_collection.push(minEdge.source().data().id);
+            }
+
+            if (minEdge.target().data().finished === -1) {
+                minEdge.target().data().finished = 1;
+                nodes_collection.push(minEdge.target().data().id);
+            }
+        }
+
+        let runPrimAnimation = function () {
+            let current_edge = result.shift();
+            if (current_edge === undefined) {
+                return
+            }
+            current_edge.animate({
+                css: {
+                    'line-color': '#61bffc',
+                    'target-arrow-color': '#61bffc',
+                    'transition-property':  'line-color, target-arrow-color',
+                    'transition-duration': '0.5s'
+                }
+            }, {
+                duration : 500,
+            });
+            setTimeout(runPrimAnimation,2000);
+
+        }
+        runPrimAnimation();
 
     }
 
@@ -290,10 +362,7 @@ class Algorithm {
 
                 let data = time_stamps.get(current_node_time);
 
-                // console.log(current_node_time, data);
-
                 if (data === undefined || data === []) {
-                    console.log(data);
                     if (node.data().finished !== -1) break;
                     node.data().finished = time;
                     time++;
@@ -318,7 +387,6 @@ class Algorithm {
 
             for (const [key, value] of time_stamps.entries()) {
                 if (value.length !== 0) {
-                    console.log('Vyberam');
                     current_node_time = key;
                     br = false;
                     break;
@@ -328,8 +396,6 @@ class Algorithm {
             if (br) break;
 
         }
-
-        // console.log('TOTO JE TIMESTAMP:', graph.sorted_by_finished().map(node => [node.data().id, node.data().discovered, node.data().finished]));
     }
 
     #runReversedDDFS_main(sorted) {
@@ -337,7 +403,6 @@ class Algorithm {
         console.log(sorted.map(node => [node.data().id, node.data().discovered, node.data().finished]));
 
         let current = sorted.pop();
-        let newEdgesCollections = [];
         let no = [];
         let runReversedDDFS = function () {
 
@@ -346,9 +411,6 @@ class Algorithm {
                 graph.get_elements().dfs({
                     roots: '#' + current.data().id,
                     visit: function(v, e, u, i, depth){
-                        if (e !== undefined) {
-                            newEdgesCollections.push(e);
-                        }
                         if (v !== undefined && v.data().reversed !== 1) {
                             tmp.push(v);
                             v.data().reversed = 1;
@@ -383,14 +445,9 @@ class Algorithm {
         let root = system.node_select_value;
         let original = root;
 
-        // Prvy DFS => zistim ako sa odhaluju edge a len si ich odchytim.
         let edgesCollection = this.#first_dfs(root);
         graph.reset_configuration();
 
-        // console.log(edgesCollection.map(edge => [edge.source().data().name, edge.target().data().name]));
-
-
-        // Urobim mapu na source => edge
         $.each(edgesCollection, function (index, edge) {
             let source = edge.source().data().id;
 
