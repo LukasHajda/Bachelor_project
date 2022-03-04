@@ -330,9 +330,9 @@ class Graph {
                     { data: { id: 'E' , name: 'E', old_color: '#a83030', original_name: 'E', visited : false, discovered : -1, finished : -1, reversed: 0} },
                     { data: { id: 'F' , name: 'F', old_color: '#a83030', original_name: 'F', visited : false, discovered : -1, finished : -1, reversed: 0} },
                     { data: { id: 'G' , name: 'G', old_color: '#a83030', original_name: 'G', visited : false, discovered : -1, finished : -1, reversed: 0} },
-                    { data: { id: 'H' , name: 'H', old_color: '#a83030', original_name: 'G', visited : false, discovered : -1, finished : -1, reversed: 0} },
-                    { data: { id: 'I' , name: 'I', old_color: '#a83030', original_name: 'G', visited : false, discovered : -1, finished : -1, reversed: 0} },
-                    { data: { id: 'J' , name: 'J', old_color: '#a83030', original_name: 'G', visited : false, discovered : -1, finished : -1, reversed: 0} },
+                    { data: { id: 'H' , name: 'H', old_color: '#a83030', original_name: 'H', visited : false, discovered : -1, finished : -1, reversed: 0} },
+                    { data: { id: 'I' , name: 'I', old_color: '#a83030', original_name: 'I', visited : false, discovered : -1, finished : -1, reversed: 0} },
+                    { data: { id: 'J' , name: 'J', old_color: '#a83030', original_name: 'J', visited : false, discovered : -1, finished : -1, reversed: 0} },
                 ],
                 edges: [
                     { data: { source: 'A', target: 'B' , weight: -20, old_color: '#83b55a'} },
@@ -385,7 +385,7 @@ class Graph {
      */
 
     get_specific_node(id) {
-        return this.#current_graph.$('#' + id);
+        return this.#current_graph.nodes('[id = "' + id + '"]');
     }
 
     // ========================================================================

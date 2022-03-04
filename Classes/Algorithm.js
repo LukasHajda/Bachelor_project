@@ -312,6 +312,7 @@ class Algorithm {
         let edgesCollection = [];
         let visited = [];
         while(root !== undefined) {
+            // console.log('Prave odhaluje z:', root);
             if (!visited.includes(root)) {
                 visited.push(root)
             }
@@ -387,6 +388,7 @@ class Algorithm {
 
             for (const [key, value] of time_stamps.entries()) {
                 if (value.length !== 0) {
+                    console.log('Nejaka noda', key);
                     current_node_time = key;
                     br = false;
                     break;
@@ -452,6 +454,7 @@ class Algorithm {
             let source = edge.source().data().id;
 
             if (!map.has(source)) {
+                // map.set(source, [edge]);
                 map.set(source, [edge]);
             } else {
                 let arr = map.get(source);
@@ -468,6 +471,22 @@ class Algorithm {
             }
         });
 
+        let nodes = graph.get_nodes().map(node => node.data().id);
+
+        $.each(nodes, function (index, node) {
+            if (!map.has(node)) {
+                map.set(node, [undefined]);
+            }
+
+            if (!time_stamps.has(node)) {
+                time_stamps.set(node, [undefined]);
+            }
+        })
+
+
+        // console.log(map);
+        // return;
+
         let time = 1;
         let current_node = original;
         let previous = [];
@@ -475,6 +494,7 @@ class Algorithm {
         let unconnected = false;
 
         let runKosarajuAnimation = function() {
+            console.log('Prave animujem:', current_node);
             let node_object = graph.get_specific_node(current_node);
 
             if (current_node !== undefined && !node_object.hasClass('visited')) {
