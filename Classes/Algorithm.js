@@ -19,11 +19,14 @@ class Algorithm {
             case "Kruskal":
                 this.#kruskal();
                 break;
-            case "Kosararu sharir":
-                this.#kos_sharir();
+            case "Tarjan":
+                this.#tarjan();
                 break;
             case "Prim":
                 this.#prim();
+                break;
+            case "Bellman-Ford":
+                this.#bellman_ford();
                 break;
 
         }
@@ -33,6 +36,21 @@ class Algorithm {
     makeVisited(node) {
         node.addClass('visited');
         node.data('name', node.data().original_name + ' (visited)');
+    }
+
+    makeLVK(nodes, lkv) {
+        $.each(nodes, function (index, node) {
+            node.data('name', node.data().original_name + ' LKV: ' + lkv)
+        })
+    }
+
+    makeComponents(nodes) {
+        $.each(nodes, function (index, ele) {
+            let nodes = ele.nodes();
+            let component = graph.add_component();
+            console.log(nodes);
+            nodes.move({parent: component.data('id')});
+        })
     }
 
     makeExplored(node) {
@@ -192,6 +210,15 @@ class Algorithm {
     }
 
     #bellman_ford() {
+        let bf = graph.get_elements().bellmanFord({
+            root: '#' + system.node_select_value,
+            weight: function (edge) {
+                console.log(edge);
+            },
+            directed: true
+        });
+
+        console.log(bf);
 
     }
 
@@ -308,261 +335,57 @@ class Algorithm {
 
     }
 
-    #first_dfs(root) {
-        let edgesCollection = [];
-        let visited = [];
-        while(root !== undefined) {
-            // console.log('Prave odhaluje z:', root);
-            if (!visited.includes(root)) {
-                visited.push(root)
-            }
-            graph.get_elements().dfs({
-                roots: '#' + root,
-                visit: function(v, e, u, i, depth){
-                    if (e !== undefined) {
-                        if (!visited.includes(e.target().data().id)) {
-                            edgesCollection.push(e);
-                            visited.push(e.target().data().id)
-                        }
-                    }
-                    if (v !== undefined) {
-                        v.data().discovered = 1;
-                    }
-                },
-                directed: true
+    #tarjan() {
+        let self = this;
+        let tsc = graph.get_elements().tarjanStronglyConnected();
+        let result_obj = [];
+        // let component_count = 1;
+
+        $.each(tsc.components, function (index, coll) {
+            result_obj.push({
+               index: index + 1,
+               nodes: coll.nodes(),
+               edges: coll.edges(),
             });
-
-            root = graph.get_undiscovered_nodes().pop();
-            // console.log(root);
-        }
-
-        console.log(edgesCollection.map(edge => [edge.source().data().id, edge.target().data().id]));
-
-        return edgesCollection;
-    }
-
-    #make_timestamps(map, original) {
-        let time = 1;
-        let time_stamps = map;
-        let previous_time = [];
-        let current_node_time = original;
-        let node = null;
-        let br = 0;
-        console.log('VSTUP MAPA:', map);
-        while (true) {
-            br = true;
-            while(current_node_time !== undefined) {
-                node = graph.get_specific_node(current_node_time);
-
-                console.log(node.data().name, time);
-
-                if (node.data().discovered === -1) {
-                    node.data().discovered = time;
-                    time++;
-                }
-
-                let data = time_stamps.get(current_node_time);
-
-                if (data === undefined || data === []) {
-                    if (node.data().finished !== -1) break;
-                    node.data().finished = time;
-                    time++;
-
-                    current_node_time = previous_time.pop();
-                } else {
-                    let edge = time_stamps.get(current_node_time).shift();
-
-                    if (edge === undefined) {
-                        node = graph.get_specific_node(current_node_time);
-                        if (node.data().finished === -1) {
-                            node.data().finished = time;
-                            time++;
-                        }
-                        current_node_time = previous_time.pop();
-                    } else {
-                        previous_time.push(current_node_time);
-                        current_node_time = edge.target().data().id;
-                    }
-                }
-            }
-
-            for (const [key, value] of time_stamps.entries()) {
-                if (value.length !== 0) {
-                    console.log('Nejaka noda', key);
-                    current_node_time = key;
-                    br = false;
-                    break;
-                }
-            }
-
-            if (br) break;
-
-        }
-    }
-
-    #runReversedDDFS_main(sorted) {
-
-        console.log(sorted.map(node => [node.data().id, node.data().discovered, node.data().finished]));
-
-        let current = sorted.pop();
-        let no = [];
-        let runReversedDDFS = function () {
-
-            while (current !== undefined) {
-                let tmp = [];
-                graph.get_elements().dfs({
-                    roots: '#' + current.data().id,
-                    visit: function(v, e, u, i, depth){
-                        if (v !== undefined && v.data().reversed !== 1) {
-                            tmp.push(v);
-                            v.data().reversed = 1;
-                        }
-                    },
-                    directed: true
-                });
-                if (tmp.length !== 0) {
-                    no.push(tmp);
-                }
-                current = sorted.pop();
-            }
-
-        }
-        runReversedDDFS();
-        let runReversedAnimation = function () {
-            $.each(no, function (index, arr) {
-                let component = graph.add_component();
-
-                $.each(arr, function (index, node) {
-                    console.log(node);
-                    node.move({parent: component.data('id')})
-                })
-            })
-        }
-        runReversedAnimation();
-    }
-
-    #kos_sharir() {
-        let map = new Map();
-        let time_stamps = new Map();
-        let root = system.node_select_value;
-        let original = root;
-
-        let edgesCollection = this.#first_dfs(root);
-        graph.reset_configuration();
-
-        $.each(edgesCollection, function (index, edge) {
-            let source = edge.source().data().id;
-
-            if (!map.has(source)) {
-                // map.set(source, [edge]);
-                map.set(source, [edge]);
-            } else {
-                let arr = map.get(source);
-                arr.push(edge);
-                map.set(source, arr);
-            }
-
-            if (!time_stamps.has(source)) {
-                time_stamps.set(source, [edge]);
-            } else {
-                let arr = time_stamps.get(source);
-                arr.push(edge);
-                time_stamps.set(source, arr);
-            }
         });
 
-        let nodes = graph.get_nodes().map(node => node.data().id);
 
-        $.each(nodes, function (index, node) {
-            if (!map.has(node)) {
-                map.set(node, [undefined]);
+        result_obj = result_obj.reverse();
+        
+        let current_obj = result_obj.pop();
+        let current_edge = null;
+        let lkv = 1;
+
+        let runTarjanAnimation = function () {
+            
+            if (current_obj === undefined) {
+                self.makeComponents(tsc.components);
+                return;
             }
+            current_edge = current_obj.edges.pop();
 
-            if (!time_stamps.has(node)) {
-                time_stamps.set(node, [undefined]);
-            }
-        })
-
-
-        // console.log(map);
-        // return;
-
-        let time = 1;
-        let current_node = original;
-        let previous = [];
-        let self = this;
-        let unconnected = false;
-
-        let runKosarajuAnimation = function() {
-            console.log('Prave animujem:', current_node);
-            let node_object = graph.get_specific_node(current_node);
-
-            if (current_node !== undefined && !node_object.hasClass('visited')) {
-                self.makeVisited(node_object);
-            }
-
-            unconnected = false;
-            if (!map.has(current_node)) {
-                if (current_node === undefined) {
-                    for (const [key, value] of map.entries()) {
-                        if (value.length !== 0) {
-                            current_node = key;
-                            self.makeExplored(graph.get_specific_node(current_node));
-                            unconnected = true;
-                            break;
-                        }
-                    }
-
-                }
-
-                if (!unconnected) {
-                    if (current_node === undefined) {
-                        graph.reset_configuration();
-                        graph.make_transposed();
-                        self.#make_timestamps(time_stamps, original)
-                        let sorted = graph.sorted_by_finished();
-                        self.#runReversedDDFS_main(sorted);
-                        return;
-                    }
-                    self.makeExplored(graph.get_specific_node(current_node));
-                    current_node = previous.pop();
-                }
-            }
-
-            let edge = current_node === undefined ? undefined : map.get(current_node).shift();
-            node_object = graph.get_specific_node(current_node);
-
-            if (edge === undefined) {
-                if (current_node !== undefined) {
-                    self.makeExplored(node_object);
-                    graph.change_time(node_object.data().id, false, time);
-                    time++;
-                }
-                current_node = previous.pop();
-                setTimeout(runKosarajuAnimation, 500);
+            if (current_edge === undefined) {
+                self.makeLVK(current_obj.nodes, lkv);
+                lkv++;
+                current_obj = result_obj.pop();
+                setTimeout(runTarjanAnimation, 1500);
             } else {
-                if (!edge.target().hasClass('explored')) {
-                    edge.animate({
-                        style: {
-                            'line-color' : 'yellow',
-                            'target-arrow-color': 'yellow'
-                        }
-                    }, {
-                        duration : 200,
-                        complete : function() {
-                            graph.change_time(edge.target().data().id, true, time);
-                            time++;
-                            self.makeVisited(edge.target());
-                        }
-                    });
-                }
-                previous.push(current_node);
-                current_node = edge.target().data().id;
-                setTimeout(runKosarajuAnimation, 500)
+                current_edge.animate({
+                    css: {
+                        'line-color': '#61bffc',
+                        'target-arrow-color': '#61bffc',
+                        'transition-property':  'line-color, target-arrow-color',
+                        'transition-duration': '0.5s'
+                    }
+                }, {
+                    duration : 500,
+                });
+                setTimeout(runTarjanAnimation,1500);
             }
-        }
-        runKosarajuAnimation();
 
+        }
+
+        runTarjanAnimation();
     }
 
 
