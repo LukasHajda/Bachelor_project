@@ -279,10 +279,30 @@ class Graph {
                     }
                 },
                 {
+                    selector: '.bf_hide',
+                    style: {
+                        'opacity': 0,
+                    }
+                },
+                {
                     selector : '.explored',
                     style : {
                         'border-color': 'black',
                         'border-width': 8,
+                    }
+                },
+                {
+                    selector: '.bf',
+                    style: {
+                        'border-color': 'blue',
+                        'border-width': 8,
+                    }
+                },
+                {
+                    selector: '.bf_edge',
+                    style: {
+                        'line-color' : 'yellow',
+                        'target-arrow-color': 'yellow'
                     }
                 },
                 {
@@ -323,36 +343,36 @@ class Graph {
 
             elements: {
                 nodes: [
-                    { data: { id: 'A' , name: 'A', old_color: '#a83030', original_name: 'A', visited : false, discovered : -1, finished : -1, reversed: 0, tarjan: false} },
-                    { data: { id: 'B' , name: 'B', old_color: '#a83030', original_name: 'B', visited : false, discovered : -1, finished : -1, reversed: 0, tarjan: false} },
-                    { data: { id: 'C' , name: 'C', old_color: '#a83030', original_name: 'C', visited : false, discovered : -1, finished : -1, reversed: 0, tarjan: false} },
-                    { data: { id: 'D' , name: 'D', old_color: '#a83030', original_name: 'D', visited : false, discovered : -1, finished : -1, reversed: 0, tarjan: false} },
-                    { data: { id: 'E' , name: 'E', old_color: '#a83030', original_name: 'E', visited : false, discovered : -1, finished : -1, reversed: 0, tarjan: false} },
-                    { data: { id: 'F' , name: 'F', old_color: '#a83030', original_name: 'F', visited : false, discovered : -1, finished : -1, reversed: 0, tarjan: false} },
-                    { data: { id: 'G' , name: 'G', old_color: '#a83030', original_name: 'G', visited : false, discovered : -1, finished : -1, reversed: 0, tarjan: false} },
-                    { data: { id: 'H' , name: 'H', old_color: '#a83030', original_name: 'H', visited : false, discovered : -1, finished : -1, reversed: 0, tarjan: false} },
-                    { data: { id: 'I' , name: 'I', old_color: '#a83030', original_name: 'I', visited : false, discovered : -1, finished : -1, reversed: 0, tarjan: false} },
-                    { data: { id: 'J' , name: 'J', old_color: '#a83030', original_name: 'J', visited : false, discovered : -1, finished : -1, reversed: 0, tarjan: false} },
+                    { data: { id: 'A' , name: 'A', old_color: '#a83030', original_name: 'A', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'B' , name: 'B', old_color: '#a83030', original_name: 'B', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'C' , name: 'C', old_color: '#a83030', original_name: 'C', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'D' , name: 'D', old_color: '#a83030', original_name: 'D', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'E' , name: 'E', old_color: '#a83030', original_name: 'E', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'F' , name: 'F', old_color: '#a83030', original_name: 'F', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'G' , name: 'G', old_color: '#a83030', original_name: 'G', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'H' , name: 'H', old_color: '#a83030', original_name: 'H', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'I' , name: 'I', old_color: '#a83030', original_name: 'I', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'J' , name: 'J', old_color: '#a83030', original_name: 'J', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
                 ],
                 edges: [
-                    { data: { source: 'A', target: 'B' , weight: -20, old_color: '#83b55a',tarjan: false} },
-                    { data: { source: 'B', target: 'D' , weight: 100, old_color: '#83b55a',tarjan: false} },
+                    { data: { source: 'A', target: 'B' , weight: 20, old_color: '#83b55a',tarjan: false} },
+                    { data: { source: 'B', target: 'D' , weight: 10, old_color: '#83b55a',tarjan: false} },
                     { data: { source: 'D', target: 'A' , weight: 10, old_color: '#83b55a',tarjan: false} },
 
 
-                    { data: { source: 'A', target: 'G' , weight: 5, old_color: '#83b55a',tarjan: false} },
+                    { data: { source: 'G', target: 'A' , weight: 5, old_color: '#83b55a',tarjan: false} },
 
 
-                    { data: { source: 'C', target: 'F' , weight: -30, old_color: '#83b55a',tarjan: false} },
+                    { data: { source: 'C', target: 'F' , weight: 5, old_color: '#83b55a',tarjan: false} },
                     { data: { source: 'F', target: 'E' , weight: 4, old_color: '#83b55a',tarjan: false} },
                     { data: { source: 'E', target: 'C' , weight: 10, old_color: '#83b55a',tarjan: false} },
 
                     { data: { source: 'C', target: 'G' , weight: 21, old_color: '#83b55a',tarjan: false} },
 
-                    { data: { source: 'I', target: 'J' , weight: 78, old_color: '#83b55a',tarjan: false} },
+                    { data: { source: 'J', target: 'I' , weight: 78, old_color: '#83b55a',tarjan: false} },
                     { data: { source: 'J', target: 'H' , weight: 1, old_color: '#83b55a',tarjan: false} },
                     { data: { source: 'H', target: 'F' , weight: 5, old_color: '#83b55a',tarjan: false} },
-                    { data: { source: 'J', target: 'G' , weight: -1, old_color: '#83b55a',tarjan: false} },
+                    { data: { source: 'G', target: 'J' , weight: 1, old_color: '#83b55a',tarjan: false} },
 
 
                 ]
@@ -435,7 +455,7 @@ class Graph {
     change_text_edge() {
         let input = $('#label_edge');
         let label_input = input.val();
-        let regex = /^-?([1-9][0-9]+|0)$/g;
+        let regex = /^-?([1-9][0-9]*)$/g;
         let pass = regex.test(label_input);
         let edge = this.#current_graph.edges('#' + input.attr('data-id'));
         if (pass) {
@@ -640,6 +660,14 @@ class Graph {
         return this.#current_graph.edges().filter(function (edge) {
             return edge.data().tarjan === false;
         }).length;
+    }
+
+    change_edge_weight(edge, weight) {
+        edge.data('weight', parseInt(weight));
+    }
+
+    get_current_graph() {
+        return this.#current_graph;
     }
 
 

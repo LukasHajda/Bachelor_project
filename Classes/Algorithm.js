@@ -44,6 +44,20 @@ class Algorithm {
         })
     }
 
+    changeInfiniteLabel() {
+        let nodes = graph.get_elements().nodes();
+
+        $.each(nodes, function (index, node) {
+            node.data('name', '');
+            node.data('name', node.data().original_name + ' distance: ' + '∞' + ' Pr: NULL');
+        })
+    }
+
+    changeDistanceAndPredecessor(node, distance, source) {
+        node.data('name', '');
+        node.data('name', node.data().original_name + ' distance: ' + distance + ' Pr: ' + source.data().original_name);
+    }
+
     makeComponents(nodes) {
         $.each(nodes, function (index, ele) {
             let nodes = ele.nodes();
@@ -210,16 +224,72 @@ class Algorithm {
     }
 
     #bellman_ford() {
-        let bf = graph.get_elements().bellmanFord({
-            root: '#' + system.node_select_value,
-            weight: function (edge) {
-                console.log(edge);
-            },
-            directed: true
-        });
+        let node_count = graph.get_elements().nodes().length;
+        graph.get_elements().nodes().map(node => node.data().bf = Infinity);
+        graph.get_elements().nodes().map(node => node.data().predecessor = null);
+        let root = graph.get_specific_node(system.node_select_value);
+        let edges = graph.get_elements().edges();
 
-        console.log(bf);
+        this.changeInfiniteLabel();
+        root.data().bf = 0;
+        root.data().predecessor = root;
 
+        root.data('name', root.data().original_name + ' distance: ' + root.data().bf + ' Pr: ' + root.data().predecessor.data().original_name);
+
+        let count = 1;
+
+        let result = [];
+
+        for( ;; ) {
+            if (count === node_count) {
+                break;
+            }
+
+            $.each(edges, function (index, edge) {
+                console.log(edge.source().data().id, edge.target().data().id);
+                if (edge.source().data().bf + edge.data().weight < edge.target().data().bf) {
+                    result.push({
+                        edge: edge,
+                        source: edge.source(),
+                        target: edge.target(),
+                        new_distance: edge.source().data().bf + edge.data().weight
+                    })
+                    edge.target().data().bf = edge.source().data().bf + edge.data().weight;
+                    edge.target().data().predecessor = edge.source();
+                }
+            });
+
+            count++;
+        }
+
+        let self = this;
+        let current_obj = result.shift();
+        let runBFAnimation = function () {
+            graph.get_elements().nodes().map(node => node.removeClass('bf'));
+            graph.get_elements().edges().map(edge => edge.style({
+                'line-color' : '#83b55a',
+                'target-arrow-color': '#83b55a'
+            }));
+
+            if (current_obj === undefined) {
+                return;
+            }
+
+            let target = current_obj.target;
+            let edge = current_obj.edge;
+
+            target.addClass('bf');
+            edge.style(
+                {'line-color' : 'blue',
+                'target-arrow-color': 'blue'});
+
+            self.changeDistanceAndPredecessor(target, current_obj.new_distance, current_obj.source);
+            current_obj = result.shift();
+            setTimeout(runBFAnimation, 3000);
+
+        }
+
+        runBFAnimation();
     }
 
     #kruskal() {
