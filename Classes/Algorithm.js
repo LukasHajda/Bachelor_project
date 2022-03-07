@@ -80,6 +80,7 @@ class Algorithm {
     #breadth_first_search() {
         let edgesCollection = [];
         let nodesCollection = [];
+        let is_directed = system.get_direction;
         graph.get_elements().bfs({
             roots: '#' + system.node_select_value,
             visit: function(v, e, u, i, depth){
@@ -91,8 +92,10 @@ class Algorithm {
                     nodesCollection.push(v);
                 }
             },
-            directed: true
+            directed: false
         });
+
+        console.log(edgesCollection.map(edge => [edge.source().data().id, edge.target().data().id]));
 
         let self = this;
         let real_queue = [];
@@ -119,6 +122,13 @@ class Algorithm {
                 return !edge.target().hasClass('visited') && !edge.target().hasClass('explored');
             });
 
+            let current_node_edges_in = current_node.incomers().edges().filter(function (edge) {
+                return !edge.source().hasClass('visited') && !edge.source().hasClass('explored');
+            });
+            if (!is_directed) {
+                current_node_edges.merge(current_node_edges_in);
+            }
+
             let length = current_node_edges.length;
             current_node_edges.each(function (edge, index) {
                 edge.animate({
@@ -132,6 +142,12 @@ class Algorithm {
                         if (!edge.target().hasClass('visited') && !edge.target().hasClass('explored')) {
                             self.makeVisited(edge.target());
                             real_queue.push(edge.target().data().original_name);
+                            self.#queue.text(real_queue);
+                        }
+
+                        if (!edge.source().hasClass('visited') && !edge.source().hasClass('explored')) {
+                            self.makeVisited(edge.source());
+                            real_queue.push(edge.source().data().original_name);
                             self.#queue.text(real_queue);
                         }
 
@@ -261,6 +277,18 @@ class Algorithm {
 
             count++;
         }
+
+        // Check negative cycle
+        let negative_cycle = false;
+        $.each(edges, function (index, edge) {
+            if (edge.source().data().bf + edge.data().weight < edge.target().data().bf) {
+                alert('Graf obsahuje negatívny cyklus');
+                negative_cycle = true;
+            }
+        });
+
+        if (negative_cycle) return;
+
 
         let self = this;
         let current_obj = result.shift();
