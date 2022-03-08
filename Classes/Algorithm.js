@@ -92,83 +92,82 @@ class Algorithm {
                     nodesCollection.push(v);
                 }
             },
-            directed: false
+            directed: system.get_direction
         });
 
-        console.log(edgesCollection.map(edge => [edge.source().data().id, edge.target().data().id]));
+        console.log(nodesCollection);
+        console.log(edgesCollection);
 
+        let order = [];
         let self = this;
-        let real_queue = [];
 
-        if (nodesCollection[0] !== undefined) {
-            real_queue.push(nodesCollection[0].data().original_name);
+        while(nodesCollection.length !== 0) {
+            let node = nodesCollection.shift();
+            let edges = [];
+
+            while (edgesCollection[0] !== undefined && (edgesCollection[0].source().data().id === node.data().id || edgesCollection[0].target().data().id === node.data().id)) {
+                let e = edgesCollection.shift()
+                edges.push(e);
+            }
+            let obj = {
+                node: node,
+                edges: edges
+            };
+
+            order.push(obj);
         }
 
-        self.#queue.text(real_queue);
+        let real_queue = [];
 
-        let runBFSAnimation = function() {
-            console.log(edgesCollection);
+        let runBFSAnimation = function () {
+            let current_obj = order.shift();
 
-            let current_node = nodesCollection.shift();
-            if (current_node === undefined)  {
+            if (current_obj === undefined) {
                 return;
             }
 
-            self.makeExplored(current_node);
+            self.makeExplored(current_obj.node);
             real_queue.shift();
             self.#queue.text(real_queue);
 
-            let current_node_edges = current_node.outgoers().edges().filter(function (edge) {
-                return !edge.target().hasClass('visited') && !edge.target().hasClass('explored');
-            });
-
-            let current_node_edges_in = current_node.incomers().edges().filter(function (edge) {
-                return !edge.source().hasClass('visited') && !edge.source().hasClass('explored');
-            });
-            if (!is_directed) {
-                current_node_edges.merge(current_node_edges_in);
-            }
-
-            let length = current_node_edges.length;
-            current_node_edges.each(function (edge, index) {
+            $.each(current_obj.edges, function (index, edge) {
                 edge.animate({
                     style: {
-                        'line-color' : 'yellow',
+                        'line-color': 'yellow',
                         'target-arrow-color': 'yellow'
                     },
                 }, {
-                    duration : 500,
-                    complete : function() {
-                        if (!edge.target().hasClass('visited') && !edge.target().hasClass('explored')) {
-                            self.makeVisited(edge.target());
-                            real_queue.push(edge.target().data().original_name);
-                            self.#queue.text(real_queue);
+                    duration: 500,
+                    complete: function () {
+                        if (current_obj.node.data().id === edge.source().data().id) {
+                            if (!edge.target().hasClass('visited') && !edge.target().hasClass('explored')) {
+                                self.makeVisited(edge.target());
+                                real_queue.push(edge.target().data().original_name);
+                                self.#queue.text(real_queue);
+                            }
                         }
 
-                        if (!edge.source().hasClass('visited') && !edge.source().hasClass('explored')) {
-                            self.makeVisited(edge.source());
-                            real_queue.push(edge.source().data().original_name);
-                            self.#queue.text(real_queue);
-                        }
-
-                        if (length - 1 === index) {
-                            self.#queue.text(real_queue);
+                        if (current_obj.node.data().id === edge.target().data().id) {
+                            if (!edge.source().hasClass('visited') && !edge.source().hasClass('explored')) {
+                                self.makeVisited(edge.source());
+                                real_queue.push(edge.source().data().original_name);
+                                self.#queue.text(real_queue);
+                            }
                         }
                     }
                 });
-            });
-
+            })
             setTimeout(runBFSAnimation, 2000);
-
         }
 
         runBFSAnimation();
-
     }
 
     #depth_first_search() {
         let edgesCollection = [];
+        let nodesCollection = [];
         let map = new Map();
+        let is_directed = system.get_direction;
         let root = system.node_select_value;
         graph.get_elements().dfs({
             roots: '#' + root,
@@ -176,45 +175,57 @@ class Algorithm {
                 if (e !== undefined) {
                     edgesCollection.push(e);
                 }
+                if (v !== undefined) {
+                    nodesCollection.push(v.data().id);
+                }
             },
-            directed: true
+            directed: system.get_direction
         });
 
-        $.each(edgesCollection, function (index, edge) {
-            let source = edge.source().data().id;
 
-            if (!map.has(source)) {
-                map.set(source, [edge]);
+        $.each(edgesCollection, function (index, edge) {
+            let node1 = edge.source();
+            let node2 = edge.target();
+            if (index === 0) {
+                node1.data().succ.push([node2,edge]);
+                node2.data().pred = node1;
+
+                map.set(node1.data().id, node1);
+                map.set(node2.data().id, node2);
             } else {
-                let arr = map.get(source);
-                arr.push(edge);
-                map.set(source, arr);
+                if (!map.has(node1.data().id)) {
+                    node2.data().succ.push([node1, edge]);
+                    node1.data().pred = node2;
+                    map.set(node1.data().id, node1);
+                }
+
+                if (!map.has(node2.data().id)) {
+                    node1.data().succ.push([node2, edge]);
+                    node2.data().pred = node1;
+                    map.set(node2.data().id, node2);
+                }
             }
         });
 
-        let current_node = root;
-        let previous = [];
+        let current_node = map.get(root);
         let self = this;
-        self.makeVisited(graph.get_specific_node(current_node));
         
         let runDFSAnimation = function() {
 
-            if (!map.has(current_node)) {
-                if (current_node === undefined) {
-                    return;
-                }
-                self.makeExplored(graph.get_specific_node(current_node));
-                current_node = previous.pop();
+            if (current_node.data().pred === null && current_node.hasClass('visited')) {
+                self.makeExplored(current_node);
+                return;
             }
 
-            let edge = map.get(current_node).shift();
-            let node_object = graph.get_specific_node(current_node);
+            self.makeVisited(current_node);
 
-            if (edge === undefined) {
-                self.makeExplored(node_object);
-                current_node = previous.pop();
+            let succ_edge = current_node.data().succ.shift()
+            if (succ_edge === undefined) {
+                self.makeExplored(current_node);
+                current_node = current_node.data().pred;
                 setTimeout(runDFSAnimation, 3000);
             } else {
+                let edge = succ_edge[1];
                 edge.animate({
                     style: {
                         'line-color' : 'yellow',
@@ -223,20 +234,15 @@ class Algorithm {
                 }, {
                     duration : 500,
                     complete : function() {
-                        self.makeVisited(edge.target());
+                        self.makeVisited(succ_edge[0]);
                     }
                 });
 
-                previous.push(current_node);
-                current_node = edge.target().data().id;
+                current_node = succ_edge[0];
                 setTimeout(runDFSAnimation, 3000)
             }
         }
         runDFSAnimation();
-    }
-
-    #dijkstra() {
-
     }
 
     #bellman_ford() {
