@@ -3,11 +3,15 @@ class System {
     #backgroundColor_first;
     #backgroundColor_second;
     #node_select;
+    #time;
+    #log;
 
     constructor() {
         this.#backgroundColor_first = $('#backgroundColor-first');
         this.#backgroundColor_second = $('#backgroundColor-second');
         this.#node_select = $('.starting_node');
+        this.#time = $('#time');
+        this.#log = $('.log');
         this.set_events();
     }
 
@@ -53,6 +57,24 @@ class System {
 
     get get_direction() {
         return $('.inner').attr('data-check') === "0";
+    }
+
+    get time_value() {
+        return parseFloat(this.#time.val());
+    }
+
+    add_message(message, variant) {
+        let style = "";
+        switch (variant) {
+            case "end":
+                style = 'style="font-weight:bold"';
+                break;
+            case "start":
+                style = 'style="font-weight:bold;color:green"';
+                break;
+        }
+        let p = '<p' + ' '  + style + '>' + message + '</p>';
+        this.#log.append(p);
     }
 
 }

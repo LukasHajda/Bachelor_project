@@ -34,7 +34,6 @@
             <li id="representation">Representation</li>
             <li id="configuration">Configuration</li>
             <li id="tutorial">Tutorial</li>
-            <li id="about">About</li>
             <hr/>
         </ul>
     </div>
@@ -51,16 +50,30 @@
                     <option value="Tarjan">Tarjan</option>
                     <option value="Topological sort">Topological sort</option>
             </select>
+            <label><strong>Cas animacie <i style="font-size: 10px;">(sekundy)</i></strong></label>
+            <input type="number" min="0.1" step="0.1" id="time" value="2">
             <div class="button" id="play">Vykonaj</div>
             <br>
             <div style="display: inline-block">
 
-                <label><strong>Pociatocny bod: </strong><span data-nodeid="" class="starting_node">B</span></label>
+                <label><strong>Pociatocny bod: </strong><span data-nodeid="" class="starting_node">B</span></label><i style="font-size: 13px;">  (kliknutim na vrchol vyberete)</i>
             </div>
             <br>
-            <label><strong>Queue: </strong></label>
-            <div class="queue"></div>
 
+            <div class="row">
+                <section id="sub_tab1">
+                    <label><strong>Postup algoritmu</strong></label>
+                    <div class="log">
+
+                    </div>
+                </section>
+                <section id="sub_tab2">
+
+                </section>
+                <section id="sub_tab3">
+
+                </section>
+            </div>
 
         </section>
         <section id="tab2">
@@ -121,9 +134,6 @@
             </div>
         </section>
         <section id="tab4">
-            <p>toto je tutorial</p>
-        </section>
-        <section id="tab5">
             <p>toto je tutorial</p>
         </section>
     </div>

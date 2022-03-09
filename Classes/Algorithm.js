@@ -9,26 +9,33 @@ class Algorithm {
 
     call_algorithm(algo_name) {
         console.log(algo_name);
+        console.log(system.time_value);
+
         switch (algo_name) {
             case "BFS":
+                system.add_message(algo_name + ' algorithm starts', "start");
                 this.#breadth_first_search();
                 break;
             case "DFS":
+                system.add_message(algo_name + ' algorithm starts', "start");
                 this.#depth_first_search();
                 break;
             case "Kruskal":
+                system.add_message(algo_name + ' algorithm starts', "start");
                 this.#kruskal();
                 break;
             case "Tarjan":
+                system.add_message(algo_name + ' algorithm starts', "start");
                 this.#tarjan();
                 break;
             case "Prim":
+                system.add_message(algo_name + ' algorithm starts', "start");
                 this.#prim();
                 break;
             case "Bellman-Ford":
+                system.add_message(algo_name + ' algorithm starts', "start");
                 this.#bellman_ford();
                 break;
-
         }
 
     }
@@ -49,13 +56,13 @@ class Algorithm {
 
         $.each(nodes, function (index, node) {
             node.data('name', '');
-            node.data('name', node.data().original_name + ' distance: ' + '∞' + ' Pr: NULL');
+            node.data('name', node.data().original_name + ' distance: ' + '∞');
         })
     }
 
-    changeDistanceAndPredecessor(node, distance, source) {
+    changeDistanceAndPredecessor(node, distance) {
         node.data('name', '');
-        node.data('name', node.data().original_name + ' distance: ' + distance + ' Pr: ' + source.data().original_name);
+        node.data('name', node.data().original_name + ' distance: ' + distance);
     }
 
     makeComponents(nodes) {
@@ -182,13 +189,21 @@ class Algorithm {
             directed: system.get_direction
         });
 
+        console.log(edgesCollection.map(edge => [edge.source().data().id, edge.target().data().id]));
+
 
         $.each(edgesCollection, function (index, edge) {
             let node1 = edge.source();
             let node2 = edge.target();
             if (index === 0) {
-                node1.data().succ.push([node2,edge]);
-                node2.data().pred = node1;
+                if (root === node1.data().id) {
+                    node1.data().succ.push([node2,edge]);
+                    node2.data().pred = node1;
+                } else {
+                    node2.data().succ.push([node1,edge]);
+                    node1.data().pred = node2;
+                }
+
 
                 map.set(node1.data().id, node1);
                 map.set(node2.data().id, node2);
@@ -206,6 +221,8 @@ class Algorithm {
                 }
             }
         });
+
+        console.log(map);
 
         let current_node = map.get(root);
         let self = this;
@@ -256,7 +273,7 @@ class Algorithm {
         root.data().bf = 0;
         root.data().predecessor = root;
 
-        root.data('name', root.data().original_name + ' distance: ' + root.data().bf + ' Pr: ' + root.data().predecessor.data().original_name);
+        root.data('name', root.data().original_name + ' distance: ' + root.data().bf);
 
         let count = 1;
 
@@ -338,7 +355,6 @@ class Algorithm {
 
         let sorted_edges = nodes.kruskal().edges().map(edge => [edge, edge.data().weight]);
 
-        let self = this;
         let runKruskalAnimation  = function() {
 
             let edge_arr = sorted_edges.shift();
