@@ -3,11 +3,15 @@ class System {
     #backgroundColor_first;
     #backgroundColor_second;
     #node_select;
+    #time;
+    #log;
 
     constructor() {
         this.#backgroundColor_first = $('#backgroundColor-first');
         this.#backgroundColor_second = $('#backgroundColor-second');
         this.#node_select = $('.starting_node');
+        this.#time = $('#time');
+        this.#log = $('.log');
         this.set_events();
     }
 
@@ -18,6 +22,19 @@ class System {
             $("body").css({
                 background : 'linear-gradient(' + $(self.#backgroundColor_first).val() + ',' + $(self.#backgroundColor_second).val() + ') no-repeat fixed'
             }, 200)
+        });
+
+        $('.outer').click(function() {
+            let inner = $('.inner');
+            inner.attr('data-check', ((inner.attr('data-check') === "0") ? "1" : "0"));
+            if (inner.attr('data-check') === "1") {
+                $(this).css({"background-color":"#9198e5", "transition":"background-color .4s ease"});
+                inner.css("transform","translate(27px, 0)");
+            } else {
+                $(this).css({"background-color":"#ccc", "transition":"background-color .4s ease"});
+                inner.css("transform","translate(0px, 0)");
+            }
+            graph.change_edges_directions(inner.attr('data-check') === "0");
         });
     }
 
@@ -37,4 +54,27 @@ class System {
     get node_select_value() {
         return this.#node_select.attr('data-nodeid');
     }
+
+    get get_direction() {
+        return $('.inner').attr('data-check') === "0";
+    }
+
+    get time_value() {
+        return parseFloat(this.#time.val());
+    }
+
+    add_message(message, variant) {
+        let style = "";
+        switch (variant) {
+            case "end":
+                style = 'style="font-weight:bold"';
+                break;
+            case "start":
+                style = 'style="font-weight:bold;color:green"';
+                break;
+        }
+        let p = '<p' + ' '  + style + '>' + message + '</p>';
+        this.#log.append(p);
+    }
+
 }

@@ -8,6 +8,7 @@ class Graph {
     #current_graph;
     #sourceNode;
     #targetNode;
+    #directed;
 
     constructor() {
         this.#current_id = 1;
@@ -18,6 +19,7 @@ class Graph {
         this.#sourceNode = null;
         this.#targetNode = null;
         this.#set_events();
+        this.#set_direction();
     }
 
     /*
@@ -25,6 +27,12 @@ class Graph {
     |                              Private Methods
     |--------------------------------------------------------------------------
     */
+
+
+    #set_direction() {
+        this.#current_graph.edges().map(edge => edge.addClass('directed'));
+    }
+
 
     /**
      * Set up all events for graph
@@ -93,6 +101,12 @@ class Graph {
             system.add_node_option({id : this.data().id, name: this.data().name});
         })
 
+        this.#current_graph.on('click', 'edge', function () {
+            let label_input = $('#label_edge');
+            label_input.val(this.data('weight'));
+            label_input.attr('data-id', this.data('id'));
+        })
+
     }
 
     // ========================================================================
@@ -126,6 +140,7 @@ class Graph {
         ]);
         edge.style({'line-color' : edge_color,
             'target-arrow-color': edge_color});
+        edge.addClass(system.get_direction ? 'directed' : 'undirected');
         this.#sourceNode = null;
         this.#targetNode=  null;
     }
@@ -167,7 +182,7 @@ class Graph {
             let newID = this.#current_letter + '_' + ((this.#levels[this.#levels.length - 1] === 0) ? '' : (this.#levels[this.#levels.length - 1] + '_')) + this.#current_id;
             let node = this.#current_graph.add([{
                 group: "nodes",
-                data: { id: newID, label: newID, name: newID, old_color: node_color, original_name: newID},
+                data: { id: newID, label: newID, name: newID, old_color: node_color, original_name: newID, discovered: -1, finished: -1},
                 position: {
                     x: xPos,
                     y: yPos,
@@ -189,7 +204,7 @@ class Graph {
      * @returns {*}
      */
 
-    #add_component() {
+    add_component() {
         let newID = 'Komponenta_' + this.#current_component_id;
         let component = this.#current_graph.add([{
             group: "nodes",
@@ -236,6 +251,7 @@ class Graph {
             container: document.getElementById('cy'),
             wheelSensitivity: 0.2,
             boxSelectionEnabled: false,
+            autounselectify: true,
             // zoomingEnabled: false,
 
             style : [
@@ -263,10 +279,30 @@ class Graph {
                     }
                 },
                 {
+                    selector: '.bf_hide',
+                    style: {
+                        'opacity': 0,
+                    }
+                },
+                {
                     selector : '.explored',
                     style : {
                         'border-color': 'black',
                         'border-width': 8,
+                    }
+                },
+                {
+                    selector: '.bf',
+                    style: {
+                        'border-color': 'blue',
+                        'border-width': 8,
+                    }
+                },
+                {
+                    selector: '.bf_edge',
+                    style: {
+                        'line-color' : 'yellow',
+                        'target-arrow-color': 'yellow'
                     }
                 },
                 {
@@ -279,11 +315,22 @@ class Graph {
                     }
                 },
                 {
+                    selector: '.directed',
+                    css: {
+                        'target-arrow-shape' : 'triangle',
+                    }
+                },
+                {
+                    selector: '.undirected',
+                    css: {
+                        'target-arrow-shape' : 'none',
+                    }
+                },
+                {
                     selector: 'edges',
                     style: {
                         'curve-style' : 'bezier',
                         'font-size' : 20,
-                        'target-arrow-shape' : 'triangle',
                         'line-color' : '#83b55a',
                         'target-arrow-color': '#83b55a',
                         'width': 6,
@@ -296,31 +343,39 @@ class Graph {
 
             elements: {
                 nodes: [
-                    { data: { id: 'A' , name: 'A', old_color: '#a83030', original_name: 'A', visited : false} },
-                    { data: { id: 'B' , name: 'B', old_color: '#a83030', original_name: 'B', visited : false} },
-                    { data: { id: 'C' , name: 'C', old_color: '#a83030', original_name: 'C', visited : false} },
-                    { data: { id: 'D' , name: 'D', old_color: '#a83030', original_name: 'D', visited : false} },
-                    { data: { id: 'E' , name: 'E', old_color: '#a83030', original_name: 'E', visited : false} },
-                    { data: { id: 'F' , name: 'F', old_color: '#a83030', original_name: 'F', visited : false} },
-                    { data: { id: 'G' , name: 'G', old_color: '#a83030', original_name: 'G', visited : false} },
-                    { data: { id: 'H' , name: 'H', old_color: '#a83030', original_name: 'H', visited : false} }
+                    { data: { id: 'A' , name: 'A', old_color: '#a83030', succ: [], pred: null, original_name: 'A', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'B' , name: 'B', old_color: '#a83030', succ: [], pred: null, original_name: 'B', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'C' , name: 'C', old_color: '#a83030', succ: [], pred: null, original_name: 'C', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'D' , name: 'D', old_color: '#a83030', succ: [], pred: null, original_name: 'D', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'E' , name: 'E', old_color: '#a83030', succ: [], pred: null, original_name: 'E', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'F' , name: 'F', old_color: '#a83030', succ: [], pred: null, original_name: 'F', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'G' , name: 'G', old_color: '#a83030', succ: [], pred: null, original_name: 'G', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'H' , name: 'H', old_color: '#a83030', succ: [], pred: null, original_name: 'H', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'I' , name: 'I', old_color: '#a83030', succ: [], pred: null, original_name: 'I', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'J' , name: 'J', old_color: '#a83030', succ: [], pred: null, original_name: 'J', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
                 ],
                 edges: [
-                    { data: { source: 'A', target: 'B' , weight: 5, old_color: '#83b55a'} },
-                    { data: { source: 'B', target: 'C' , weight: 2, old_color: '#83b55a'} },
-                    { data: { source: 'C', target: 'D' , weight: 10, old_color: '#83b55a'} },
-                    { data: { source: 'D', target: 'E' , weight: 1, old_color: '#83b55a'} },
-                    { data: { source: 'E', target: 'F' , weight: -20, old_color: '#83b55a'} },
+                    { data: { source: 'B', target: 'A' , weight: 20, old_color: '#83b55a',tarjan: false} },
+                    { data: { source: 'B', target: 'D' , weight: 10, old_color: '#83b55a',tarjan: false} },
+                    { data: { source: 'D', target: 'A' , weight: 10, old_color: '#83b55a',tarjan: false} },
 
-                    { data: { source: 'F', target: 'A' , weight: 4, old_color: '#83b55a'} },
-                    { data: { source: 'H', target: 'E' , weight: 1, old_color: '#83b55a'} },
 
-                    { data: { source: 'F', target: 'G' , weight: -20, old_color: '#83b55a'} },
-                    { data: { source: 'G', target: 'H' , weight: 50, old_color: '#83b55a'} },
-                    { data: { source: 'D', target: 'D' , weight: 50, old_color: '#83b55a'} },
-                    { data: { source: 'A', target: 'D' , weight: -1, old_color: '#83b55a'} },
-                    { data: { source: 'A', target: 'E' , weight: -20, old_color: '#83b55a'} },
-                    { data: { source: 'G', target: 'E' , weight: 20, old_color: '#83b55a'}, }
+                    { data: { source: 'G', target: 'A' , weight: 5, old_color: '#83b55a',tarjan: false} },
+
+
+                    { data: { source: 'C', target: 'F' , weight: 5, old_color: '#83b55a',tarjan: false} },
+                    { data: { source: 'F', target: 'E' , weight: 4, old_color: '#83b55a',tarjan: false} },
+                    { data: { source: 'E', target: 'C' , weight: 10, old_color: '#83b55a',tarjan: false} },
+
+                    { data: { source: 'C', target: 'G' , weight: 21, old_color: '#83b55a',tarjan: false} },
+                    { data: { source: 'F', target: 'G' , weight: 21, old_color: '#83b55a',tarjan: false} },
+
+                    { data: { source: 'J', target: 'I' , weight: 78, old_color: '#83b55a',tarjan: false} },
+                    { data: { source: 'J', target: 'H' , weight: 1, old_color: '#83b55a',tarjan: false} },
+                    { data: { source: 'H', target: 'F' , weight: 5, old_color: '#83b55a',tarjan: false} },
+                    { data: { source: 'G', target: 'J' , weight: 1, old_color: '#83b55a',tarjan: false} },
+
+
                 ]
             },
 
@@ -395,6 +450,25 @@ class Graph {
     // ========================================================================
 
     /**
+     * Change weight of edge which was selected by a normal click (one click)
+     */
+
+    change_text_edge() {
+        let input = $('#label_edge');
+        let label_input = input.val();
+        let regex = /^-?([1-9][0-9]*)$/g;
+        let pass = regex.test(label_input);
+        let edge = this.#current_graph.edges('#' + input.attr('data-id'));
+        if (pass) {
+            edge.data('weight', parseInt(label_input));
+        } else {
+            alert('Musi byt validne cele cislo');
+        }
+    }
+
+    // ========================================================================
+
+    /**
      * Make component with selected nodes
      */
 
@@ -405,7 +479,7 @@ class Graph {
 
         if (selected_nodes.length === 0) return;
 
-        let newComponent = this.#add_component();
+        let newComponent = this.add_component();
         selected_nodes.move({parent: newComponent.data('id')});
 
         this.#reset_selected_elements(selected_nodes);
@@ -457,6 +531,9 @@ class Graph {
         this.#current_graph.elements().removeClass('visited');
         this.#current_graph.elements().removeClass('explored');
         this.#current_graph.nodes().map(node => node.data('name', node.data().original_name));
+        this.#current_graph.nodes().map(node => node.data().discovered = -1);
+        this.#current_graph.nodes().map(node => node.data().finished = -1);
+        this.#current_graph.nodes().map(node => node.data().reversed = 0);
     }
 
     // ======================================================================================
@@ -510,6 +587,19 @@ class Graph {
         return this.#current_graph.nodes();
     }
 
+    show_time() {
+        let n = graph.get_nodes().map(node => [node.data().name, node.data().discovered, node.data().finished]);
+        console.log(n);
+    }
+
+    change_time(id, discovered, time) {
+        if (discovered) {
+            this.#current_graph.nodes('[id = "' + id + '"]').data().discovered = time;
+        } else {
+            this.#current_graph.nodes('[id = "' + id + '"]').data().finished = time;
+        }
+    }
+
     // =======================================================================================
 
     run_algorithm(algo_name) {
@@ -518,19 +608,69 @@ class Graph {
 
     }
 
-    // test() {
-    //     let e = this.#current_graph.edges()[0];
-    //     console.log(e);
-    //     e.addClass('visited');
-    // }
+    // =======================================================================================
 
-    flashAnimation() {
-        this.#current_graph.$('#A').animate({
-            style: { borderColor: 'blue'},
-            duration: 2000,
-            easing: 'ease-in-out'
-        })
+    change_edges_directions(direction_option) {
+        if (direction_option) {
+            this.#current_graph.edges().map(edge => edge.removeClass('undirected').addClass('directed'));
+        } else {
+            this.#current_graph.edges().map(edge => edge.removeClass('directed').addClass('undirected'));
+        }
     }
+
+
+    make_transposed() {
+        let old_edges = this.#current_graph.edges().map(edge => [edge.source().data().id, edge.target().data().id, edge.data().weight]);
+
+        this.clear_edges();
+
+
+        let self = this;
+        let color = $('#color4').val();
+        $.each(old_edges, function (index, edge) {
+            let new_edge = self.#current_graph.add([
+                {
+                    group: "edges", data: { source: edge[1], target: edge[0], weight: edge[2], old_color: color}
+                }
+            ]);
+            new_edge.style({'line-color' : color,
+                'target-arrow-color': color});
+        new_edge.addClass(system.get_direction ? 'directed' : 'undirected');
+        })
+
+    }
+
+
+    sorted_by_finished() {
+        return this.#current_graph.nodes().sort(function (node1, node2) {
+            return node1.data().finished - node2.data().finished;
+        }).toArray();
+    }
+
+    get_undiscovered_nodes() {
+        return this.#current_graph.nodes().filter(function (node) {
+            return node.data().discovered === -1;
+        }).map(node => node.data().id);
+    }
+
+    make_collection() {
+        return this.#current_graph.collection();
+    }
+
+    get_tarjaned_edges() {
+        return this.#current_graph.edges().filter(function (edge) {
+            return edge.data().tarjan === false;
+        }).length;
+    }
+
+    change_edge_weight(edge, weight) {
+        edge.data('weight', parseInt(weight));
+    }
+
+    get_current_graph() {
+        return this.#current_graph;
+    }
+
 
 
 

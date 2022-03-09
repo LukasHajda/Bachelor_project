@@ -35,6 +35,10 @@ $('#change_element').on('click', function () {
     graph.change_text(); // done
 })
 
+$('#change_edge').on('click', function () {
+    graph.change_text_edge();
+})
+
 $('#select_all_edges').on('click', function () {
    graph.select_all_edges();
 });
@@ -48,73 +52,33 @@ $('#play').on('click', function () {
     graph.run_algorithm(selected_algo);
 });
 
-
-$('#test2').on('click', function () {
-    let a = graph.get_elements().kruskal().edges();
-    a.style({
-        'line-color' : 'pink',
-        'target-arrow-color': 'pink',
-    });
-    console.log(a.edges().map(edge => edge.data().weight));
+$('#discovered').on('click', function () {
+   graph.show_time();
 });
 
-
-// let click_count = 0;
-// let nodes_positions = new Map();
-// let edges_info = new Map();
-//
-// $('#color4').val('#83b55a');
-// $('#color3').val('#a83030');
-//
-// cy.ready(function (){
-//     let ids = cy.nodes().map(node => node.data().name);
-//     let edges = cy.edges();
-//
-//     ids.forEach(function (id) {
-//         nodes_positions.set(id, [parseInt(cy.$('#' + id).position().x), parseInt(cy.$('#' + id).position().y)]);
-//     });
-//
-//     edges.forEach(function (edge) {
-//         let vector_length = calculate_vector_length(edge);
-//         edges_info.set(edge.data().source + edge.data().target, [edge.data().weight, vector_length]);
-//     })
-// })
-//
-// function calculate_vector_length(edge) {
-//     let node_a = nodes_positions.get(edge.data().source);
-//     let node_b = nodes_positions.get(edge.data().target);
-//
-//     return Math.sqrt(Math.pow(node_b[0] - node_a[0], 2) + Math.pow(node_b[1] - node_a[1], 2));
-// }
-//
 $(function () {
 
     $('#tab3').addClass('open-section');
-    $('#tab2, #tab1, #tab4, #tab5').addClass('hide-section');
+    $('#tab2, #tab1, #tab4').addClass('hide-section');
 
     $('#algorithm').click(function () {
         $('#tab1').removeClass('hide-section').addClass('open-section');
-        $('#tab2, #tab3, #tab4, #tab5').removeClass('open-section').addClass('hide-section');
+        $('#tab2, #tab3, #tab4').removeClass('open-section').addClass('hide-section');
     })
 
     $('#representation').click(function () {
         $('#tab2').removeClass('hide-section').addClass('open-section');
-        $('#tab1, #tab3, #tab4, #tab5').removeClass('open-section').addClass('hide-section');
+        $('#tab1, #tab3, #tab4').removeClass('open-section').addClass('hide-section');
     })
 
     $('#configuration').click(function () {
         $('#tab3').removeClass('hide-section').addClass('open-section');
-        $('#tab2, #tab1, #tab4, #tab5').removeClass('open-section').addClass('hide-section');
+        $('#tab2, #tab1, #tab4').removeClass('open-section').addClass('hide-section');
     })
 
     $('#tutorial').click(function () {
         $('#tab4').removeClass('hide-section').addClass('open-section');
-        $('#tab2, #tab3, #tab1, #tab5').removeClass('open-section').addClass('hide-section');
-    })
-
-    $('#about').click(function () {
-        $('#tab5').removeClass('hide-section').addClass('open-section');
-        $('#tab2, #tab3, #tab5, #tab1').removeClass('open-section').addClass('hide-section');
+        $('#tab2, #tab3, #tab1').removeClass('open-section').addClass('hide-section');
     })
 
 
