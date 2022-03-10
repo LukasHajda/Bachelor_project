@@ -5,6 +5,7 @@ class System {
     #node_select;
     #time;
     #log;
+    #animation_color;
 
     constructor() {
         this.#backgroundColor_first = $('#backgroundColor-first');
@@ -12,6 +13,7 @@ class System {
         this.#node_select = $('.starting_node');
         this.#time = $('#time');
         this.#log = $('.log');
+        this.#animation_color = $('#animation_color');
         this.set_events();
     }
 
@@ -63,18 +65,29 @@ class System {
         return parseFloat(this.#time.val());
     }
 
-    add_message(message, variant) {
+    add_message(message, variant = null) {
         let style = "";
         switch (variant) {
             case "end":
-                style = 'style="font-weight:bold"';
+                style = 'style="font-weight:bold;;color:red;margin-left:10px"';
                 break;
             case "start":
-                style = 'style="font-weight:bold;color:green"';
+                style = 'style="font-weight:bold;color:green;margin-left:10px"';
+                break;
+            default:
+                style = 'style="font-weight:bold;margin-left:10px"';
                 break;
         }
         let p = '<p' + ' '  + style + '>' + message + '</p>';
         this.#log.append(p);
+    }
+
+    remove_log() {
+        this.#log.empty();
+    }
+
+    get animation_color() {
+        return this.#animation_color.val();
     }
 
 }

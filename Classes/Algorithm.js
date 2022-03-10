@@ -1,16 +1,21 @@
 class Algorithm {
 
-    #current_graph
+    #current_graph;
     #queue;
+    #time;
+    #animation_color;
     constructor(current_graph) {
         this.#current_graph = current_graph;
         this.#queue = $('.queue');
+        this.#animation_color = system.animation_color;
     }
 
     call_algorithm(algo_name) {
+        console.log(system.animation_color);
         console.log(algo_name);
         console.log(system.time_value);
-
+        system.remove_log();
+        this.#time = system.time_value * 1000;
         switch (algo_name) {
             case "BFS":
                 system.add_message(algo_name + ' algorithm starts', "start");
@@ -125,23 +130,24 @@ class Algorithm {
         }
 
         let real_queue = [];
-
         let runBFSAnimation = function () {
             let current_obj = order.shift();
 
             if (current_obj === undefined) {
+                system.add_message("BFS algorithm ends", "end");
                 return;
             }
 
             self.makeExplored(current_obj.node);
+            system.add_message("Explore  node: " + current_obj.node.data().original_name);
             real_queue.shift();
             self.#queue.text(real_queue);
 
             $.each(current_obj.edges, function (index, edge) {
                 edge.animate({
                     style: {
-                        'line-color': 'yellow',
-                        'target-arrow-color': 'yellow'
+                        'line-color': self.#animation_color,
+                        'target-arrow-color': self.#animation_color
                     },
                 }, {
                     duration: 500,
@@ -149,6 +155,7 @@ class Algorithm {
                         if (current_obj.node.data().id === edge.source().data().id) {
                             if (!edge.target().hasClass('visited') && !edge.target().hasClass('explored')) {
                                 self.makeVisited(edge.target());
+                                system.add_message("Visit node: " + edge.target().data().original_name);
                                 real_queue.push(edge.target().data().original_name);
                                 self.#queue.text(real_queue);
                             }
@@ -157,6 +164,7 @@ class Algorithm {
                         if (current_obj.node.data().id === edge.target().data().id) {
                             if (!edge.source().hasClass('visited') && !edge.source().hasClass('explored')) {
                                 self.makeVisited(edge.source());
+                                system.add_message("Visit node: " + edge.source().data().original_name);
                                 real_queue.push(edge.source().data().original_name);
                                 self.#queue.text(real_queue);
                             }
@@ -164,7 +172,7 @@ class Algorithm {
                     }
                 });
             })
-            setTimeout(runBFSAnimation, 2000);
+            setTimeout(runBFSAnimation, self.#time);
         }
 
         runBFSAnimation();
@@ -226,11 +234,12 @@ class Algorithm {
 
         let current_node = map.get(root);
         let self = this;
-        
         let runDFSAnimation = function() {
 
             if (current_node.data().pred === null && current_node.hasClass('visited')) {
+                system.add_message("Explore node: " + current_node.data().original_name);
                 self.makeExplored(current_node);
+                system.add_message("DFS algorithm ends", "end");
                 return;
             }
 
@@ -238,25 +247,27 @@ class Algorithm {
 
             let succ_edge = current_node.data().succ.shift()
             if (succ_edge === undefined) {
+                system.add_message("Explore node: " + current_node.data().original_name);
                 self.makeExplored(current_node);
                 current_node = current_node.data().pred;
-                setTimeout(runDFSAnimation, 3000);
+                setTimeout(runDFSAnimation, self.#time);
             } else {
                 let edge = succ_edge[1];
                 edge.animate({
                     style: {
-                        'line-color' : 'yellow',
-                        'target-arrow-color': 'yellow'
+                        'line-color' : self.#animation_color,
+                        'target-arrow-color': self.#animation_color
                     }
                 }, {
                     duration : 500,
                     complete : function() {
+                        system.add_message("Visit node: " + succ_edge[0].data().original_name);
                         self.makeVisited(succ_edge[0]);
                     }
                 });
 
                 current_node = succ_edge[0];
-                setTimeout(runDFSAnimation, 3000)
+                setTimeout(runDFSAnimation, self.#time)
             }
         }
         runDFSAnimation();
@@ -306,6 +317,7 @@ class Algorithm {
         $.each(edges, function (index, edge) {
             if (edge.source().data().bf + edge.data().weight < edge.target().data().bf) {
                 alert('Graf obsahuje negatívny cyklus');
+                system.add_message("Bellman-Ford algorithm ends due to negative cycle", "end");
                 negative_cycle = true;
             }
         });
@@ -318,11 +330,12 @@ class Algorithm {
         let runBFAnimation = function () {
             graph.get_elements().nodes().map(node => node.removeClass('bf'));
             graph.get_elements().edges().map(edge => edge.style({
-                'line-color' : '#83b55a',
-                'target-arrow-color': '#83b55a'
+                'line-color' : self.#animation_color,
+                'target-arrow-color': self.#animation_color
             }));
 
             if (current_obj === undefined) {
+                system.add_message("Bellman-Ford algorithm ends", "end");
                 return;
             }
 
@@ -330,13 +343,14 @@ class Algorithm {
             let edge = current_obj.edge;
 
             target.addClass('bf');
+            system.add_message("Relaxing node " + target.data().original_name + "`s distance to " + current_obj.new_distance);
             edge.style(
-                {'line-color' : 'blue',
-                'target-arrow-color': 'blue'});
+                {'line-color' : self.#animation_color,
+                'target-arrow-color': self.#animation_color});
 
             self.changeDistanceAndPredecessor(target, current_obj.new_distance, current_obj.source);
             current_obj = result.shift();
-            setTimeout(runBFAnimation, 3000);
+            setTimeout(runBFAnimation, self.#time);
 
         }
 
@@ -344,6 +358,7 @@ class Algorithm {
     }
 
     #kruskal() {
+        graph.change_edges_directions(false);
         let nodes = graph.get_elements().nodes();
         let test = graph.get_elements().edges().sort(function (edge1, edge2) {
             return edge1.data().weight - edge2.data().weight;
@@ -354,28 +369,30 @@ class Algorithm {
         })
 
         let sorted_edges = nodes.kruskal().edges().map(edge => [edge, edge.data().weight]);
-
+        let self = this;
         let runKruskalAnimation  = function() {
 
             let edge_arr = sorted_edges.shift();
 
             if (edge_arr === undefined) {
+                system.add_message("Kruskal algorithm ends", "end");
                 return;
             }
 
             let current_edge = edge_arr[0];
 
+            system.add_message("Pick smallest edge: [" + current_edge.source().data().original_name + ', ' + current_edge.target().data().original_name + ']');
             current_edge.animate({
                 css: {
-                    'line-color': '#61bffc',
-                    'target-arrow-color': '#61bffc',
+                    'line-color': self.#animation_color,
+                    'target-arrow-color': self.#animation_color,
                     'transition-property':  'line-color, target-arrow-color',
                     'transition-duration': '0.5s'
                 }
             }, {
                 duration : 500,
             });
-            setTimeout(runKruskalAnimation,2000);
+            setTimeout(runKruskalAnimation,self.#time);
         }
 
         runKruskalAnimation();
@@ -403,7 +420,7 @@ class Algorithm {
         let nodes_collection = [];
         let node_graphs = graph.get_elements().nodes().length;
         let result = [];
-
+        let self = this;
         nodes_collection.push(root);
 
         root_object.data().finished = 1;
@@ -436,19 +453,21 @@ class Algorithm {
         let runPrimAnimation = function () {
             let current_edge = result.shift();
             if (current_edge === undefined) {
+                system.add_message("Prim algorithm ends", "end");
                 return
             }
+            system.add_message("Pick smallest edge: [" + current_edge.source().data().original_name + ', ' + current_edge.target().data().original_name + '] with weight: ' + current_edge.data().weight);
             current_edge.animate({
                 css: {
-                    'line-color': '#61bffc',
-                    'target-arrow-color': '#61bffc',
+                    'line-color': self.#animation_color,
+                    'target-arrow-color': self.#animation_color,
                     'transition-property':  'line-color, target-arrow-color',
                     'transition-duration': '0.5s'
                 }
             }, {
                 duration : 500,
             });
-            setTimeout(runPrimAnimation,2000);
+            setTimeout(runPrimAnimation, self.#time);
 
         }
         runPrimAnimation();
@@ -480,6 +499,7 @@ class Algorithm {
             
             if (current_obj === undefined) {
                 self.makeComponents(tsc.components);
+                system.add_message("Tarjan algorithm ends", "end");
                 return;
             }
             current_edge = current_obj.edges.pop();
@@ -488,29 +508,24 @@ class Algorithm {
                 self.makeLVK(current_obj.nodes, lkv);
                 lkv++;
                 current_obj = result_obj.pop();
-                setTimeout(runTarjanAnimation, 1500);
+                setTimeout(runTarjanAnimation, self.#time);
             } else {
                 current_edge.animate({
                     css: {
-                        'line-color': '#61bffc',
-                        'target-arrow-color': '#61bffc',
+                        'line-color': self.#animation_color,
+                        'target-arrow-color': self.#animation_color,
                         'transition-property':  'line-color, target-arrow-color',
                         'transition-duration': '0.5s'
                     }
                 }, {
                     duration : 500,
                 });
-                setTimeout(runTarjanAnimation,1500);
+                setTimeout(runTarjanAnimation,self.#time);
             }
 
         }
 
         runTarjanAnimation();
-    }
-
-
-    #transposed_graph() {
-        graph.make_transposed();
     }
 
     #topological_sort() {

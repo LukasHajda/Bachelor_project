@@ -42,7 +42,6 @@
             <label><strong>Algoritmus: </strong></label>
             <select name="algorithms" id="algorithm-select">
                     <option value="Bellman-Ford" selected>Bellman-Ford</option>
-                    <option value="Dijkstra">Dijkstra</option>
                     <option value="BFS">BFS</option>
                     <option value="DFS">DFS</option>
                     <option value="Kruskal">Kruskal</option>
@@ -56,10 +55,11 @@
             <br>
             <div style="display: inline-block">
 
-                <label><strong>Pociatocny bod: </strong><span data-nodeid="" class="starting_node">B</span></label><i style="font-size: 13px;">  (kliknutim na vrchol vyberete)</i>
+                <label><strong>Pociatocny bod: </strong><span data-nodeid="" class="starting_node"></span></label><i style="font-size: 13px;">  (kliknutim na vrchol vyberete)</i>
             </div>
             <br>
-
+            <label><strong>Farba animacie: </strong></label>
+            <input type="color" id="animation_color">
             <div class="row">
                 <section id="sub_tab1">
                     <label><strong>Postup algoritmu</strong></label>

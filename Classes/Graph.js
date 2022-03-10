@@ -259,7 +259,7 @@ class Graph {
                     selector : 'nodes',
                     style : {
                         'content': 'data(name)',
-                        'font-size' : 25,
+                        'font-size' : 29,
                         'background-color' : '#a83030',
                         'width' : 40,
                         'height' : 40,
@@ -330,10 +330,11 @@ class Graph {
                     selector: 'edges',
                     style: {
                         'curve-style' : 'bezier',
-                        'font-size' : 20,
+                        'font-size' : 27,
                         'line-color' : '#83b55a',
                         'target-arrow-color': '#83b55a',
                         'width': 6,
+                        'arrow-scale': 1.8,
                         'label': 'data(weight)',
                         'text-margin-y': 15,
                         'text-rotation': 'autorotate'
