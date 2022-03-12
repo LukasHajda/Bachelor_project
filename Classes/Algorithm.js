@@ -37,6 +37,10 @@ class Algorithm {
                 system.add_message(algo_name + ' algorithm starts', "start");
                 this.#prim();
                 break;
+            case "Topological":
+                system.add_message(algo_name + ' algorithm starts', "start");
+                this.#topological_sort();
+                break;
             case "Bellman-Ford":
                 system.add_message(algo_name + ' algorithm starts', "start");
                 this.#bellman_ford();
@@ -44,6 +48,7 @@ class Algorithm {
         }
 
     }
+
 
     makeVisited(node) {
         node.addClass('visited');
@@ -54,6 +59,10 @@ class Algorithm {
         $.each(nodes, function (index, node) {
             node.data('name', node.data().original_name + ' LKV: ' + lkv)
         })
+    }
+
+    changeIncomesData(node) {
+        node.data('name', node.data().original_name + ' Incomes: ' + node.data().incomes);
     }
 
     changeInfiniteLabel() {
@@ -529,6 +538,94 @@ class Algorithm {
     }
 
     #topological_sort() {
+
+        // let no_incoming_edges = graph.get_elements().nodes().filter(function (node) {
+        //     return node.incomers().length === 0;
+        // });
+
+        let nodes = graph.get_elements().nodes();
+        let self = this;
+
+        let result = [];
+        let incomes = [];
+        let queue = [];
+        let anime = [];
+
+        // Set incomes to all nodes
+        $.each(nodes, function (index, node) {
+           node.data().incomes = node.incomers().nodes().length;
+           let income_original = node.data().incomes;
+           incomes.push([node, income_original]);
+           if (node.data().incomes === 0) {
+               anime.push(node);
+               queue.push(node);
+               result.push(node);
+           }
+           self.changeIncomesData(node, '-');
+        });
+
+
+
+
+        let current_node;
+        while(queue.length !== 0) {
+            current_node = queue.shift();
+
+            $.each(current_node.outgoers().nodes(), function (index, node) {
+                node.data().incomes -= 1;
+                anime.push(node);
+                if (node.data().incomes === 0) {
+                    queue.push(node);
+                    result.push(node);
+                }
+            });
+        }
+
+        $.each(incomes, function (index, arr) {
+            let node = arr[0];
+            node.data().incomes = arr[1];
+        });
+
+        let count = 1;
+        let r = [];
+
+        system.add_message("Khan's algorithm starts", "start");
+        let runKhanAnimation = function() {
+            let current_node = anime.shift();
+            if (current_node === undefined) {
+                system.add_message("Khan's algorithm ends", "end");
+                system.add_message("Final topological sort: " + result.map(node => node.data().original_name), "special");
+                return;
+            }
+
+            console.log(current_node.data().id);
+
+            if (current_node.data().incomes >= 0) {
+                current_node.addClass('bf');
+                if (current_node.data().incomes !== 0) {
+                    current_node.data().incomes -= 1;
+                    self.changeIncomesData(current_node);
+                    system.add_message("Current node has " +  current_node.data().incomes + " incomes nodes");
+                    if (current_node.data().incomes === 0) {
+                        r.push(current_node.data().original_name);
+                        system.add_message("Node is pushed into the queue");
+                        system.add_message("Queue: " + r, "special");
+                    }
+                } else {
+                    r.push(current_node.data().original_name);
+                    system.add_message("Node is pushed into the queue");
+                    system.add_message("Queue: " + r, "special");
+                }
+
+                count++;
+
+                setTimeout(runKhanAnimation, self.#time);
+
+            }
+
+        }
+        runKhanAnimation();
+
 
     }
 

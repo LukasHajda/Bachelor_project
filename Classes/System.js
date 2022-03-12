@@ -74,6 +74,9 @@ class System {
             case "start":
                 style = 'style="font-weight:bold;color:green;margin-left:10px"';
                 break;
+            case "special":
+                style = 'style="font-weight:bold;color:orange;margin-left:10px"';
+                break;
             default:
                 style = 'style="font-weight:bold;margin-left:10px"';
                 break;
