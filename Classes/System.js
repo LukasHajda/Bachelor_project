@@ -59,7 +59,6 @@ class System {
     }
 
     add_node_option(obj) {
-        console.log(obj);
         this.#node_select.attr('data-nodeid', obj.id);
         this.#node_select.text(obj.name);
     }

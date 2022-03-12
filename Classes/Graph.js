@@ -95,6 +95,7 @@ class Graph {
         });
 
         this.#current_graph.on('click', 'node', function () {
+            console.log(this.data().parent);
             let label_input = $('#label');
             label_input.val(this.data('name'));
             label_input.attr('data-id', this.data('id'));
@@ -279,12 +280,6 @@ class Graph {
                     }
                 },
                 {
-                    selector: '.bf_hide',
-                    style: {
-                        'opacity': 0,
-                    }
-                },
-                {
                     selector : '.explored',
                     style : {
                         'border-color': 'black',
@@ -296,13 +291,6 @@ class Graph {
                     style: {
                         'border-color': 'blue',
                         'border-width': 8,
-                    }
-                },
-                {
-                    selector: '.bf_edge',
-                    style: {
-                        'line-color' : 'yellow',
-                        'target-arrow-color': 'yellow'
                     }
                 },
                 {
@@ -527,10 +515,29 @@ class Graph {
         });
         this.#current_graph.elements().removeClass('visited');
         this.#current_graph.elements().removeClass('explored');
+        this.#current_graph.elements().removeClass('bf');
         this.#current_graph.nodes().map(node => node.data('name', node.data().original_name));
         this.#current_graph.nodes().map(node => node.data().discovered = -1);
         this.#current_graph.nodes().map(node => node.data().finished = -1);
         this.#current_graph.nodes().map(node => node.data().reversed = 0);
+        this.#current_graph.nodes().map(node => node.data().succ = []);
+        this.#current_graph.nodes().map(node => node.data().pred = null);
+        this.#current_graph.nodes().map(node => node.data().incomes = 0);
+        this.#current_graph.nodes().map(node => node.data().visited = false);
+        this.#current_graph.nodes().map(node => node.data().bf = Infinity);
+        this.#current_graph.nodes().map(node => node.data().predecessor = null);
+        this.#current_graph.nodes().map(node => node.data().tarjan = false);
+
+        this.#current_graph.edges().map(edge => edge.data().tarjan = false);
+
+        this.#current_graph.nodes().map(node => node.data().parent = undefined);
+
+        this.#current_graph.nodes().filter(function (node) {
+            return node.data('component') === true
+        }).remove();
+
+        this.#remove_empty_components();
+
     }
 
     // ======================================================================================
