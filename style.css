@@ -169,3 +169,7 @@ hr {
     border: 5px solid black;
     overflow-y: scroll;
 }
+
+.hide {
+    display: none !important;
+}

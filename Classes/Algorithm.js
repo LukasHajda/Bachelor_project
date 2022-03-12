@@ -18,11 +18,9 @@ class Algorithm {
         this.#time = system.time_value * 1000;
         switch (algo_name) {
             case "BFS":
-                system.add_message(algo_name + ' algorithm starts', "start");
                 this.#breadth_first_search();
                 break;
             case "DFS":
-                system.add_message(algo_name + ' algorithm starts', "start");
                 this.#depth_first_search();
                 break;
             case "Kruskal":
@@ -34,7 +32,6 @@ class Algorithm {
                 this.#tarjan();
                 break;
             case "Prim":
-                system.add_message(algo_name + ' algorithm starts', "start");
                 this.#prim();
                 break;
             case "Topological":
@@ -42,7 +39,6 @@ class Algorithm {
                 this.#topological_sort();
                 break;
             case "Bellman-Ford":
-                system.add_message(algo_name + ' algorithm starts', "start");
                 this.#bellman_ford();
                 break;
         }
@@ -98,10 +94,23 @@ class Algorithm {
         node.removeClass('custom-border');
     }
 
+    checkForEmptyRoot() {
+        console.log(system.node_select_value);
+        if (system.node_select_value === "") {
+            alert('Choose initial vertex');
+            return true;
+        }
+        return false;
+    }
+
     #breadth_first_search() {
         let edgesCollection = [];
         let nodesCollection = [];
-        let is_directed = system.get_direction;
+        if (this.checkForEmptyRoot()) {
+            return;
+        }
+        system.add_message('BFS algorithm starts', "start");
+
         graph.get_elements().bfs({
             roots: '#' + system.node_select_value,
             visit: function(v, e, u, i, depth){
@@ -191,7 +200,10 @@ class Algorithm {
         let edgesCollection = [];
         let nodesCollection = [];
         let map = new Map();
-        let is_directed = system.get_direction;
+        if (this.checkForEmptyRoot()) {
+            return;
+        }
+        system.add_message('DFS algorithm starts', "start");
         let root = system.node_select_value;
         graph.get_elements().dfs({
             roots: '#' + root,
@@ -283,6 +295,10 @@ class Algorithm {
     }
 
     #bellman_ford() {
+        if (this.checkForEmptyRoot()) {
+            return;
+        }
+        system.add_message('Bellman-Ford algorithm starts', "start");
         let node_count = graph.get_elements().nodes().length;
         graph.get_elements().nodes().map(node => node.data().bf = Infinity);
         graph.get_elements().nodes().map(node => node.data().predecessor = null);
@@ -339,8 +355,8 @@ class Algorithm {
         let runBFAnimation = function () {
             graph.get_elements().nodes().map(node => node.removeClass('bf'));
             graph.get_elements().edges().map(edge => edge.style({
-                'line-color' : self.#animation_color,
-                'target-arrow-color': self.#animation_color
+                'line-color' : $('#color4').val(),
+                'target-arrow-color': $('#color4').val()
             }));
 
             if (current_obj === undefined) {
@@ -421,7 +437,28 @@ class Algorithm {
 
 
     #prim() {
+        if (this.checkForEmptyRoot()) {
+            return;
+        }
+        let count = 0;
+        let count_nodes = graph.get_elements().nodes().length;
+        graph.get_elements().bfs({
+            roots: '#' + system.node_select_value,
+            visit: function(v, e, u, i, depth){
+                if (v !== undefined) {
+                    count++;
+                }
+            },
+            directed: false
+        });
+
+        if (count !== count_nodes) {
+            alert('Graph has to be connected');
+            return;
+        }
+
         graph.change_edges_directions(false);
+        system.add_message("Prim algorithm starts", "start");
         let root = system.node_select_value;
         let root_object = graph.get_specific_node(root);
 
@@ -538,11 +575,6 @@ class Algorithm {
     }
 
     #topological_sort() {
-
-        // let no_incoming_edges = graph.get_elements().nodes().filter(function (node) {
-        //     return node.incomers().length === 0;
-        // });
-
         let nodes = graph.get_elements().nodes();
         let self = this;
 
@@ -563,8 +595,6 @@ class Algorithm {
            }
            self.changeIncomesData(node, '-');
         });
-
-
 
 
         let current_node;
@@ -605,15 +635,15 @@ class Algorithm {
                 if (current_node.data().incomes !== 0) {
                     current_node.data().incomes -= 1;
                     self.changeIncomesData(current_node);
-                    system.add_message("Current node has " +  current_node.data().incomes + " incomes nodes");
+                    system.add_message("Current node " + current_node.data().original_name + " has " +  current_node.data().incomes + " incomes nodes");
                     if (current_node.data().incomes === 0) {
                         r.push(current_node.data().original_name);
-                        system.add_message("Node is pushed into the queue");
+                        system.add_message("Node " + current_node.data().original_name + " is pushed into the queue");
                         system.add_message("Queue: " + r, "special");
                     }
                 } else {
                     r.push(current_node.data().original_name);
-                    system.add_message("Node is pushed into the queue");
+                    system.add_message("Node " + current_node.data().original_name + " is pushed into the queue");
                     system.add_message("Queue: " + r, "special");
                 }
 

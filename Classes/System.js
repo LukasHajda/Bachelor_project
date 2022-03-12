@@ -38,6 +38,17 @@ class System {
             }
             graph.change_edges_directions(inner.attr('data-check') === "0");
         });
+
+        $('#algorithm-select').on('change', function () {
+            let value = $(this).val()
+
+            if (['Tarjan', 'Kruskal', 'Topological'].includes(value)) {
+                console.log('dsdsdsd');
+                $('#initial_vertex').addClass('hide');
+            } else {
+                $('#initial_vertex').removeClass('hide');
+            }
+        });
     }
 
     reset_configuration() {

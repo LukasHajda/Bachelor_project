@@ -668,10 +668,6 @@ class Graph {
         return this.#current_graph;
     }
 
-    remove_node(id) {
-        this.#current_graph.$('#' + id).remove();
-    }
-
 
 
 
