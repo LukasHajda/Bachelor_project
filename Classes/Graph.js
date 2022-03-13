@@ -95,6 +95,7 @@ class Graph {
         });
 
         this.#current_graph.on('click', 'node', function () {
+            console.log(this.data().parent);
             let label_input = $('#label');
             label_input.val(this.data('name'));
             label_input.attr('data-id', this.data('id'));
@@ -182,7 +183,7 @@ class Graph {
             let newID = this.#current_letter + '_' + ((this.#levels[this.#levels.length - 1] === 0) ? '' : (this.#levels[this.#levels.length - 1] + '_')) + this.#current_id;
             let node = this.#current_graph.add([{
                 group: "nodes",
-                data: { id: newID, label: newID, name: newID, old_color: node_color, original_name: newID, discovered: -1, finished: -1},
+                data: { id: newID, label: newID, name: newID, old_color: node_color, original_name: newID, discovered: -1, finished: -1, incomes: 0, visited: false, pred: null, predecessor: null, bf: Infinity, tarjan: false, succ: []},
                 position: {
                     x: xPos,
                     y: yPos,
@@ -259,7 +260,7 @@ class Graph {
                     selector : 'nodes',
                     style : {
                         'content': 'data(name)',
-                        'font-size' : 25,
+                        'font-size' : 29,
                         'background-color' : '#a83030',
                         'width' : 40,
                         'height' : 40,
@@ -279,12 +280,6 @@ class Graph {
                     }
                 },
                 {
-                    selector: '.bf_hide',
-                    style: {
-                        'opacity': 0,
-                    }
-                },
-                {
                     selector : '.explored',
                     style : {
                         'border-color': 'black',
@@ -296,13 +291,6 @@ class Graph {
                     style: {
                         'border-color': 'blue',
                         'border-width': 8,
-                    }
-                },
-                {
-                    selector: '.bf_edge',
-                    style: {
-                        'line-color' : 'yellow',
-                        'target-arrow-color': 'yellow'
                     }
                 },
                 {
@@ -330,10 +318,11 @@ class Graph {
                     selector: 'edges',
                     style: {
                         'curve-style' : 'bezier',
-                        'font-size' : 20,
+                        'font-size' : 27,
                         'line-color' : '#83b55a',
                         'target-arrow-color': '#83b55a',
                         'width': 6,
+                        'arrow-scale': 1.8,
                         'label': 'data(weight)',
                         'text-margin-y': 15,
                         'text-rotation': 'autorotate'
@@ -343,16 +332,15 @@ class Graph {
 
             elements: {
                 nodes: [
-                    { data: { id: 'A' , name: 'A', old_color: '#a83030', succ: [], pred: null, original_name: 'A', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
-                    { data: { id: 'B' , name: 'B', old_color: '#a83030', succ: [], pred: null, original_name: 'B', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
-                    { data: { id: 'C' , name: 'C', old_color: '#a83030', succ: [], pred: null, original_name: 'C', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
-                    { data: { id: 'D' , name: 'D', old_color: '#a83030', succ: [], pred: null, original_name: 'D', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
-                    { data: { id: 'E' , name: 'E', old_color: '#a83030', succ: [], pred: null, original_name: 'E', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
-                    { data: { id: 'F' , name: 'F', old_color: '#a83030', succ: [], pred: null, original_name: 'F', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
-                    { data: { id: 'G' , name: 'G', old_color: '#a83030', succ: [], pred: null, original_name: 'G', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
-                    { data: { id: 'H' , name: 'H', old_color: '#a83030', succ: [], pred: null, original_name: 'H', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
-                    { data: { id: 'I' , name: 'I', old_color: '#a83030', succ: [], pred: null, original_name: 'I', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
-                    { data: { id: 'J' , name: 'J', old_color: '#a83030', succ: [], pred: null, original_name: 'J', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'A' , name: 'A', old_color: '#a83030', succ: [], pred: null, incomes: 0, original_name: 'A', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'B' , name: 'B', old_color: '#a83030', succ: [], pred: null, incomes: 0, original_name: 'B', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'C' , name: 'C', old_color: '#a83030', succ: [], pred: null, incomes: 0, original_name: 'C', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'D' , name: 'D', old_color: '#a83030', succ: [], pred: null, incomes: 0, original_name: 'D', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'E' , name: 'E', old_color: '#a83030', succ: [], pred: null, incomes: 0, original_name: 'E', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'F' , name: 'F', old_color: '#a83030', succ: [], pred: null, incomes: 0, original_name: 'F', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'H' , name: 'H', old_color: '#a83030', succ: [], pred: null, incomes: 0, original_name: 'H', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'I' , name: 'I', old_color: '#a83030', succ: [], pred: null, incomes: 0, original_name: 'I', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
+                    { data: { id: 'J' , name: 'J', old_color: '#a83030', succ: [], pred: null, incomes: 0, original_name: 'J', visited : false, discovered : -1, finished : -1, predecessor: null, bf: Infinity, tarjan: false} },
                 ],
                 edges: [
                     { data: { source: 'B', target: 'A' , weight: 20, old_color: '#83b55a',tarjan: false} },
@@ -360,20 +348,17 @@ class Graph {
                     { data: { source: 'D', target: 'A' , weight: 10, old_color: '#83b55a',tarjan: false} },
 
 
-                    { data: { source: 'G', target: 'A' , weight: 5, old_color: '#83b55a',tarjan: false} },
+                    { data: { source: 'A', target: 'J' , weight: 5, old_color: '#83b55a',tarjan: false} },
 
 
                     { data: { source: 'C', target: 'F' , weight: 5, old_color: '#83b55a',tarjan: false} },
                     { data: { source: 'F', target: 'E' , weight: 4, old_color: '#83b55a',tarjan: false} },
                     { data: { source: 'E', target: 'C' , weight: 10, old_color: '#83b55a',tarjan: false} },
 
-                    { data: { source: 'C', target: 'G' , weight: 21, old_color: '#83b55a',tarjan: false} },
-                    { data: { source: 'F', target: 'G' , weight: 21, old_color: '#83b55a',tarjan: false} },
 
                     { data: { source: 'J', target: 'I' , weight: 78, old_color: '#83b55a',tarjan: false} },
                     { data: { source: 'J', target: 'H' , weight: 1, old_color: '#83b55a',tarjan: false} },
                     { data: { source: 'H', target: 'F' , weight: 5, old_color: '#83b55a',tarjan: false} },
-                    { data: { source: 'G', target: 'J' , weight: 1, old_color: '#83b55a',tarjan: false} },
 
 
                 ]
@@ -530,10 +515,29 @@ class Graph {
         });
         this.#current_graph.elements().removeClass('visited');
         this.#current_graph.elements().removeClass('explored');
+        this.#current_graph.elements().removeClass('bf');
         this.#current_graph.nodes().map(node => node.data('name', node.data().original_name));
         this.#current_graph.nodes().map(node => node.data().discovered = -1);
         this.#current_graph.nodes().map(node => node.data().finished = -1);
         this.#current_graph.nodes().map(node => node.data().reversed = 0);
+        this.#current_graph.nodes().map(node => node.data().succ = []);
+        this.#current_graph.nodes().map(node => node.data().pred = null);
+        this.#current_graph.nodes().map(node => node.data().incomes = 0);
+        this.#current_graph.nodes().map(node => node.data().visited = false);
+        this.#current_graph.nodes().map(node => node.data().bf = Infinity);
+        this.#current_graph.nodes().map(node => node.data().predecessor = null);
+        this.#current_graph.nodes().map(node => node.data().tarjan = false);
+
+        this.#current_graph.edges().map(edge => edge.data().tarjan = false);
+
+        this.#current_graph.nodes().map(node => node.data().parent = undefined);
+
+        this.#current_graph.nodes().filter(function (node) {
+            return node.data('component') === true
+        }).remove();
+
+        this.#remove_empty_components();
+
     }
 
     // ======================================================================================
