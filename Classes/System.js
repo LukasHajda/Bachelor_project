@@ -49,6 +49,12 @@ class System {
                 $('#initial_vertex').removeClass('hide');
             }
         });
+
+        $('#js').on('click', function () {
+            $.each(graph.get_elements(), function (index, ele) {
+                console.log(ele.json());
+            })
+        })
     }
 
     reset_configuration() {

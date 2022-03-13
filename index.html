@@ -28,13 +28,12 @@
 <body>
 <div id="cy" style="width: 900px; height: 800px;"></div>
 <div class="container float-right" id="menu">
-    <div class="row">
+    <div class="row main-nav">
         <ul>
             <li id="algorithm">Algorithms</li>
-            <li id="representation">Representation</li>
             <li id="configuration">Configuration</li>
             <li id="tutorial">Tutorial</li>
-            <hr/>
+            <hr id="main-hr"/>
         </ul>
     </div>
     <div class="row">
@@ -64,22 +63,13 @@
                 <section id="sub_tab1">
                     <label><strong>Postup algoritmu</strong></label>
                     <div class="log">
-
                     </div>
-                </section>
-                <section id="sub_tab2">
-
-                </section>
-                <section id="sub_tab3">
-
                 </section>
             </div>
 
         </section>
+
         <section id="tab2">
-            <p>toto je reprezentacia</p>
-        </section>
-        <section id="tab3">
             <div class="center">
                 <h3>Color</h3>
                 <label><strong>Farba pozadia: </strong></label>
@@ -129,106 +119,31 @@
                         <div class='inner' data-check="0"></div>
                     </div>
                 </div>
-                <br>
-                <div class="button" id="discovered">Vykonaj</div>
+                <div class="code_section">
+                    <label><strong>Code representation</strong></label>
+                    <ul class="codes">
+                        <li id="python">Python</li> <span><a href="#" id="python_download" class="dwn_hide" download>Download</a></span>
+                        <li id="java">Java</li> <span><a href="#" id="java_download" class="dwn_hide" download>Download</a></span>
+                        <li id="json">JSON</li> <span><a href="#" id="json_download" class="dwn_hide" download>Download</a></span>
+                    </ul>
+                </div>
+                <div class="button" id="js">JSon</div>
             </div>
         </section>
-        <section id="tab4">
+        <section id="tab3">
             <p>toto je tutorial</p>
         </section>
     </div>
+
+
+
+
 </div>
 
-
-
-
-<script>
-
-    $("#tab1").click();
-
-    let node_click = 1;
-    let first_node = null;
-    let second_node = null;
-    // let cy = cytoscape({
-    //     container: document.getElementById('cy'),
-    //     wheelSensitivity: 0.5,
-    //     // zoomingEnabled: false,
-    //
-    //     style : [
-    //         {
-    //             selector : 'nodes',
-    //             style : {
-    //                 'content': 'data(name)',
-    //                 'background-color' : '#a83030',
-    //                 'width' : 40,
-    //                 'height' : 40
-    //             }
-    //         },
-    //         {
-    //             selector: 'edges',
-    //             style: {
-    //                 'curve-style' : 'bezier',
-    //                 'target-arrow-shape' : 'triangle',
-    //                 'line-color' : '#83b55a',
-    //                 'target-arrow-color': '#83b55a',
-    //                 'width': 8,
-    //                 'label': 'data(weight)',
-    //                 'text-margin-y': 15,
-    //                 'text-rotation': 'autorotate'
-    //             }
-    //         },
-    //     ],
-    //
-    //     elements: {
-    //         nodes: [
-    //             { data: { id: 'A' , name: 'A'} },
-    //             { data: { id: 'B' , name: 'B'} },
-    //             { data: { id: 'C' , name: 'C'} },
-    //             { data: { id: 'D' , name: 'D'} },
-    //             { data: { id: 'E' , name: 'E'} },
-    //             { data: { id: 'F' , name: 'F'} },
-    //             { data: { id: 'G' , name: 'G'} },
-    //             { data: { id: 'H' , name: 'H'} }
-    //         ],
-    //         edges: [
-    //             { data: { source: 'A', target: 'B' , weight: 5} },
-    //             { data: { source: 'B', target: 'C' , weight: 2} },
-    //             { data: { source: 'C', target: 'D' , weight: 1} },
-    //             { data: { source: 'D', target: 'E' , weight: 1} },
-    //             { data: { source: 'E', target: 'F' , weight: -20} },
-    //             { data: { source: 'F', target: 'G' , weight: -20} },
-    //             { data: { source: 'G', target: 'H' , weight: 50} },
-    //             { data: { source: 'D', target: 'D' , weight: 50} },
-    //             { data: { source: 'A', target: 'D' , weight: 50} },
-    //             { data: { source: 'A', target: 'E' , weight: -20} },
-    //             { data: { source: 'G', target: 'E' , weight: 20} }
-    //         ]
-    //     },
-    //
-    //     animate: true, // whether to animate changes to the layout
-    //     animationDuration: 500, // duration of animation in ms, if enabled
-    //     animationEasing: undefined, // easing of animation, if enabled
-    //     animateFilter: function ( node, i ){ return true; },
-    //
-    //     layout: {
-    //         name: 'grid',
-    //         directed: true,
-    //         padding: 10,
-    //         motionBlur: true,
-    //         autolock: true
-    //     }
-    // }); // cy init;
-    //
-    // cy.fit()
-
-
-
-
-
-</script>
 <script src="Classes/Algorithm.js"></script>
 <script src="Classes/Graph.js"></script>
 <script src="Classes/System.js"></script>
+<script src="Classes/CodeGenerator.js"></script>
 <script src="init_data.js"></script>
 <!--<script src="Algorithms/breadthFirstSearch.js"></script>-->
 <!--<script src="depthFirstSearch.js"></script>-->
