@@ -1,6 +1,6 @@
 let graph = new Graph(cy);
-let generator = new CodeGenerator();
 let system = new System();
+let generator = new CodeGenerator();
 
 $('#backgroundColor-first').val('#e2d0d0');
 $('#backgroundColor-second').val('#949995');
@@ -60,6 +60,10 @@ $('#discovered').on('click', function () {
 
 $('#python').on('click', function () {
     generator.generate_python_code();
+})
+
+$('#java').on('click', function () {
+    generator.generate_java_code();
 })
 
 $(function () {
