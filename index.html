@@ -15,116 +15,125 @@
 </head>
 
 <body>
-<div id="cy" style="width: 900px; height: 800px;"></div>
-<div class="container float-right" id="menu">
-    <div class="row main-nav">
-        <ul>
-            <li id="algorithm">Algorithms</li>
-            <li id="configuration">Configuration</li>
-            <li id="tutorial">Tutorial</li>
-            <hr id="main-hr"/>
-        </ul>
+<div class="row">
+    <div class="col-6">
+        <div id="cy" style="height: 800px;background-color: white"></div>
     </div>
-    <div class="row">
-        <section id="tab1">
-            <label><strong>Algoritmus: </strong></label>
-            <select name="algorithms" id="algorithm-select">
-                    <option value="Bellman-Ford" selected>Bellman-Ford</option>
-                    <option value="BFS">BFS</option>
-                    <option value="DFS">DFS</option>
-                    <option value="Kruskal">Kruskal</option>
-                    <option value="Prim">Prim</option>
-                    <option value="Tarjan">Tarjan</option>
-                    <option value="Topological">Topological sort (Kahn)</option>
-            </select>
-            <label><strong>Cas animacie <i style="font-size: 10px;">(sekundy)</i></strong></label>
-            <input type="number" min="0.1" step="0.1" id="time" value="2">
-            <div class="button" id="play">Vykonaj</div>
-            <br>
-            <div style="display: inline-block" id="initial_vertex">
-
-                <label><strong>Pociatocny bod: </strong><span data-nodeid="" class="starting_node"></span></label><i style="font-size: 13px;">  (kliknutim na vrchol vyberete)</i>
+    <div class="col-6">
+        <div class="container float-right" id="menu">
+            <div class="row main-nav">
+                <ul>
+                    <li id="algorithm">Algorithms</li>
+                    <li id="configuration">Configuration</li>
+                    <li id="tutorial">Tutorial</li>
+                    <hr id="main-hr"/>
+                </ul>
             </div>
-            <br>
-            <label><strong>Farba animacie: </strong></label>
-            <input type="color" id="animation_color">
             <div class="row">
-                <section id="sub_tab1">
-                    <label><strong>Postup algoritmu</strong></label>
-                    <div class="log">
+                <section id="tab1">
+                    <label><strong>Algoritmus: </strong></label>
+                    <select name="algorithms" id="algorithm-select">
+                        <option value="Bellman-Ford" selected>Bellman-Ford</option>
+                        <option value="BFS">BFS</option>
+                        <option value="DFS">DFS</option>
+                        <option value="Kruskal">Kruskal</option>
+                        <option value="Prim">Prim</option>
+                        <option value="Tarjan">Tarjan</option>
+                        <option value="Topological">Topological sort (Kahn)</option>
+                    </select>
+                    <label><strong>Cas animacie <i style="font-size: 10px;">(sekundy)</i></strong></label>
+                    <input type="number" min="0.1" step="0.1" id="time" value="2">
+                    <div class="button" id="play">Vykonaj</div>
+                    <br>
+                    <div style="display: inline-block" id="initial_vertex">
+
+                        <label><strong>Pociatocny bod: </strong><span data-nodeid="" class="starting_node"></span></label><i style="font-size: 13px;">  (kliknutim na vrchol vyberete)</i>
                     </div>
+                    <br>
+                    <label><strong>Farba animacie: </strong></label>
+                    <input type="color" id="animation_color">
+                    <div class="row">
+                        <div class="col">
+                            <section id="sub_tab1">
+                                <label><strong>Postup algoritmu</strong></label>
+                                <div class="log">
+                                </div>
+                            </section>
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <section id="tab2">
+                    <div class="center">
+                        <h3>Color</h3>
+                        <label><strong>Farba pozadia: </strong></label>
+                        <input type="color" class="colorPick" id="backgroundColor-first">
+                        <input type="color" class="colorPick" id="backgroundColor-second">
+                        <label><strong>Farba vrcholov: </strong></label>
+                        <input type="color" id="color3">
+                        <label><strong>Farba hrán: </strong></label>
+                        <input type="color" id="color4">
+                        <br>
+                        <label><strong>Farba zvolených elementov: </strong></label>
+                        <input type="color" id="color5">
+                        <div class="myHR"></div>
+                        <br>
+                        <h3>Akcie</h3>
+                        <label><strong>Vymazať celý graf: </strong></label>
+                        <div class="button" id="clear_graph">Vykonaj</div>
+                        <label><strong>Vymazať všetky hrany: </strong></label>
+                        <div class="button" id="clear_edges">Vykonaj</div>
+                        <br>
+                        <label><strong>Vymazať zvolené elementy: </strong></label>
+                        <div class="button" id="remove_selected">Vykonaj</div>
+                        <label><strong>Resetuj nastavenia: </strong></label>
+                        <div class="button" id="reset_configuration">Vykonaj</div>
+                        <br>
+                        <label><strong>Vytvor komponentu: </strong></label>
+                        <div class="button" id="make_component">Vykonaj</div>
+                        <br>
+                        <label><strong>Zmen vrchol: </strong></label>
+                        <input type="text" id="label" data-id="test">
+                        <div class="button" id="change_element">Vykonaj</div>
+                        <br>
+                        <label><strong>Zmen hranu: </strong></label>
+                        <input type="text" id="label_edge" data-id="test">
+                        <div class="button" id="change_edge">Vykonaj</div>
+                        <br>
+                        <label><strong>Oznac vsetky hrany: </strong></label>
+                        <div class="button" id="select_all_edges">Vykonaj</div>
+                        <br>
+                        <label><strong>Oznac vsetky vrcholy: </strong></label>
+                        <div class="button" id="select_all_nodes">Vykonaj</div>
+                        <br>
+                        <br>
+                        <div>
+                            <label><strong>Neorientovany</strong></label>
+                            <div class='outer'>
+                                <div class='inner' data-check="0"></div>
+                            </div>
+                        </div>
+                        <div class="code_section">
+                            <label><strong>Code representation</strong></label>
+                            <ul class="codes">
+                                <li id="python">Python</li> <span><a href="#" id="python_download" class="dwn_hide" download>Download</a></span>
+                                <li id="java">Java</li> <span><a href="#" id="java_download" class="dwn_hide" download>Download</a></span>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                <section id="tab3">
+                    <p>toto je tutorial</p>
                 </section>
             </div>
 
-        </section>
 
-        <section id="tab2">
-            <div class="center">
-                <h3>Color</h3>
-                <label><strong>Farba pozadia: </strong></label>
-                <input type="color" class="colorPick" id="backgroundColor-first">
-                <input type="color" class="colorPick" id="backgroundColor-second">
-                <label><strong>Farba vrcholov: </strong></label>
-                <input type="color" id="color3">
-                <label><strong>Farba hrán: </strong></label>
-                <input type="color" id="color4">
-                <br>
-                <label><strong>Farba zvolených elementov: </strong></label>
-                <input type="color" id="color5">
-                <div class="myHR"></div>
-                <br>
-                <h3>Akcie</h3>
-                <label><strong>Vymazať celý graf: </strong></label>
-                <div class="button" id="clear_graph">Vykonaj</div>
-                <label><strong>Vymazať všetky hrany: </strong></label>
-                <div class="button" id="clear_edges">Vykonaj</div>
-                <br>
-                <label><strong>Vymazať zvolené elementy: </strong></label>
-                <div class="button" id="remove_selected">Vykonaj</div>
-                <label><strong>Resetuj nastavenia: </strong></label>
-                <div class="button" id="reset_configuration">Vykonaj</div>
-                <br>
-                <label><strong>Vytvor komponentu: </strong></label>
-                <div class="button" id="make_component">Vykonaj</div>
-                <br>
-                <label><strong>Zmen vrchol: </strong></label>
-                <input type="text" id="label" data-id="test">
-                <div class="button" id="change_element">Vykonaj</div>
-                <br>
-                <label><strong>Zmen hranu: </strong></label>
-                <input type="text" id="label_edge" data-id="test">
-                <div class="button" id="change_edge">Vykonaj</div>
-                <br>
-                <label><strong>Oznac vsetky hrany: </strong></label>
-                <div class="button" id="select_all_edges">Vykonaj</div>
-                <br>
-                <label><strong>Oznac vsetky vrcholy: </strong></label>
-                <div class="button" id="select_all_nodes">Vykonaj</div>
-                <br>
-                <br>
-                <div>
-                    <label><strong>Neorientovany</strong></label>
-                    <div class='outer'>
-                        <div class='inner' data-check="0"></div>
-                    </div>
-                </div>
-                <div class="code_section">
-                    <label><strong>Code representation</strong></label>
-                    <ul class="codes">
-                        <li id="python">Python</li> <span><a href="#" id="python_download" class="dwn_hide" download>Download</a></span>
-                        <li id="java">Java</li> <span><a href="#" id="java_download" class="dwn_hide" download>Download</a></span>
-                    </ul>
-                </div>
-            </div>
-        </section>
-        <section id="tab3">
-            <p>toto je tutorial</p>
-        </section>
+
+
+        </div>
     </div>
-
-
-
-
 </div>
 
 <script src="Classes/Algorithm.js"></script>
