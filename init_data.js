@@ -1,5 +1,6 @@
 let graph = new Graph(cy);
 let system = new System();
+let generator = new CodeGenerator();
 
 $('#backgroundColor-first').val('#e2d0d0');
 $('#backgroundColor-second').val('#949995');
@@ -56,35 +57,39 @@ $('#discovered').on('click', function () {
    graph.show_time();
 });
 
+
+$('#python').on('click', function () {
+    generator.generate_python_code();
+})
+
+$('#java').on('click', function () {
+    generator.generate_java_code();
+})
+
 $(function () {
 
-    $('#tab3').addClass('open-section');
-    $('#tab2, #tab1, #tab4').addClass('hide-section');
+    $('#tab2').addClass('open-section');
+    $('#tab1, #tab3').addClass('hide-section');
 
     $('#algorithm').click(function () {
         $('#tab1').removeClass('hide-section').addClass('open-section');
-        $('#tab2, #tab3, #tab4').removeClass('open-section').addClass('hide-section');
-    })
-
-    $('#representation').click(function () {
-        $('#tab2').removeClass('hide-section').addClass('open-section');
-        $('#tab1, #tab3, #tab4').removeClass('open-section').addClass('hide-section');
+        $('#tab2, #tab3').removeClass('open-section').addClass('hide-section');
     })
 
     $('#configuration').click(function () {
-        $('#tab3').removeClass('hide-section').addClass('open-section');
-        $('#tab2, #tab1, #tab4').removeClass('open-section').addClass('hide-section');
+        $('#tab2').removeClass('hide-section').addClass('open-section');
+        $('#tab1, #tab3').removeClass('open-section').addClass('hide-section');
     })
 
     $('#tutorial').click(function () {
-        $('#tab4').removeClass('hide-section').addClass('open-section');
-        $('#tab2, #tab3, #tab1').removeClass('open-section').addClass('hide-section');
+        $('#tab3').removeClass('hide-section').addClass('open-section');
+        $('#tab1, #tab2').removeClass('open-section').addClass('hide-section');
     })
 
 
-    $('.row li:nth-child(3)').addClass('active');
-    $(".row li").click(function () {
-        $('.row li').removeClass('active');
+    $('.main-nav li:nth-child(3)').addClass('active');
+    $(".main-nav li").click(function () {
+        $('.main-nav li').removeClass('active');
         $(this).addClass('active');
     })
 })
@@ -92,20 +97,20 @@ $(function () {
 
 
 $(function () {
-    let line = $('hr');
+    let line = $('#main-hr');
     line.css({
         'left': $('.row li:first-child').position().left,
         'width': $('.row li:first-child').width()
     });
 
-    $(".row li").hover(function () {
+    $(".main-nav li").hover(function () {
         let el = $(this);
         line.stop().animate({
             'left': el.position().left,
             'width': el.width()
         }, 300)
     }, function () {
-        let active_el = $('.active');
+        let active_el = $('.main-nav .active');
         line.stop().animate({
             'left': active_el.position().left,
             'width': active_el.width()

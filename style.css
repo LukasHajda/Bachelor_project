@@ -2,6 +2,7 @@ body {
     height: 100%;
     margin: 0;
     background: linear-gradient(#e2d0d0, #949995) no-repeat fixed;
+    overflow-x: hidden;
 }
 
 html {
@@ -14,7 +15,6 @@ html {
 }
 
 #menu {
-    width: 800px;
     margin: 15px 15px 0 15px;
     height: 800px;
     background-color: white;
@@ -172,4 +172,29 @@ hr {
 
 .hide {
     display: none !important;
+}
+
+.codes {
+    margin-top: 0 !important;
+}
+
+.codes li {
+    padding-right: 5px !important;
+}
+
+.codes a {
+    width: 16% !important;
+}
+
+.codes li:hover {
+    color: #9198e5;
+}
+
+
+.code_section {
+    margin-top: 10px;
+}
+
+.dwn_hide {
+    display: none;
 }

@@ -1,5 +1,4 @@
 $(function () {
-    
     let color1 = $('#color1');
     let color2 = $('#color2');
     let color4 = $('#color4');
