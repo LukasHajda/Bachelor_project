@@ -210,6 +210,7 @@ class Algorithm {
             visit: function(v, e, u, i, depth){
                 if (e !== undefined) {
                     edgesCollection.push(e);
+                    console.log(e.source().data().id, e.target().data().id);
                 }
                 if (v !== undefined) {
                     nodesCollection.push(v.data().id);
@@ -251,13 +252,11 @@ class Algorithm {
             }
         });
 
-        console.log(map);
-
         let current_node = map.get(root);
         let self = this;
         let runDFSAnimation = function() {
 
-            if (current_node.data().pred === null && current_node.hasClass('visited')) {
+            if (current_node.data().pred === null && current_node.hasClass('visited') && current_node.data().succ.length === 0) {
                 system.add_message("Explore node: " + current_node.data().original_name);
                 self.makeExplored(current_node);
                 system.add_message("DFS algorithm ends", "end");
