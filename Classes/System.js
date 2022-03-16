@@ -62,6 +62,7 @@ class System {
         $('#color3').val('#a83030');
         $('#backgroundColor-first').val('#e2d0d0');
         $('#backgroundColor-second').val('#949995');
+        this.remove_log();
     }
 
     add_node_option(obj) {
