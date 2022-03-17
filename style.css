@@ -198,3 +198,50 @@ hr {
 .dwn_hide {
     display: none;
 }
+
+.res {
+    display: none;
+}
+
+.res2 {
+    display: none;
+}
+
+
+/*-----------------------------------------------*/
+
+@media only screen and (max-width: 1616px) {
+    .log {
+        width: 638px;
+    }
+
+    .res {
+        display: block;
+    }
+}
+
+@media only screen and (max-width: 1484px) {
+    .log {
+        width: 565px;
+    }
+}
+
+@media only screen and (max-width: 1348px) {
+    .log {
+        width: 493px;
+    }
+}
+
+@media only screen and (max-width: 1260px) {
+    .log {
+        width: 430px;
+    }
+
+    .log p {
+        font-size: 15px;
+    }
+
+    .res2 {
+        display: block;
+    }
+}
