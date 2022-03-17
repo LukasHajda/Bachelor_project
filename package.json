@@ -1,0 +1,25 @@
+{
+  "name": "bachelor",
+  "version": "1.0.0",
+  "description": "<h3>Graph visualization</h3>",
+  "main": "init_data.js",
+  "dependencies": {
+    "cytoscape": "^3.20.0",
+    "jquery": "^3.6.0",
+    "bootstrap": "^5.1.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bravcoveoko/Bachelor_project.git"
+  },
+  "author": "LH",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bravcoveoko/Bachelor_project/issues"
+  },
+  "homepage": "https://github.com/Bravcoveoko/Bachelor_project#readme"
+}

@@ -24,18 +24,18 @@ class Algorithm {
                 this.#depth_first_search();
                 break;
             case "Kruskal":
-                system.add_message(algo_name + ' algorithm starts', "start");
+                system.add_message(algo_name + ' algoritmus sa spustil', "start");
                 this.#kruskal();
                 break;
             case "Tarjan":
-                system.add_message(algo_name + ' algorithm starts', "start");
+                system.add_message(algo_name + ' algoritmus sa spustil', "start");
                 this.#tarjan();
                 break;
             case "Prim":
                 this.#prim();
                 break;
             case "Topological":
-                system.add_message(algo_name + ' algorithm starts', "start");
+                system.add_message(algo_name + ' algoritmus sa spustil', "start");
                 this.#topological_sort();
                 break;
             case "Bellman-Ford":
@@ -48,7 +48,7 @@ class Algorithm {
 
     makeVisited(node) {
         node.addClass('visited');
-        node.data('name', node.data().original_name + ' (visited)');
+        node.data('name', node.data().original_name + ' (navštívený)');
     }
 
     makeLVK(nodes, lkv) {
@@ -58,7 +58,7 @@ class Algorithm {
     }
 
     changeIncomesData(node) {
-        node.data('name', node.data().original_name + ' Incomes: ' + node.data().incomes);
+        node.data('name', node.data().original_name + ' Vstupujú: ' + node.data().incomes);
     }
 
     changeInfiniteLabel() {
@@ -66,13 +66,13 @@ class Algorithm {
 
         $.each(nodes, function (index, node) {
             node.data('name', '');
-            node.data('name', node.data().original_name + ' distance: ' + '∞');
+            node.data('name', node.data().original_name + ' vzdialenosť: ' + '∞');
         })
     }
 
     changeDistanceAndPredecessor(node, distance) {
         node.data('name', '');
-        node.data('name', node.data().original_name + ' distance: ' + distance);
+        node.data('name', node.data().original_name + ' vzdialenosť: ' + distance);
     }
 
     makeComponents(nodes) {
@@ -87,7 +87,7 @@ class Algorithm {
     makeExplored(node) {
         node.removeClass('visited');
         node.addClass('explored');
-        node.data('name', node.data().original_name + ' (explored)');
+        node.data('name', node.data().original_name + ' (odhalený)');
     }
 
     removeToggle(node) {
@@ -97,7 +97,7 @@ class Algorithm {
     checkForEmptyRoot() {
         console.log(system.node_select_value);
         if (system.node_select_value === "") {
-            alert('Choose initial vertex');
+            alert('Zvoľ počiatočný vrchol');
             return true;
         }
         return false;
@@ -109,7 +109,7 @@ class Algorithm {
         if (this.checkForEmptyRoot()) {
             return;
         }
-        system.add_message('BFS algorithm starts', "start");
+        system.add_message('BFS algoritmus sa spustil', "start");
 
         graph.get_elements().bfs({
             roots: '#' + system.node_select_value,
@@ -152,7 +152,7 @@ class Algorithm {
             let current_obj = order.shift();
 
             if (current_obj === undefined) {
-                system.add_message("BFS algorithm ends", "end");
+                system.add_message("BFS algoritmus skončil", "end");
                 return;
             }
 
@@ -203,7 +203,7 @@ class Algorithm {
         if (this.checkForEmptyRoot()) {
             return;
         }
-        system.add_message('DFS algorithm starts', "start");
+        system.add_message('DFS algoritmus sa spustil', "start");
         let root = system.node_select_value;
         graph.get_elements().dfs({
             roots: '#' + root,
@@ -259,7 +259,7 @@ class Algorithm {
             if (current_node.data().pred === null && current_node.hasClass('visited') && current_node.data().succ.length === 0) {
                 system.add_message("Explore node: " + current_node.data().original_name);
                 self.makeExplored(current_node);
-                system.add_message("DFS algorithm ends", "end");
+                system.add_message("DFS algoritmus skončil", "end");
                 return;
             }
 
@@ -297,7 +297,7 @@ class Algorithm {
         if (this.checkForEmptyRoot()) {
             return;
         }
-        system.add_message('Bellman-Ford algorithm starts', "start");
+        system.add_message('Bellman-Ford algoritmus sa spustil', "start");
         let node_count = graph.get_elements().nodes().length;
         graph.get_elements().nodes().map(node => node.data().bf = Infinity);
         graph.get_elements().nodes().map(node => node.data().predecessor = null);
@@ -359,7 +359,7 @@ class Algorithm {
             }));
 
             if (current_obj === undefined) {
-                system.add_message("Bellman-Ford algorithm ends", "end");
+                system.add_message("Bellman-Ford algoritmus skončil", "end");
                 return;
             }
 
@@ -399,7 +399,7 @@ class Algorithm {
             let edge_arr = sorted_edges.shift();
 
             if (edge_arr === undefined) {
-                system.add_message("Kruskal algorithm ends", "end");
+                system.add_message("Kruskal algoritmus skončil", "end");
                 return;
             }
 
@@ -452,12 +452,12 @@ class Algorithm {
         });
 
         if (count !== count_nodes) {
-            alert('Graph has to be connected');
+            alert('Graf musí byť súvislý');
             return;
         }
 
         graph.change_edges_directions(false);
-        system.add_message("Prim algorithm starts", "start");
+        system.add_message("Prim algoritmus sa spustil", "start");
         let root = system.node_select_value;
         let root_object = graph.get_specific_node(root);
 
@@ -498,10 +498,10 @@ class Algorithm {
         let runPrimAnimation = function () {
             let current_edge = result.shift();
             if (current_edge === undefined) {
-                system.add_message("Prim algorithm ends", "end");
+                system.add_message("Prim algoritmus skončil", "end");
                 return
             }
-            system.add_message("Pick smallest edge: [" + current_edge.source().data().original_name + ', ' + current_edge.target().data().original_name + '] with weight: ' + current_edge.data().weight);
+            system.add_message("Vyber najmenšiu hranu: [" + current_edge.source().data().original_name + ', ' + current_edge.target().data().original_name + '] s váhou: ' + current_edge.data().weight);
             current_edge.animate({
                 css: {
                     'line-color': self.#animation_color,
@@ -544,7 +544,7 @@ class Algorithm {
             
             if (current_obj === undefined) {
                 self.makeComponents(tsc.components);
-                system.add_message("Tarjan algorithm ends", "end");
+                system.add_message("Tarjan algoritmus skončil", "end");
                 return;
             }
             current_edge = current_obj.edges.pop();
@@ -618,12 +618,12 @@ class Algorithm {
         let count = 1;
         let r = [];
 
-        system.add_message("Khan's algorithm starts", "start");
+        system.add_message("Khan algoritmus sa spustil", "start");
         let runKhanAnimation = function() {
             let current_node = anime.shift();
             if (current_node === undefined) {
-                system.add_message("Khan's algorithm ends", "end");
-                system.add_message("Final topological sort: " + result.map(node => node.data().original_name), "special");
+                system.add_message("Khan algoritmus skončil", "end");
+                system.add_message("Finálne topologické usporiadanie: " + result.map(node => node.data().original_name), "special");
                 return;
             }
 
@@ -634,16 +634,16 @@ class Algorithm {
                 if (current_node.data().incomes !== 0) {
                     current_node.data().incomes -= 1;
                     self.changeIncomesData(current_node);
-                    system.add_message("Current node " + current_node.data().original_name + " has " +  current_node.data().incomes + " incomes nodes");
+                    system.add_message("Aktuálny vrchol " + current_node.data().original_name + " má " +  current_node.data().incomes + " vstupné vrcholy");
                     if (current_node.data().incomes === 0) {
                         r.push(current_node.data().original_name);
-                        system.add_message("Node " + current_node.data().original_name + " is pushed into the queue");
-                        system.add_message("Queue: " + r, "special");
+                        system.add_message("Vrchol " + current_node.data().original_name + " je vložený do fronty");
+                        system.add_message("Fronta: " + r, "special");
                     }
                 } else {
                     r.push(current_node.data().original_name);
-                    system.add_message("Node " + current_node.data().original_name + " is pushed into the queue");
-                    system.add_message("Queue: " + r, "special");
+                    system.add_message("Vrchol " + current_node.data().original_name + " je vložený do fronty");
+                    system.add_message("Fronta: " + r, "special");
                 }
 
                 count++;
