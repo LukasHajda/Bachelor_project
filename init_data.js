@@ -44,7 +44,7 @@ $('#select_all_edges').on('click', function () {
    graph.select_all_edges();
 });
 
-$('#select_all_nodes').change(function () {
+$('#select_all_nodes').on('click', function () {
     graph.select_all_nodes();
 });
 

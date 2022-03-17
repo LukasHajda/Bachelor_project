@@ -575,9 +575,10 @@ class Graph {
     // =======================================================================================
 
     select_all_nodes() {
+        console.log('dsdsdsd');
         let nodes = this.#current_graph.nodes();
-        nodes.removeClass('custom-select');
-        nodes.addClass('custom-select');
+        nodes.map(node => node.removeClass('custom-select'));
+        nodes.map(node => node.addClass('custom-select'));
         this.#select_elements(nodes, 'nodes');
     }
 
