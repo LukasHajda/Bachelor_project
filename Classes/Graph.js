@@ -48,6 +48,7 @@ class Graph {
         window.addEventListener('keydown', function (event) {
             if (event.key === 'Delete') {
                 self.remove_selected_elements();
+                system.hide_download_buttons();
             }
         })
 
@@ -59,6 +60,7 @@ class Graph {
                 self.#targetNode = this;
                 self.#add_edge();
             }
+            system.hide_download_buttons();
         });
 
         // double left mouse click on node
@@ -136,7 +138,7 @@ class Graph {
         let edge_color = $('#color4').val();
         let edge = this.#current_graph.add([
             {
-                group: "edges", data: { source: this.#sourceNode.data().id, target: this.#targetNode.data().id, weight: 10, old_color: edge_color}
+                group: "edges", data: { source: this.#sourceNode.data().id, target: this.#targetNode.data().id, weight: 10, old_color: edge_color, tarjan: false}
             }
         ]);
         edge.style({'line-color' : edge_color,
@@ -144,6 +146,7 @@ class Graph {
         edge.addClass(system.get_direction ? 'directed' : 'undirected');
         this.#sourceNode = null;
         this.#targetNode=  null;
+        system.hide_download_buttons();
     }
 
     // ========================================================================
@@ -194,7 +197,7 @@ class Graph {
             node.style('background-color', node_color);
 
             system.add_node_option({id: node.data().id, name: node.data().name});
-            // nodes_positions.set(newId, [xPos, yPos]);
+            system.hide_download_buttons();
         }
     }
 
@@ -447,7 +450,7 @@ class Graph {
         if (pass) {
             edge.data('weight', parseInt(label_input));
         } else {
-            alert('Musi byt validne cele cislo');
+            alert('Musí byť zadané validné celé číslo');
         }
     }
 
@@ -551,6 +554,7 @@ class Graph {
         this.#current_letter = 'A';
         this.#levels = [0];
         this.#current_id = 1;
+        system.hide_download_buttons();
     }
 
     // =======================================================================================
@@ -561,9 +565,14 @@ class Graph {
 
     clear_edges() {
         this.#current_graph.edges().remove();
+        system.hide_download_buttons();
     }
 
     // =======================================================================================
+
+    /**
+     * Select all edges. Make them grey
+     */
 
     select_all_edges() {
         let edges = this.#current_graph.edges()
@@ -573,6 +582,10 @@ class Graph {
     }
 
     // =======================================================================================
+
+    /**
+     * Select all edges. Make them grey
+     */
 
     select_all_nodes() {
         console.log('dsdsdsd');
@@ -584,28 +597,39 @@ class Graph {
 
     // =======================================================================================
 
+    /**
+     * Return all elements of the graph (nodes, edges, components)
+     * @returns {*}
+     */
+
     get_elements() {
         return this.#current_graph.elements();
     }
 
+    /**
+     * Get only nodes
+     * @returns {*}
+     */
+
     get_nodes() {
         return this.#current_graph.nodes();
     }
+
+    /**
+     * Show time
+     */
 
     show_time() {
         let n = graph.get_nodes().map(node => [node.data().name, node.data().discovered, node.data().finished]);
         console.log(n);
     }
 
-    change_time(id, discovered, time) {
-        if (discovered) {
-            this.#current_graph.nodes('[id = "' + id + '"]').data().discovered = time;
-        } else {
-            this.#current_graph.nodes('[id = "' + id + '"]').data().finished = time;
-        }
-    }
-
     // =======================================================================================
+
+    /**
+     * Run choosen algorithm
+     * @param algo_name
+     */
 
     run_algorithm(algo_name) {
         let algorithm = new Algorithm(this.#current_graph);
@@ -615,68 +639,28 @@ class Graph {
 
     // =======================================================================================
 
+    /**
+     * Directed to undirected and vite versa
+     * @param direction_option
+     */
+
     change_edges_directions(direction_option) {
         if (direction_option) {
             this.#current_graph.edges().map(edge => edge.removeClass('undirected').addClass('directed'));
         } else {
             this.#current_graph.edges().map(edge => edge.removeClass('directed').addClass('undirected'));
         }
+        system.hide_download_buttons();
     }
 
-
-    make_transposed() {
-        let old_edges = this.#current_graph.edges().map(edge => [edge.source().data().id, edge.target().data().id, edge.data().weight]);
-
-        this.clear_edges();
-
-
-        let self = this;
-        let color = $('#color4').val();
-        $.each(old_edges, function (index, edge) {
-            let new_edge = self.#current_graph.add([
-                {
-                    group: "edges", data: { source: edge[1], target: edge[0], weight: edge[2], old_color: color}
-                }
-            ]);
-            new_edge.style({'line-color' : color,
-                'target-arrow-color': color});
-        new_edge.addClass(system.get_direction ? 'directed' : 'undirected');
-        })
-
-    }
-
-
-    sorted_by_finished() {
-        return this.#current_graph.nodes().sort(function (node1, node2) {
-            return node1.data().finished - node2.data().finished;
-        }).toArray();
-    }
-
-    get_undiscovered_nodes() {
-        return this.#current_graph.nodes().filter(function (node) {
-            return node.data().discovered === -1;
-        }).map(node => node.data().id);
-    }
+    /**
+     * Create cytoscape collection
+     * @returns {Collection|Collection|Collection|Collection|pa}
+     */
 
     make_collection() {
         return this.#current_graph.collection();
     }
-
-    get_tarjaned_edges() {
-        return this.#current_graph.edges().filter(function (edge) {
-            return edge.data().tarjan === false;
-        }).length;
-    }
-
-    change_edge_weight(edge, weight) {
-        edge.data('weight', parseInt(weight));
-    }
-
-    get_current_graph() {
-        return this.#current_graph;
-    }
-
-
 
 
     /*
