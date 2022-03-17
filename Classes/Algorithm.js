@@ -84,6 +84,26 @@ class Algorithm {
         })
     }
 
+    check_connectivity() {
+        let count = 0;
+        let count_nodes = graph.get_elements().nodes().length;
+        graph.get_elements().bfs({
+            roots: '#' + system.node_select_value,
+            visit: function(v, e, u, i, depth){
+                if (v !== undefined) {
+                    count++;
+                }
+            },
+            directed: false
+        });
+
+        if (count !== count_nodes) {
+            alert('Graf musí byť súvislý');
+            return false;
+        }
+        return true;
+    }
+
     makeExplored(node) {
         node.removeClass('visited');
         node.addClass('explored');
