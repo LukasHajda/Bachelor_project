@@ -403,6 +403,12 @@ class Algorithm {
 
     #kruskal() {
         graph.change_edges_directions(false);
+
+        if (!this.check_connectivity()) {
+            system.add_message("Kruskal algoritmus skončil", "end");
+            return
+        }
+
         let nodes = graph.get_elements().nodes();
         let test = graph.get_elements().edges().sort(function (edge1, edge2) {
             return edge1.data().weight - edge2.data().weight;
@@ -459,21 +465,9 @@ class Algorithm {
         if (this.checkForEmptyRoot()) {
             return;
         }
-        let count = 0;
-        let count_nodes = graph.get_elements().nodes().length;
-        graph.get_elements().bfs({
-            roots: '#' + system.node_select_value,
-            visit: function(v, e, u, i, depth){
-                if (v !== undefined) {
-                    count++;
-                }
-            },
-            directed: false
-        });
-
-        if (count !== count_nodes) {
-            alert('Graf musí byť súvislý');
-            return;
+        if (!this.check_connectivity()) {
+            system.add_message("Prim algoritmus skončil", "end");
+            return
         }
 
         graph.change_edges_directions(false);

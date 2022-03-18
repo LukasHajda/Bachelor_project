@@ -70,6 +70,11 @@ class System {
         this.#node_select.text(obj.name);
     }
 
+    hide_download_buttons() {
+        if (!$('#python_download').hasClass('dwn_hide')) $('#python_download').addClass('dwn_hide');
+        if (!$('#java_download').hasClass('dwn_hide')) $('#java_download').addClass('dwn_hide');
+    }
+
     get node_select_value() {
         return this.#node_select.attr('data-nodeid');
     }
