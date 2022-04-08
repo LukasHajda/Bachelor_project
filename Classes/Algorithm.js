@@ -145,9 +145,6 @@ class Algorithm {
             directed: system.get_direction
         });
 
-        console.log(nodesCollection);
-        console.log(edgesCollection);
-
         let order = [];
         let self = this;
 
@@ -555,6 +552,9 @@ class Algorithm {
         let lkv = 1;
 
         let runTarjanAnimation = function () {
+
+
+
             
             if (current_obj === undefined) {
                 self.makeComponents(tsc.components);

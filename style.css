@@ -216,6 +216,7 @@ hr {
 
 .tutorial-col span {
     font-weight: bold;
+    word-wrap: break-word
 }
 
 /*-----------------------------------------------*/
