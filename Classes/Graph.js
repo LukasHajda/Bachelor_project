@@ -662,7 +662,6 @@ class Graph {
         return this.#current_graph.collection();
     }
 
-
     /*
     |--------------------------------------------------------------------------
     |                              End Public Methods

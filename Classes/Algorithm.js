@@ -18,27 +18,34 @@ class Algorithm {
         this.#time = system.time_value * 1000;
         switch (algo_name) {
             case "BFS":
+                graph.reset_configuration();
                 this.#breadth_first_search();
                 break;
             case "DFS":
+                graph.reset_configuration();
                 this.#depth_first_search();
                 break;
             case "Kruskal":
+                graph.reset_configuration();
                 system.add_message(algo_name + ' algoritmus sa spustil', "start");
                 this.#kruskal();
                 break;
             case "Tarjan":
+                graph.reset_configuration();
                 system.add_message(algo_name + ' algoritmus sa spustil', "start");
                 this.#tarjan();
                 break;
             case "Prim":
+                graph.reset_configuration();
                 this.#prim();
                 break;
             case "Topological":
+                graph.reset_configuration();
                 system.add_message(algo_name + ' algoritmus sa spustil', "start");
                 this.#topological_sort();
                 break;
             case "Bellman-Ford":
+                graph.reset_configuration();
                 this.#bellman_ford();
                 break;
         }
@@ -54,7 +61,9 @@ class Algorithm {
     makeLVK(nodes, lkv) {
         $.each(nodes, function (index, node) {
             node.data('name', node.data().original_name + ' LKV: ' + lkv)
+            system.add_message("Vrchol " + node.data().original_name + " patri do spoločnej komponenty: " + lkv);
         })
+        system.add_message("---------------------------------------");
     }
 
     changeIncomesData(node) {
@@ -174,7 +183,7 @@ class Algorithm {
             }
 
             self.makeExplored(current_obj.node);
-            system.add_message("Explore  node: " + current_obj.node.data().original_name);
+            system.add_message("Preskúmal vrchol: " + current_obj.node.data().original_name);
             real_queue.shift();
             self.#queue.text(real_queue);
 
@@ -190,7 +199,7 @@ class Algorithm {
                         if (current_obj.node.data().id === edge.source().data().id) {
                             if (!edge.target().hasClass('visited') && !edge.target().hasClass('explored')) {
                                 self.makeVisited(edge.target());
-                                system.add_message("Visit node: " + edge.target().data().original_name);
+                                system.add_message("Navštívil vrchol: " + edge.target().data().original_name);
                                 real_queue.push(edge.target().data().original_name);
                                 self.#queue.text(real_queue);
                             }
@@ -274,7 +283,7 @@ class Algorithm {
         let runDFSAnimation = function() {
 
             if (current_node.data().pred === null && current_node.hasClass('visited') && current_node.data().succ.length === 0) {
-                system.add_message("Explore node: " + current_node.data().original_name);
+                system.add_message("Preskúmal vrchol: " + current_node.data().original_name);
                 self.makeExplored(current_node);
                 system.add_message("DFS algoritmus skončil", "end");
                 return;
@@ -284,7 +293,7 @@ class Algorithm {
 
             let succ_edge = current_node.data().succ.shift()
             if (succ_edge === undefined) {
-                system.add_message("Explore node: " + current_node.data().original_name);
+                system.add_message("Preskúmal vrchol: " + current_node.data().original_name);
                 self.makeExplored(current_node);
                 current_node = current_node.data().pred;
                 setTimeout(runDFSAnimation, self.#time);
@@ -298,7 +307,7 @@ class Algorithm {
                 }, {
                     duration : 500,
                     complete : function() {
-                        system.add_message("Visit node: " + succ_edge[0].data().original_name);
+                        system.add_message("Navštívil vrchol: " + succ_edge[0].data().original_name);
                         self.makeVisited(succ_edge[0]);
                     }
                 });
@@ -325,7 +334,7 @@ class Algorithm {
         root.data().bf = 0;
         root.data().predecessor = root;
 
-        root.data('name', root.data().original_name + ' distance: ' + root.data().bf);
+        root.data('name', root.data().original_name + ' vzdialenosť: ' + root.data().bf);
 
         let count = 1;
 
@@ -358,7 +367,7 @@ class Algorithm {
         $.each(edges, function (index, edge) {
             if (edge.source().data().bf + edge.data().weight < edge.target().data().bf) {
                 alert('Graf obsahuje negatívny cyklus');
-                system.add_message("Bellman-Ford algorithm ends due to negative cycle", "end");
+                system.add_message("Bellman-Ford algoritmus skončil lebo existuje negatívny cyklus", "end");
                 negative_cycle = true;
             }
         });
@@ -384,7 +393,7 @@ class Algorithm {
             let edge = current_obj.edge;
 
             target.addClass('bf');
-            system.add_message("Relaxing node " + target.data().original_name + "`s distance to " + current_obj.new_distance);
+            system.add_message("Relaxuje vrchol " + target.data().original_name + " na vzdialenosť: " + current_obj.new_distance);
             edge.style(
                 {'line-color' : self.#animation_color,
                 'target-arrow-color': self.#animation_color});
@@ -428,7 +437,7 @@ class Algorithm {
 
             let current_edge = edge_arr[0];
 
-            system.add_message("Pick smallest edge: [" + current_edge.source().data().original_name + ', ' + current_edge.target().data().original_name + ']');
+            system.add_message("Vyberá najmenšiu hranu: [" + current_edge.source().data().original_name + ', ' + current_edge.target().data().original_name + ']');
             current_edge.animate({
                 css: {
                     'line-color': self.#animation_color,
@@ -512,7 +521,7 @@ class Algorithm {
                 system.add_message("Prim algoritmus skončil", "end");
                 return
             }
-            system.add_message("Vyber najmenšiu hranu: [" + current_edge.source().data().original_name + ', ' + current_edge.target().data().original_name + '] s váhou: ' + current_edge.data().weight);
+            system.add_message("Vyberá najmenšiu hranu: [" + current_edge.source().data().original_name + ', ' + current_edge.target().data().original_name + '] s váhou: ' + current_edge.data().weight);
             current_edge.animate({
                 css: {
                     'line-color': self.#animation_color,
@@ -534,7 +543,6 @@ class Algorithm {
         let self = this;
         let tsc = graph.get_elements().tarjanStronglyConnected();
         let result_obj = [];
-        // let component_count = 1;
 
         $.each(tsc.components, function (index, coll) {
             result_obj.push({
@@ -552,9 +560,6 @@ class Algorithm {
         let lkv = 1;
 
         let runTarjanAnimation = function () {
-
-
-
             
             if (current_obj === undefined) {
                 self.makeComponents(tsc.components);
