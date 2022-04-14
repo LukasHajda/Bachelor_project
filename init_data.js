@@ -87,7 +87,7 @@ $(function () {
     })
 
 
-    $('.main-nav li:nth-child(3)').addClass('active');
+    $('.main-nav li:nth-child(2)').addClass('active');
     $(".main-nav li").click(function () {
         $('.main-nav li').removeClass('active');
         $(this).addClass('active');
@@ -99,8 +99,8 @@ $(function () {
 $(function () {
     let line = $('#main-hr');
     line.css({
-        'left': $('.row li:first-child').position().left,
-        'width': $('.row li:first-child').width()
+        'left': $('.row li:nth-child(2)').position().left,
+        'width': $('.row li:nth-child(2)').width()
     });
 
     $(".main-nav li").hover(function () {

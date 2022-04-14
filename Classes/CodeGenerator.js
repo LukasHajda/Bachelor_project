@@ -107,7 +107,6 @@ class CodeGenerator {
             }
         })
 
-        // generate matrix for python:
         let final = "";
         let arr_text = brackets[0];
         $.each(matrix, function (main_index, arr) {
@@ -122,12 +121,9 @@ class CodeGenerator {
             arr_text += (main_index !== nodes_count - 1) ? brackets[1] + ',' : brackets[1];
             final += arr_text + ((main_index !== nodes_count - 1) ? "\n" : '');
         })
-
         new_text = new_text.replace('++++', final);
         new_text = new_text.replace('____', nodes_count);
-
         return new_text;
-
     }
 
 }

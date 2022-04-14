@@ -18,6 +18,10 @@ class System {
     }
 
 
+    /**
+     * Set events for inputs from events
+     */
+
     set_events() {
         let self = this;
         $('.colorPick').change(function () {
@@ -43,7 +47,6 @@ class System {
             let value = $(this).val()
 
             if (['Tarjan', 'Kruskal', 'Topological'].includes(value)) {
-                console.log('dsdsdsd');
                 $('#initial_vertex').addClass('hide');
             } else {
                 $('#initial_vertex').removeClass('hide');
@@ -52,10 +55,13 @@ class System {
 
         $('#js').on('click', function () {
             $.each(graph.get_elements(), function (index, ele) {
-                console.log(ele.json());
             })
         })
     }
+
+    /**
+     * Reset all colors inputs
+     */
 
     reset_configuration() {
         $('#color4').val('#83b55a');
@@ -65,52 +71,90 @@ class System {
         this.remove_log();
     }
 
+    /**
+     * Add nodeid attribute
+     * @param obj
+     */
+
     add_node_option(obj) {
         this.#node_select.attr('data-nodeid', obj.id);
         this.#node_select.text(obj.name);
     }
+
+    /**
+     * Hide when new element is added
+     */
 
     hide_download_buttons() {
         if (!$('#python_download').hasClass('dwn_hide')) $('#python_download').addClass('dwn_hide');
         if (!$('#java_download').hasClass('dwn_hide')) $('#java_download').addClass('dwn_hide');
     }
 
+    /**
+     * Return id of selected node
+     * @returns {*}
+     */
+
     get node_select_value() {
         return this.#node_select.attr('data-nodeid');
     }
+
+    /**
+     * Directed / Undirected graph
+     * @returns {boolean}
+     */
 
     get get_direction() {
         return $('.inner').attr('data-check') === "0";
     }
 
+    /**
+     * Return parsed time
+     * @returns {number}
+     */
+
     get time_value() {
         return parseFloat(this.#time.val());
     }
 
+    /**
+     * Add message to log
+     * @param message
+     * @param variant
+     */
+
     add_message(message, variant = null) {
-        let style = "";
+        let weight_margin = 'font-weight:bold;margin-left:10px"';
+        let style;
         switch (variant) {
             case "end":
-                style = 'style="font-weight:bold;;color:red;margin-left:10px"';
+                style = 'style="color:red;' + weight_margin;
                 break;
             case "start":
-                style = 'style="font-weight:bold;color:green;margin-left:10px"';
+                style = 'style="color:green;' + weight_margin;
                 break;
             case "special":
-                style = 'style="font-weight:bold;color:orange;margin-left:10px"';
+                style = 'style="color:orange;' + weight_margin;
                 break;
             default:
-                style = 'style="font-weight:bold;margin-left:10px"';
-                break;
+                style = 'style="' + weight_margin;
         }
         let p = '<p' + ' '  + style + '>' + message + '</p>';
         this.#log.append(p);
     }
 
+    /**
+     * Clear log
+     */
+
     remove_log() {
         this.#log.empty();
     }
 
+    /**
+     * Get animation color
+     * @returns {jQuery|string|undefined}
+     */
     get animation_color() {
         return this.#animation_color.val();
     }
