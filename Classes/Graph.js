@@ -28,6 +28,9 @@ class Graph {
     |--------------------------------------------------------------------------
     */
 
+    /**
+     *  Default graph is directed
+     */
 
     #set_direction() {
         this.#current_graph.edges().map(edge => edge.addClass('directed'));
@@ -77,12 +80,9 @@ class Graph {
                 this.style('background-color', 'grey');
             }
         });
-
-        // double left mouse click on edge
         this.#current_graph.on('dblclick', 'edge', function () {
             if (this.hasClass('custom-select')) {
                 this.removeClass('custom-select');
-                console.log(this);
                 this.style({
                     'line-color' : this.data().old_color,
                     'target-arrow-color': this.data().old_color,
@@ -97,7 +97,6 @@ class Graph {
         });
 
         this.#current_graph.on('click', 'node', function () {
-            console.log(this.data().parent);
             let label_input = $('#label');
             label_input.val(this.data('name'));
             label_input.attr('data-id', this.data('id'));
@@ -113,6 +112,12 @@ class Graph {
     }
 
     // ========================================================================
+
+    /**
+     * Select all elements
+     * @param arr
+     * @param group
+     */
 
     #select_elements(arr, group) {
         $.each(arr, function (index, value) {
@@ -379,8 +384,7 @@ class Graph {
                 motionBlur: true,
                 autolock: true
             }
-        }); // cy init;
-
+        })
         cy.fit()
         return cy;
     }
@@ -588,7 +592,6 @@ class Graph {
      */
 
     select_all_nodes() {
-        console.log('dsdsdsd');
         let nodes = this.#current_graph.nodes();
         nodes.map(node => node.removeClass('custom-select'));
         nodes.map(node => node.addClass('custom-select'));
@@ -621,7 +624,6 @@ class Graph {
 
     show_time() {
         let n = graph.get_nodes().map(node => [node.data().name, node.data().discovered, node.data().finished]);
-        console.log(n);
     }
 
     // =======================================================================================
